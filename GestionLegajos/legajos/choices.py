@@ -5,7 +5,9 @@ estados = (
 
 sexo = (
   ('F', 'Femenino'),
-  ('M', 'Masculino')
+  ('M', 'Masculino'),
+  ('T', 'Travesti'),
+  ('I', 'Fino')
 )
 
 tipo = (
@@ -41,4 +43,25 @@ departamento = (
   ('Tacna', 'Tacna'),
   ('Tumbes', 'Tumbes'),
   ('Ucayali', 'Ucayali')
+)
+
+dependencia = (
+  ('HHV', 'Hospital Hermilio Valdizán'),
+)
+
+cargo = (
+  ('Auxiliar Administrativo', 'Auxiliar Administrativo'),
+  ('Asistente Administrativo', 'Asistente Administrativo'),
+  ('Coordinador', 'Coordinador')
+)
+
+nivel = (
+  ('STD', 'STD'),
+  ('SAA', 'SAA')
+)
+
+documento = (
+  ('RA', 'Resolución Administrativa'),
+  ('RD', 'Resolución Directoral'),
+  ('Memo', 'Memorando')
 )
