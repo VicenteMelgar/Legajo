@@ -11,10 +11,9 @@ from .models import (
     Nivel,
     Cargo,
     Plaza,
-    Modalidad,
 )
 
-admin.site.site_header = "DASHBOARD B.E.L.U"
+admin.site.site_header = "DASHBOARD LEGAJO"
 admin.site.site_title = "Panel de Administración"
 admin.site.index_title = "Bienvenido al Sistema de Administración"
 
@@ -28,10 +27,6 @@ class CargoAdmin(admin.ModelAdmin):
     
 @admin.register(Plaza)
 class PlazaAdmin(admin.ModelAdmin):
-    list_display = ('denominacion',)
-
-@admin.register(Modalidad)
-class ModalidadAdmin(admin.ModelAdmin):
     list_display = ('denominacion',)
     
 @admin.register(DatosPersonales)

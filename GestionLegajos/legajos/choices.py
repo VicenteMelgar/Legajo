@@ -1,3 +1,8 @@
+modalidad = (
+  ('CAS', 'CAS'),
+  ('Nombrado', 'Nombrado'),
+  ('Cesante', 'Cesante')
+)
 estados = (
   ('S', 'Soltero/a'),
   ('C', 'Casado/a')
@@ -5,9 +10,7 @@ estados = (
 
 sexo = (
   ('F', 'Femenino'),
-  ('M', 'Masculino'),
-  ('T', 'Travesti'),
-  ('I', 'Fino')
+  ('M', 'Masculino')
 )
 
 tipo = (

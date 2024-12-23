@@ -1,0 +1,28 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Editar Servicio Prestado</h2>
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+      {% csrf_token %}
+      {% if form.errors %}
+          <div class="alert alert-danger">
+              <ul>
+                  {% for field in form %}
+                      {% if field.errors %}
+                          {% for error in field.errors %}
+                              <li>{{ field.label }}: {{ error }}</li>
+                          {% endfor %}
+                      {% endif %}
+                  {% endfor %}
+              </ul>
+          </div>
+      {% endif %}
+
+      {{ form.as_p }}  
+
+      <button type="submit" class="btn btn-primary mt-3">Guardar Cambios</button>
+      <a href="{% url 'legajos:info_personal' empleado_preseleccionado %}" class="btn btn-secondary mt-3">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

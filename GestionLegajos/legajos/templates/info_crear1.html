@@ -1,0 +1,121 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="app-content pt-3 p-md-3 p-lg-4">
+	<div class="container-xl">
+		
+		<div class="row g-3 mb-4 align-items-center justify-content-between">
+			<div class="col-auto">
+				<h1 class="app-page-title mb-0">{{ empleado }}</h1>
+			</div>
+			<div class="col-auto">
+				<div class="page-utilities">
+					<div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+
+						<div class="col-auto">						    
+							<a class="btn app-btn-primary" href="#">
+								Ver Todos
+								<svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" fill="currentColor" class="bi bi-file-earmark-arrow-up" viewBox="0 0 16 16">
+                  <path d="M8.5 11.5a.5.5 0 0 1-1 0V7.707L6.354 8.854a.5.5 0 1 1-.708-.708l2-2a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 7.707z"/>
+                  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                </svg>
+							</a>
+						</div>
+					</div><!--//row-->
+				</div><!--//table-utilities-->
+			</div><!--//col-auto-->
+		</div><!--//row-->
+		
+		<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+			<a class="flex-sm-fill text-sm-center nav-link active" id="orders-services-tab" data-bs-toggle="tab" href="#orders-services" role="tab" aria-controls="orders-service" aria-selected="true">Servicios Prestados</a>
+			<a class="flex-sm-fill text-sm-center nav-link"  id="orders-amd-tab" data-bs-toggle="tab" href="#orders-amd" role="tab" aria-controls="orders-amd" aria-selected="false">AMD</a>
+			<a class="flex-sm-fill text-sm-center nav-link" id="orders-pension-tab" data-bs-toggle="tab" href="#orders-pension" role="tab" aria-controls="orders-pension" aria-selected="false">Pensionista Sobreviviente</a>
+			<a class="flex-sm-fill text-sm-center nav-link" id="orders-bonificacion-tab" data-bs-toggle="tab" href="#orders-bonificacion" role="tab" aria-controls="orders-bonificacion" aria-selected="false">Bonificación Personal</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="orders-tiemposervicios-tab" data-bs-toggle="tab" href="#orders-tiemposervicios" role="tab" aria-controls="orders-tiemposervicios" aria-selected="false">Tiempo de Servicios</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="orders-estudios-tab" data-bs-toggle="tab" href="#orders-estudios" role="tab" aria-controls="orders-estudios" aria-selected="false">Estudios Realizados</a>
+		</nav>
+    
+    <form method="post" enctype="multipart/form-data" class="settings-form">
+      {% csrf_token %}
+      <div class="tab-content" id="orders-table-tab-content">
+        <div class="tab-pane fade show active" id="orders-services" role="tabpanel" aria-labelledby="orders-services-tab">
+          <div class="app-card app-card-orders-table shadow-sm mb-5">
+            <div class="app-card-body">
+              <div class="table-responsive">
+                <div class="app-card-body" id="servicios">
+                  {{ servicios_form.as_p }}
+                  <button type="submit" name="guardar_servicios" class="btn app-btn-primary" >Guardar</button>
+                </div><!--//app-card-body-->
+              </div><!--//table-responsive-->				 
+            </div><!--//app-card-body-->		
+          </div><!--//app-card-->
+        </div><!--//tab-pane-->
+        
+        <div class="tab-pane fade" id="orders-amd" role="tabpanel" aria-labelledby="orders-amd-tab">
+          <div class="app-card app-card-orders-table mb-5">
+            <div class="app-card-body">
+              <div class="table-responsive">	
+                <div class="app-card-body" id="ausencias">
+                  {{ ausencias_form.as_p }}
+                  <button type="submit" name="guardar_ausencias" class="btn app-btn-primary" >Guardar</button>
+                </div><!--//app-card-body-->
+              </div><!--//table-responsive-->
+            </div><!--//app-card-body-->		
+          </div><!--//app-card-->
+        </div><!--//tab-pane-->
+          
+        <div class="tab-pane fade" id="orders-pension" role="tabpanel" aria-labelledby="orders-pension-tab">
+          <div class="app-card app-card-orders-table mb-5">
+            <div class="app-card-body">
+              <div class="table-responsive">
+                <div class="app-card-body" id="pensionista">
+                  {{ pensionista_form.as_p }}
+                  <button type="submit" name="guardar_pensionista" class="btn app-btn-primary" >Guardar</button>
+                </div><!--//app-card-body-->
+              </div><!--//table-responsive-->
+            </div><!--//app-card-body-->		
+          </div><!--//app-card-->
+        </div><!--//tab-pane-->
+
+        <div class="tab-pane fade" id="orders-bonificacion" role="tabpanel" aria-labelledby="orders-bonificacion-tab">
+          <div class="app-card app-card-orders-table mb-5">
+            <div class="app-card-body">
+              <div class="table-responsive">
+                <div class="app-card-body" id="bonificacion">
+                  {{ bonificacion_form.as_p }}
+                  <button type="submit" name="guardar_bonificacion" class="btn app-btn-primary" >Guardar</button>
+                </div><!--//app-card-body-->
+              </div><!--//table-responsive-->
+            </div><!--//app-card-body-->		
+          </div><!--//app-card-->
+        </div><!--//tab-pane-->
+
+        <div class="tab-pane fade" id="orders-tiemposervicios" role="tabpanel" aria-labelledby="orders-tiemposervicios-tab">
+          <div class="app-card app-card-orders-table mb-5">
+            <div class="app-card-body">
+              <div class="table-responsive">
+                <div class="app-card-body" id="tiempo_servicio">
+                  {{ tiempo_servicio_form.as_p }}
+                  <button type="submit" name="guardar_tiempo_servicio" class="btn app-btn-primary" >Guardar</button>
+                </div><!--//app-card-body-->
+              </div><!--//table-responsive-->
+            </div><!--//app-card-body-->		
+          </div><!--//app-card-->
+        </div><!--//tab-pane-->
+
+        <div class="tab-pane fade" id="orders-estudios" role="tabpanel" aria-labelledby="orders-estudios-tab">
+          <div class="app-card app-card-orders-table mb-5">
+            <div class="app-card-body">
+              <div class="table-responsive">
+                <div class="app-card-body" id="estudios">
+                  {{ estudios_form.as_p }}
+                  <button type="submit" name="guardar_estudios" class="btn app-btn-primary" >Guardar</button>
+                </div><!--//app-card-body-->
+              </div><!--//table-responsive-->
+            </div><!--//app-card-body-->		
+          </div><!--//app-card-->
+        </div><!--//tab-pane-->
+		  </div><!--//tab-content-->		
+    </form>
+	</div><!--//container-fluid-->
+</div><!--//app-content-->
+{% endblock content %}
