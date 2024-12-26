@@ -30,7 +30,7 @@ class ServiciosPrestadosForm(forms.ModelForm):
         fields = ['empleado', 'documento', 'numero', 'tipo', 'asunto', 'fecha', 'fecha_vigencia', 'dependencia', 
                   'cargo', 'nivel', 'plaza', 'pdf']
         widgets = {
-          'empleado': forms.SelectMultiple(attrs={'class': 'form-select'}),
+          'empleado': forms.HiddenInput(),
           'documento': forms.Select(attrs={'class': 'form-select'}),
           'numero': forms.TextInput(attrs={'class': 'form-control'}),
           'tipo': forms.Select(attrs={'class': 'form-select'}),
@@ -41,6 +41,23 @@ class ServiciosPrestadosForm(forms.ModelForm):
           'cargo': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'nivel': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'plaza': forms.SelectMultiple(attrs={'class': 'form-select'}),
+          'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        
+class EstudiosRealizadosForm(forms.ModelForm):
+    class Meta:
+        model = EstudiosRealizados
+        fields = ['empleado', 'inicio', 'fin', 'grado_instruccion', 'especialidad', 'sub_especialidad', 'cod_especialidad',
+                  'fecha_expedicion', 'pdf']
+        widgets = {
+          'empleado': forms.HiddenInput(),
+          'inicio': forms.DateInput(attrs={'class': 'form-control'}),
+          'fin': forms.DateInput(attrs={'class': 'form-control'}),
+          'grado_instruccion': forms.TextInput(attrs={'class': 'form-control'}),
+          'especialidad': forms.TextInput(attrs={'class': 'form-control'}),
+          'sub_especialidad': forms.TextInput(attrs={'class': 'form-control'}),
+          'cod_especialidad': forms.TextInput(attrs={'class': 'form-control'}),
+          'fecha_expedicion': forms.DateInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
         
@@ -64,7 +81,3 @@ class PensionistaSobrevivienteForm(forms.ModelForm):
         model = PensionistaSobreviviente
         fields = '__all__'
 
-class EstudiosRealizadosForm(forms.ModelForm):
-    class Meta:
-        model = EstudiosRealizados
-        fields = '__all__'

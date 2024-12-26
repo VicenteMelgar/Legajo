@@ -18,11 +18,11 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <li><a class="dropdown-item" href="{% url 'legajos:servicio_crear' empleado.id %}">Servicios Prestados</a></li>
-                  <li><a class="dropdown-item" href="#">Option 2</a></li>
-                  <li><a class="dropdown-item" href="#">Option 3</a></li>
-                  <li><a class="dropdown-item" href="#">Option 4</a></li>
-                  <li><a class="dropdown-item" href="#">Option 5</a></li>
-                  <li><a class="dropdown-item" href="#">Option 6</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:estudios_crear' empleado.id %}">Estudios Realizados</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:ausencias_crear' empleado.id %}">Ausencias, Méritos, Demeritos</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:bonificacion_crear' empleado.id %}">Bonificación Personal</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:tiempo_crear' empleado.id %}">Tiempo de Servicios</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:pensionista_crear' empleado.id %}">Pensionista Sobreviviente</a></li>
                 </ul>
               </div>
             </div>
@@ -34,11 +34,11 @@
 		
 		<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
 			<a class="flex-sm-fill text-sm-center nav-link active" id="orders-services-tab" data-bs-toggle="tab" href="#orders-services" role="tab" aria-controls="orders-service" aria-selected="true">Servicios Prestados</a>
-			<a class="flex-sm-fill text-sm-center nav-link"  id="orders-amd-tab" data-bs-toggle="tab" href="#orders-amd" role="tab" aria-controls="orders-amd" aria-selected="false">AMD</a>
-			<a class="flex-sm-fill text-sm-center nav-link" id="orders-pension-tab" data-bs-toggle="tab" href="#orders-pension" role="tab" aria-controls="orders-pension" aria-selected="false">Pensionista Sobreviviente</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="orders-estudios-tab" data-bs-toggle="tab" href="#orders-estudios" role="tab" aria-controls="orders-estudios" aria-selected="false">Estudios Realizados</a>
+      <a class="flex-sm-fill text-sm-center nav-link"  id="orders-amd-tab" data-bs-toggle="tab" href="#orders-amd" role="tab" aria-controls="orders-amd" aria-selected="false">AMD</a>
 			<a class="flex-sm-fill text-sm-center nav-link" id="orders-bonificacion-tab" data-bs-toggle="tab" href="#orders-bonificacion" role="tab" aria-controls="orders-bonificacion" aria-selected="false">Bonificación Personal</a>
       <a class="flex-sm-fill text-sm-center nav-link" id="orders-tiemposervicios-tab" data-bs-toggle="tab" href="#orders-tiemposervicios" role="tab" aria-controls="orders-tiemposervicios" aria-selected="false">Tiempo de Servicios</a>
-      <a class="flex-sm-fill text-sm-center nav-link" id="orders-estudios-tab" data-bs-toggle="tab" href="#orders-estudios" role="tab" aria-controls="orders-estudios" aria-selected="false">Estudios Realizados</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="orders-pension-tab" data-bs-toggle="tab" href="#orders-pension" role="tab" aria-controls="orders-pension" aria-selected="false">Pensionista Sobreviviente</a>
 		</nav>
 
 		<div class="tab-content" id="orders-table-tab-content">
@@ -82,7 +82,9 @@
 											{% endif %}
 										</span></td>
 										<td class="cell"><span>{{ servicio.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:servicio_editar' servicio.id %}" class="btn btn-primary btn-sm">Editar</a></span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:servicio_editar' servicio.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -116,6 +118,9 @@
 										<td class="cell"><span>{{ ausencia.desde }}</span></td>
 										<td class="cell"><span>{{ ausencia.hasta }}</span></td>
 										<td class="cell"><span>{{ ausencia.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:ausencias_editar' ausencia.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
 									</tr>
 									{% endfor %}	
 								</tbody>
@@ -147,6 +152,9 @@
 										<td class="cell"><span>{{ pensionista.apellido_paterno}} {{ pensionista.apellido_materno}} {{ pensionista.nombres}}</span></td>
 										<td class="cell"><span>{{ pensionista.dni}}</span></td>
 										<td class="cell"><span>{{ pensionista.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:pensionista_editar' pensionista.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
 									</tr>
 									{% endfor %}	
 								</tbody>
@@ -184,6 +192,9 @@
 										<td class="cell"><span>{{ bonificacion.meses }}</span></td>
 										<td class="cell"><span>{{ bonificacion.dias }}</span></td>
 										<td class="cell"><span>{{ bonificacion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:bonificacion_editar' bonificacion.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
 									</tr>
 									{% endfor %}	
 								</tbody>
@@ -219,6 +230,9 @@
 										<td class="cell"><span>{{ tiempo.meses }}</span></td>
 										<td class="cell"><span>{{ tiempo.dias }}</span></td>
 										<td class="cell"><span>{{ tiempo.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:tiempo_editar' tiempo.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
 									</tr>
 									{% endfor %}	
 								</tbody>
@@ -256,6 +270,9 @@
 										<td class="cell"><span>{{ estudio.cod_especialidad }}</span></td>
 										<td class="cell"><span>{{ estudio.fecha_expedicion }}</span></td>
 										<td class="cell"><span>{{ estudio.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:estudios_editar' estudio.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
 									</tr>
 									{% endfor %}	
 								</tbody>

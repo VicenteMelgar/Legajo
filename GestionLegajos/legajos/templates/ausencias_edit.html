@@ -1,0 +1,13 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<h2>Editar Ausencia, Mérito y Demerito para: {{ empleado_preseleccionado }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="{% url 'legajos:info_personal' empleado_preseleccionado %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<h2>Crear Nuevo Tiempo de Servicio para: {{ empleado_preseleccionado }}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" name="action" value="save_and_exit" class="btn app-btn-primary">Guardar</button>
+    <button type="submit" name="action" value="save_and_add_more" class="btn app-btn-primary">Guardar y Agregar Más</button>
+    <a href="{% url 'legajos:info_personal' empleado_preseleccionado.id %}" class="btn app-btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

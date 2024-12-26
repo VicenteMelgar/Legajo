@@ -245,3 +245,4 @@ class EstudiosRealizados(models.Model):
     class Meta:
         verbose_name = 'Estudio Realizado'
         verbose_name_plural = 'Estudios Realizados'
+        
