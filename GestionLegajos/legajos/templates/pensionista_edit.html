@@ -1,13 +1,15 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-<h2>Editar Pensionista Sobreviviente para: {{ empleado_preseleccionado }}</h2>
+<div class="container mt-4">
+  <h2>Editar Pensionista Sobreviviente</h2>
 
-<form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
 
     <button type="submit" class="btn app-btn-primary">Guardar</button>
     <a href="{% url 'legajos:info_personal' empleado_preseleccionado %}" class="btn app-btn-secondary">Cancelar</a>
-</form>
+  </form>
+</div>
 {% endblock %}

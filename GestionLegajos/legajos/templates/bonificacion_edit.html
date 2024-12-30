@@ -1,13 +1,15 @@
-{% extends 'layout/base.html' %}
+{% extends 'layouts/base.html' %}
 
 {% block content %}
-<h2>Editar Bonificación para el Empleado ID: {{ empleado_preseleccionado }}</h2>
+<div class="container mt-4">
+  <h2>Editar Bonificación Personal</h2>
 
-<form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="{% url 'legajos:info_personal' empleado_preseleccionado %}" class="btn btn-danger">Cancelar</a>
-</form>
+    <button type="submit" class="btn app-btn-primary">Guardar</button>
+    <a href="{% url 'legajos:info_personal' empleado_preseleccionado %}" class="btn app-btn-secondary">Cancelar</a>
+  </form>
+</div>
 {% endblock %}

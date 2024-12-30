@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Editar Estudios Realizados para: {{ empleado_preseleccionado }}</h2>
+    <h2>Editar Estudios Realizados</h2>
     <form method="post" enctype="multipart/form-data" class="mt-4">
       {% csrf_token %}
       {{ form.as_p }}  

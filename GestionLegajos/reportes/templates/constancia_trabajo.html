@@ -1,0 +1,54 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+    <div class="container mt-5">
+        <!-- Encabezado -->
+        <div class="text-center mb-4">
+            <h1>Constancia de Trabajo</h1>
+            <p>Emitida por: "Hospital Hermilio Valdizán"</p>
+        </div>
+
+        <!-- Información del Trabajador -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Información del Trabajador</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Nombre:</strong> {{ trabajador.nombres }} {{ trabajador.apellido_paterno }} {{ trabajador.apellido_materno }}</p>
+                <p><strong>DNI:</strong> {{ trabajador.dni }}</p>
+            </div>
+        </div>
+
+        <!-- Servicios Prestados -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Historial de Servicios Prestados</h5>
+            </div>
+            <div class="card-body">
+                <form method="get" action="{% url 'reportes:descargar_constancia' trabajador.id %}">
+                    {% for servicio in servicios %}
+                    <div class="form-check">
+                        <input 
+                            type="checkbox" 
+                            class="form-check-input" 
+                            name="servicios" 
+                            value="{{ servicio.id }}" 
+                            id="servicio-{{ servicio.id }}"
+                        >
+                        <label class="form-check-label" for="servicio-{{ servicio.id }}">
+                            {{ servicio.cargo.all|join:", " }} en {{ servicio.dependencia }}
+                            ({{ servicio.fecha_vigencia|date:"d/m/Y" }} - {{ servicio.fecha_fin|date:"d/m/Y"|default:"actualidad" }})
+                        </label>
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+
+        <!-- Botón Generar Constancia fuera del cuadro -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn app-btn-primary">Descargar Constancia</button>
+        </div>
+        </form>
+    </div>
+
+{% endblock %}

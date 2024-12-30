@@ -5,7 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('legajos/', include('legajos.urls', namespace='legajos_lista'))
+    path('legajos/', include('legajos.urls', namespace='legajos_lista')),
+    path('reportes/', include('reportes.urls')),
 ]
 
 # Agregar manejo de archivos media en desarrollo

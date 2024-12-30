@@ -65,6 +65,7 @@ class ServiciosPrestados(models.Model):
     asunto = models.CharField(max_length=100, blank=True)
     fecha= models.DateField()
     fecha_vigencia = models.DateField()
+    fecha_fin = models.DateField(blank=True, null=True)
     dependencia = models.CharField(max_length=30, choices= dependencia, blank=True, null=True)
     cargo = models.ManyToManyField(Cargo, blank=True)
     nivel = models.ManyToManyField(Nivel, blank=True)

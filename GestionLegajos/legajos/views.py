@@ -1,26 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from datetime import date
+from django.db.models import Q
 from django.views.generic.edit import CreateView
 from .models import DatosPersonales, ServiciosPrestados, AusenciasMeritosDemeritos, BonificacionPersonal, TiempodeServicios, PensionistaSobreviviente, EstudiosRealizados
 from .forms import DatosPersonalesForm, ServiciosPrestadosForm, EstudiosRealizadosForm, AusenciasMeritosDemeritosForm, BonificacionPersonalForm, TiempodeServiciosForm, PensionistaSobrevivienteForm
 
 def datospersonales_lista(request):
-  
-  empleados_cas = DatosPersonales.objects.filter(modalidad='CAS')
-  empleados_nombrados = DatosPersonales.objects.filter(modalidad='Nombrado')
-  empleados_cesantes = DatosPersonales.objects.filter(modalidad='Cesante')
-  todos_empleados = DatosPersonales.objects.all()
-  
+    query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
+    filters = Q(apellido_paterno__icontains=query) | Q(apellido_materno__icontains=query) | Q(nombres__icontains=query)
+
+    empleados_cas = DatosPersonales.objects.filter(filters, modalidad='CAS')
+    empleados_nombrados = DatosPersonales.objects.filter(filters, modalidad='Nombrado')
+    empleados_cesantes = DatosPersonales.objects.filter(filters, modalidad='Cesante')
+    todos_empleados = DatosPersonales.objects.filter(filters)
+
     # Preparar contexto
-  context = {
-      'empleados_cas': empleados_cas,
-      'empleados_nombrados': empleados_nombrados,
-      'empleados_cesantes': empleados_cesantes,
-      'todos_empleados': todos_empleados,
+    context = {
+        'empleados_cas': empleados_cas,
+        'empleados_nombrados': empleados_nombrados,
+        'empleados_cesantes': empleados_cesantes,
+        'todos_empleados': todos_empleados,
+        'query': query  # Para mantener el texto en el campo de búsqueda
     }
-  
-  return render(request, 'empleados.html', context)
+
+    return render(request, 'empleados.html', context)
 
 def empleado_crear(request):
     if request.method == 'POST':

@@ -27,16 +27,16 @@ class DatosPersonalesForm(forms.ModelForm):
 class ServiciosPrestadosForm(forms.ModelForm):
     class Meta:
         model = ServiciosPrestados
-        fields = ['empleado', 'documento', 'numero', 'tipo', 'asunto', 'fecha', 'fecha_vigencia', 'dependencia', 
-                  'cargo', 'nivel', 'plaza', 'pdf']
+        fields = '__all__'
         widgets = {
-          'empleado': forms.HiddenInput(),
+          'empleado': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'documento': forms.Select(attrs={'class': 'form-select'}),
           'numero': forms.TextInput(attrs={'class': 'form-control'}),
           'tipo': forms.Select(attrs={'class': 'form-select'}),
           'asunto': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
           'fecha_vigencia': forms.DateInput(attrs={'class': 'form-control'}),
+          'fecha_fin': forms.DateInput(attrs={'class': 'form-control'}),
           'dependencia': forms.Select(attrs={'class': 'form-select'}),
           'cargo': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'nivel': forms.SelectMultiple(attrs={'class': 'form-select'}),
@@ -47,10 +47,9 @@ class ServiciosPrestadosForm(forms.ModelForm):
 class EstudiosRealizadosForm(forms.ModelForm):
     class Meta:
         model = EstudiosRealizados
-        fields = ['empleado', 'inicio', 'fin', 'grado_instruccion', 'especialidad', 'sub_especialidad', 'cod_especialidad',
-                  'fecha_expedicion', 'pdf']
+        fields = '__all__'
         widgets = {
-          'empleado': forms.HiddenInput(),
+          'empleado': forms.Select(attrs={'class': 'form-select'}),
           'inicio': forms.DateInput(attrs={'class': 'form-control'}),
           'fin': forms.DateInput(attrs={'class': 'form-control'}),
           'grado_instruccion': forms.TextInput(attrs={'class': 'form-control'}),
@@ -65,19 +64,60 @@ class AusenciasMeritosDemeritosForm(forms.ModelForm):
     class Meta:
         model = AusenciasMeritosDemeritos
         fields = '__all__'
+        widgets = {
+          'empleado': forms.Select(attrs={'class': 'form-select'}),
+          'resolucion': forms.TextInput(attrs={'class': 'form-control'}),
+          'motivo': forms.TextInput(attrs={'class': 'form-control'}),
+          'asunto': forms.TextInput(attrs={'class': 'form-control'}),
+          'desde': forms.DateInput(attrs={'class': 'form-control'}),
+          'hasta': forms.DateInput(attrs={'class': 'form-control'}),
+          'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
 class BonificacionPersonalForm(forms.ModelForm):
     class Meta:
         model = BonificacionPersonal
         fields = '__all__'
+        widgets = {
+          'empleado': forms.Select(attrs={'class': 'form-select'}),
+          'resolucion': forms.TextInput(attrs={'class': 'form-control'}),
+          'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'motivo': forms.TextInput(attrs={'class': 'form-control'}),
+          'porcentaje': forms.TextInput(attrs={'class': 'form-control'}),
+          'anios': forms.TextInput(attrs={'class': 'form-control'}),
+          'meses': forms.TextInput(attrs={'class': 'form-control'}),
+          'dias': forms.TextInput(attrs={'class': 'form-control'}),
+          'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+
 
 class TiempodeServiciosForm(forms.ModelForm):
     class Meta:
         model = TiempodeServicios
         fields = '__all__'
+        widgets = {
+          'empleado': forms.Select(attrs={'class': 'form-select'}),
+          'resolucion': forms.TextInput(attrs={'class': 'form-control'}),
+          'desde': forms.DateInput(attrs={'class': 'form-control'}),
+          'hasta': forms.DateInput(attrs={'class': 'form-control'}),
+          'anios': forms.TextInput(attrs={'class': 'form-control'}),
+          'meses': forms.TextInput(attrs={'class': 'form-control'}),
+          'dias': forms.TextInput(attrs={'class': 'form-control'}),
+          'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
 class PensionistaSobrevivienteForm(forms.ModelForm):
     class Meta:
         model = PensionistaSobreviviente
         fields = '__all__'
+        widgets = {
+          'empleado': forms.Select(attrs={'class': 'form-select'}),
+          'resolucion': forms.TextInput(attrs={'class': 'form-control'}),
+          'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'apellido_paterno': forms.TextInput(attrs={'class': 'form-control'}),
+          'apellido_materno': forms.TextInput(attrs={'class': 'form-control'}),
+          'nombres': forms.TextInput(attrs={'class': 'form-control'}),
+          'dni': forms.TextInput(attrs={'class': 'form-control'}),
+          'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
 
