@@ -68,3 +68,30 @@ documento = (
   ('RD', 'Resolución Directoral'),
   ('Memo', 'Memorando')
 )
+
+documentos_informacion = [
+  (3, "Ficha de datos"),
+  (6, "Documento Nacional de Identidad – DNI"),
+  (9, "Declaración jurada o Certificado de antecedentes penales"),
+  (12, "Declaración jurada o certificado de antecedentes policiales"),
+  (15, "Declaración Jurada de bienes y rentas"),
+  (18, "Declaración Jurada de no tener impedimentos (Ley N° 31419)"),
+  (21, "Partida de matrimonio o constancia de concubinato"),
+  (24, "Información de impedimentos e inhabilitaciones"),
+  (27, "DNI de el/la cónyuge o concubino/a"),
+  (30, "DNI de los/las hijos/as menores de edad"),
+  (33, "Certificado de discapacidad de el/la servidor/a"),
+  (36, "Certificado de discapacidad de los/las hijos/as"),
+]
+
+documentos_seleccion = [
+  (3, "Resultado Final de proceso de selección"),
+  (6, "Informe de la Oficina de Personal"),
+]
+
+documentos_induccion = [
+  (3, "Registro de Inducción"),
+  (6, "Cargo de entrega de perfil de puesto y funciones"),
+  (9, "Cargo de entrega de reglamento interno de servidores civiles"),
+  (12, "Cargo de entrega de código de conducta y ética"),
+]

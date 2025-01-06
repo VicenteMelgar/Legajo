@@ -1,10 +1,13 @@
 from django.contrib import admin
 from .models import (
     DatosPersonales,
-    ServiciosPrestados,
+    InfoPersonal,
+    Seleccion,
+    Vinculo,
+    Induccion,
     Programa,
-    AusenciasMeritosDemeritos,
-    BonificacionPersonal,
+    Movimientos,
+    Compensaciones,
     TiempodeServicios,
     PensionistaSobreviviente,
     EstudiosRealizados,
@@ -34,12 +37,31 @@ class DatosPersonalesAdmin(admin.ModelAdmin):
     list_display = ('apellido_paterno', 'apellido_materno', 'nombres', 'dni', 'carnet_extranjeria', 'email')
     search_fields = ('apellido_paterno', 'apellido_materno', 'nombres', 'dni')
 
-@admin.register(ServiciosPrestados)
-class ServiciosPrestadosAdmin(admin.ModelAdmin):
+@admin.register(InfoPersonal)
+class InfoPersonalAdmin(admin.ModelAdmin):
+    list_display = ('tipo_documento', 'ver_pdf', 'fecha_carga')
+    list_filter = ('empleado', 'tipo_documento')
+    search_fields = ('tipo_documento', 'empleado__nombres', 'empleado__apellido_paterno', 'empleado__apellido_materno', 'empleado__dni')
+    
+@admin.register(Seleccion)
+class SeleccionAdmin(admin.ModelAdmin):
+    list_display = ('tipo_documento', 'descripcion', 'ver_pdf', 'fecha_carga')
+    list_filter = ('empleado', 'tipo_documento')
+    search_fields = ('tipo_documento', 'empleado__nombres', 'empleado__apellido_paterno', 'empleado__apellido_materno', 'empleado__dni')
+    filter_horizontal = ('empleado',)
+    
+@admin.register(Vinculo)
+class VinculoAdmin(admin.ModelAdmin):
     list_display = ('documento', 'numero', 'tipo', 'asunto', 'fecha_vigencia', 'ver_pdf')
     list_filter = ('empleado', 'tipo')
     search_fields = ('documento', 'empleado__nombres', 'empleado__apellido_paterno', 'empleado__apellido_materno', 'empleado__dni')
     filter_horizontal = ('empleado',)
+
+@admin.register(Induccion)
+class InduccionAdmin(admin.ModelAdmin):
+    list_display = ('tipo_documento', 'ver_pdf', 'fecha_carga')
+    list_filter = ('empleado', 'tipo_documento')
+    search_fields = ('tipo_documento', 'empleado__nombres', 'empleado__apellido_paterno', 'empleado__apellido_materno', 'empleado__dni')
     
 @admin.register(PensionistaSobreviviente)
 class PensionistaSobrevivienteAdmin(admin.ModelAdmin):
@@ -59,14 +81,14 @@ class ProgramaAdmin(admin.ModelAdmin):
     list_filter = ('empleado',) 
     search_fields = ('denominacion',)
     
-@admin.register(AusenciasMeritosDemeritos)
-class AusenciasMeritosDemeritosAdmin(admin.ModelAdmin):
+@admin.register(Movimientos)
+class MovimientosAdmin(admin.ModelAdmin):
     list_display = ('resolucion', 'motivo', 'asunto', 'desde', 'hasta', 'ver_pdf')
     list_filter = ('empleado',)
     search_fields = ('resolucion',)
     
-@admin.register(BonificacionPersonal)
-class BonificacionPersonalAdmin(admin.ModelAdmin):
+@admin.register(Compensaciones)
+class CompensacionesAdmin(admin.ModelAdmin):
     list_display = ('resolucion', 'fecha', 'motivo', 'porcentaje', 'anios', 'meses', 'dias', 'ver_pdf')
     list_filter = ('empleado',)
     search_fields = ('resolucion',)

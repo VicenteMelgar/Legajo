@@ -20,10 +20,10 @@
                   </svg> Actualizar Legajo
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <li><a class="dropdown-item" href="{% url 'legajos:servicio_crear' empleado.id %}">Servicios Prestados</a></li>
-                  <li><a class="dropdown-item" href="{% url 'legajos:estudios_crear' empleado.id %}">Estudios Realizados</a></li>
-                  <li><a class="dropdown-item" href="{% url 'legajos:ausencias_crear' empleado.id %}">Ausencias, Méritos, Demeritos</a></li>
-                  <li><a class="dropdown-item" href="{% url 'legajos:bonificacion_crear' empleado.id %}">Bonificación Personal</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:vinculo_crear' empleado.id %}">Formalización de Vínculo</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:estudios_crear' empleado.id %}">Formación Académica</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:movimientos_crear' empleado.id %}">Movimientos del Personal</a></li>
+                  <li><a class="dropdown-item" href="{% url 'legajos:compensaciones_crear' empleado.id %}">Compensaciones</a></li>
                   <li><a class="dropdown-item" href="{% url 'legajos:tiempo_crear' empleado.id %}">Tiempo de Servicios</a></li>
                   <li><a class="dropdown-item" href="{% url 'legajos:pensionista_crear' empleado.id %}">Pensionista Sobreviviente</a></li>
                 </ul>
@@ -36,17 +36,80 @@
 		</div><!--//row-->
 		
 		<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
-			<a class="flex-sm-fill text-sm-center nav-link active" id="orders-services-tab" data-bs-toggle="tab" href="#orders-services" role="tab" aria-controls="orders-service" aria-selected="true">Servicios Prestados</a>
-      <a class="flex-sm-fill text-sm-center nav-link" id="orders-estudios-tab" data-bs-toggle="tab" href="#orders-estudios" role="tab" aria-controls="orders-estudios" aria-selected="false">Estudios Realizados</a>
-      <a class="flex-sm-fill text-sm-center nav-link"  id="orders-amd-tab" data-bs-toggle="tab" href="#orders-amd" role="tab" aria-controls="orders-amd" aria-selected="false">AMD</a>
-			<a class="flex-sm-fill text-sm-center nav-link" id="orders-bonificacion-tab" data-bs-toggle="tab" href="#orders-bonificacion" role="tab" aria-controls="orders-bonificacion" aria-selected="false">Bonificación Personal</a>
-      <a class="flex-sm-fill text-sm-center nav-link" id="orders-tiemposervicios-tab" data-bs-toggle="tab" href="#orders-tiemposervicios" role="tab" aria-controls="orders-tiemposervicios" aria-selected="false">Tiempo de Servicios</a>
-      <a class="flex-sm-fill text-sm-center nav-link" id="orders-pension-tab" data-bs-toggle="tab" href="#orders-pension" role="tab" aria-controls="orders-pension" aria-selected="false">Pensionista Sobreviviente</a>
+			<a class="flex-sm-fill text-sm-center nav-link active" id="informacion-tab" data-bs-toggle="tab" href="#informacion" role="tab" aria-controls="informacion" aria-selected="true">Información</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="incorporacion-tab" data-bs-toggle="tab" href="#incorporacion" role="tab" aria-controls="incorporacion" aria-selected="false">Incorporación</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="estudios-tab" data-bs-toggle="tab" href="#estudios" role="tab" aria-controls="estudios" aria-selected="false">Formación</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="pension-tab" data-bs-toggle="tab" href="#pension" role="tab" aria-controls="pension" aria-selected="false">Experiencia</a>
+      <a class="flex-sm-fill text-sm-center nav-link"  id="amd-tab" data-bs-toggle="tab" href="#amd" role="tab" aria-controls="orders-amd" aria-selected="false">Movimientos</a>
+			<a class="flex-sm-fill text-sm-center nav-link" id="bonificacion-tab" data-bs-toggle="tab" href="#bonificacion" role="tab" aria-controls="bonificacion" aria-selected="false">Compensaciones</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="tiemposervicios-tab" data-bs-toggle="tab" href="#tiemposervicios" role="tab" aria-controls="tiemposervicios" aria-selected="false">Evaluación</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="pension-tab" data-bs-toggle="tab" href="#pension" role="tab" aria-controls="pension" aria-selected="false">Reconocimientos</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="pension-tab" data-bs-toggle="tab" href="#pension" role="tab" aria-controls="pension" aria-selected="false">Laboral</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="pension-tab" data-bs-toggle="tab" href="#pension" role="tab" aria-controls="pension" aria-selected="false">SST</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="pension-tab" data-bs-toggle="tab" href="#pension" role="tab" aria-controls="pension" aria-selected="false">Desvinculación</a>
 		</nav>
 
-		<div class="tab-content" id="orders-table-tab-content">
-			<div class="tab-pane fade show active" id="orders-services" role="tabpanel" aria-labelledby="orders-services-tab">
-				<div class="app-card app-card-orders-table shadow-sm mb-5">
+    <div class="tab-content" id="orders-table-tab-content">
+      <div class="tab-pane fade show active" id="informacion" role="tabpanel" aria-labelledby="informacion-tab">
+        <div class="app-card app-card-orders-table mb-5">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Ver Documento</th>
+                    <th class="cell">Editar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for info_personal in informacion_personal %}
+                  <tr>
+                    <td class="cell"><span>{{ info_personal.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ info_personal.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="#" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->
+
+			<div class="tab-pane fade" id="incorporacion" role="tabpanel" aria-labelledby="incorporacion-tab">
+        <div class="app-card app-card-orders-table shadow-sm mb-3">
+					<div class="app-card-body">
+						<div class="table-responsive">
+              <table class="table app-table-hover mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Tipo de Documento</th>
+										<th class="cell">Descripción</th>
+										<th class="cell">Documento</th>
+                    <th class="cell">Editar</th>
+									</tr>
+								</thead>
+                <tbody>
+                  {% for seleccion in selecciones %}
+                  <tr>
+                    <td class="cell"><span>{{ seleccion.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ seleccion.descripcion }}</span></td>
+                    <td class="cell"><span>{{ seleccion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="#" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+							</table>
+						</div><!--//table-responsive-->				 
+					</div><!--//app-card-body-->		
+				</div><!--//app-card-->
+  
+        <div class="app-card app-card-orders-table shadow-sm mb-3">
 					<div class="app-card-body">
 						<div class="table-responsive">
 							<table class="table app-table-hover mb-0 text-left">
@@ -61,14 +124,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									{% for servicio in servicios %}
+									{% for vinculo in vinculos %}
 									<tr>
-										<td class="cell">{{ servicio.documento }} {{ servicio.numero }}</td>
-										<td class="cell"><span class="truncate">{{ servicio.fecha }}</span></td>
-										<td class="cell">{{ servicio.asunto }}</td>
+										<td class="cell">{{ vinculo.documento }} {{ vinculo.numero }}</td>
+										<td class="cell"><span class="truncate">{{ vinculo.fecha }}</span></td>
+										<td class="cell">{{ vinculo.asunto }}</td>
 										<td class="cell"><span>
-											{% if servicio.cargo.all %}
-												{% for cargo in servicio.cargo.all %}
+											{% if vinculo.cargo.all %}
+												{% for cargo in vinculo.cargo.all %}
 													{{ cargo }}{% if not forloop.last %}, {% endif %}
 												{% endfor %}
 											{% else %}
@@ -76,16 +139,16 @@
 											{% endif %}
 										</span></td>
 										<td class="cell"><span>
-											{% if servicio.nivel.all %}
-												{% for nivel in servicio.nivel.all %}
+											{% if vinculo.nivel.all %}
+												{% for nivel in vinculo.nivel.all %}
 													{{ nivel }}{% if not forloop.last %}, {% endif %}
 												{% endfor %}
 											{% else %}
 												Sin nivel registrado
 											{% endif %}
 										</span></td>
-										<td class="cell"><span>{{ servicio.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:servicio_editar' servicio.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+										<td class="cell"><span>{{ vinculo.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:vinculo_editar' vinculo.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                       <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                     </svg></a></span></td>
 									</tr>
@@ -93,11 +156,38 @@
 								</tbody>
 							</table>
 						</div><!--//table-responsive-->				 
-					</div><!--//app-card-body-->		
-				</div><!--//app-card-->
-			</div><!--//tab-pane-->
-			
-			<div class="tab-pane fade" id="orders-amd" role="tabpanel" aria-labelledby="orders-amd-tab">
+					</div><!--//app-card-body-->	
+        </div><!--//app-card-->
+      			
+        <div class="app-card app-card-orders-table mb-3">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Ver Documento</th>
+                    <th class="cell">Editar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for induccion in inducciones %}
+                  <tr>
+                    <td class="cell"><span>{{ induccion.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ induccion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="#" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->	
+
+			<div class="tab-pane fade" id="amd" role="tabpanel" aria-labelledby="amd-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">	
@@ -113,14 +203,14 @@
 									</tr>
 								</thead>
 								<tbody>
-									{% for ausencia in ausencias %}
+									{% for movimiento in movimientos %}
 									<tr>
-										<td class="cell"><span>{{ ausencia.resolucion }}</span></td>
-										<td class="cell"><span>{{ ausencia.motivo }}</span></td>
-										<td class="cell"><span>{{ ausencia.asunto }}</span></td>
-										<td class="cell"><span>{{ ausencia.desde }}</span></td>
-										<td class="cell"><span>{{ ausencia.hasta }}</span></td>
-										<td class="cell"><span>{{ ausencia.ver_pdf|safe }}</span></td>
+										<td class="cell"><span>{{ movimiento.resolucion }}</span></td>
+										<td class="cell"><span>{{ movimiento.motivo }}</span></td>
+										<td class="cell"><span>{{ movimiento.asunto }}</span></td>
+										<td class="cell"><span>{{ movimiento.desde }}</span></td>
+										<td class="cell"><span>{{ movimiento.hasta }}</span></td>
+										<td class="cell"><span>{{ movimiento.ver_pdf|safe }}</span></td>
                     <td class="cell"><span><a href="{% url 'legajos:ausencias_editar' ausencia.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                       <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                     </svg></a></span></td>
@@ -133,7 +223,7 @@
 				</div><!--//app-card-->
 			</div><!--//tab-pane-->
 				
-			<div class="tab-pane fade" id="orders-pension" role="tabpanel" aria-labelledby="orders-pension-tab">
+			<div class="tab-pane fade" id="pension" role="tabpanel" aria-labelledby="pension-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -167,7 +257,7 @@
 				</div><!--//app-card-->
 			</div><!--//tab-pane-->
 
-			<div class="tab-pane fade" id="orders-bonificacion" role="tabpanel" aria-labelledby="orders-bonificacion-tab">
+			<div class="tab-pane fade" id="bonificacion" role="tabpanel" aria-labelledby="bonificacion-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -185,16 +275,16 @@
 									</tr>
 								</thead>
 								<tbody>
-									{% for bonificacion in bonificaciones %}
+									{% for compensacion in compensaciones %}
 									<tr>
-										<td class="cell"><span>{{ bonificacion.resolucion }}</span></td>
-										<td class="cell"><span>{{ bonificacion.fecha }}</span></td>
-										<td class="cell"><span>{{ bonificacion.motivo }}</span></td>
-										<td class="cell"><span>{{ bonificacion.porcentaje }}%</span></td>
-										<td class="cell"><span>{{ bonificacion.anios }}</span></td>
-										<td class="cell"><span>{{ bonificacion.meses }}</span></td>
-										<td class="cell"><span>{{ bonificacion.dias }}</span></td>
-										<td class="cell"><span>{{ bonificacion.ver_pdf|safe }}</span></td>
+										<td class="cell"><span>{{ compensacion.resolucion }}</span></td>
+										<td class="cell"><span>{{ compensacion.fecha }}</span></td>
+										<td class="cell"><span>{{ compensacion.motivo }}</span></td>
+										<td class="cell"><span>{{ compensacion.porcentaje }}%</span></td>
+										<td class="cell"><span>{{ compensacion.anios }}</span></td>
+										<td class="cell"><span>{{ compensacion.meses }}</span></td>
+										<td class="cell"><span>{{ compensacion.dias }}</span></td>
+										<td class="cell"><span>{{ compensacion.ver_pdf|safe }}</span></td>
                     <td class="cell"><span><a href="{% url 'legajos:bonificacion_editar' bonificacion.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                       <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                     </svg></a></span></td>
@@ -207,7 +297,7 @@
 				</div><!--//app-card-->
 			</div><!--//tab-pane-->
 
-			<div class="tab-pane fade" id="orders-tiemposervicios" role="tabpanel" aria-labelledby="orders-tiemposervicios-tab">
+			<div class="tab-pane fade" id="tiemposervicios" role="tabpanel" aria-labelledby="tiemposervicios-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -245,7 +335,7 @@
 				</div><!--//app-card-->
 			</div><!--//tab-pane-->
 
-			<div class="tab-pane fade" id="orders-estudios" role="tabpanel" aria-labelledby="orders-estudios-tab">
+			<div class="tab-pane fade" id="estudios" role="tabpanel" aria-labelledby="estudios-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">

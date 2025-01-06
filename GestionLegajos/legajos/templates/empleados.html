@@ -68,7 +68,7 @@
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><a class="btn-sm app-btn-secondary" href="{% url 'legajos:info_personal' empleado.id %}">Ver</a></td>
+									<td class="cell"><a class="btn-sm app-btn-secondary" href="{% url 'legajos:info_general' empleado.id %}">Ver</a></td>
 								</tr>
 								{% endfor %}	
 							</tbody>

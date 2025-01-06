@@ -1,5 +1,5 @@
 from django import forms
-from .models import DatosPersonales, ServiciosPrestados, AusenciasMeritosDemeritos, BonificacionPersonal, TiempodeServicios, PensionistaSobreviviente, EstudiosRealizados
+from .models import DatosPersonales, Vinculo, Movimientos, Compensaciones, TiempodeServicios, PensionistaSobreviviente, EstudiosRealizados
 
 class DatosPersonalesForm(forms.ModelForm):
   class Meta:
@@ -24,9 +24,9 @@ class DatosPersonalesForm(forms.ModelForm):
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
         }
 
-class ServiciosPrestadosForm(forms.ModelForm):
+class VinculoForm(forms.ModelForm):
     class Meta:
-        model = ServiciosPrestados
+        model = Vinculo
         fields = '__all__'
         widgets = {
           'empleado': forms.SelectMultiple(attrs={'class': 'form-select'}),
@@ -37,7 +37,6 @@ class ServiciosPrestadosForm(forms.ModelForm):
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
           'fecha_vigencia': forms.DateInput(attrs={'class': 'form-control'}),
           'fecha_fin': forms.DateInput(attrs={'class': 'form-control'}),
-          'dependencia': forms.Select(attrs={'class': 'form-select'}),
           'cargo': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'nivel': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'plaza': forms.SelectMultiple(attrs={'class': 'form-select'}),
@@ -60,9 +59,9 @@ class EstudiosRealizadosForm(forms.ModelForm):
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
         
-class AusenciasMeritosDemeritosForm(forms.ModelForm):
+class MovimientosForm(forms.ModelForm):
     class Meta:
-        model = AusenciasMeritosDemeritos
+        model = Movimientos
         fields = '__all__'
         widgets = {
           'empleado': forms.Select(attrs={'class': 'form-select'}),
@@ -74,9 +73,9 @@ class AusenciasMeritosDemeritosForm(forms.ModelForm):
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
-class BonificacionPersonalForm(forms.ModelForm):
+class CompensacionesForm(forms.ModelForm):
     class Meta:
-        model = BonificacionPersonal
+        model = Compensaciones
         fields = '__all__'
         widgets = {
           'empleado': forms.Select(attrs={'class': 'form-select'}),

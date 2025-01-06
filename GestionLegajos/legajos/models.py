@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
-from .choices import estados, sexo, departamento, tipo, dependencia, documento, modalidad
+from .choices import estados, sexo, departamento, tipo, documento, modalidad, documentos_informacion, documentos_seleccion, documentos_induccion
 from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
             
@@ -56,97 +56,228 @@ class DatosPersonales(models.Model):
         verbose_name = 'Empleado'
         verbose_name_plural = 'Empleados'
 
-# Modelo relacionado con PDFs
-class ServiciosPrestados(models.Model):
+# Modelo Información Personal
+class InfoPersonal(models.Model):
+    empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
+    tipo_documento = models.PositiveSmallIntegerField(choices=documentos_informacion, verbose_name='Tipo de Documento')
+    pdf = models.FileField(upload_to='documentos_personales/', verbose_name='Cargar PDF')
+    fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
+        
+    def ver_pdf(self):
+        if self.pdf:
+            return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+        return "No disponible"
+    
+    ver_pdf.short_description = "Visualizar PDF"
+  
+    class Meta:
+        ordering = ['tipo_documento']  # Ordenar según el tipo
+        unique_together = ('empleado', 'tipo_documento')
+        verbose_name = 'Información Personal'
+        verbose_name_plural = 'Información Personal'
+    
+    def __str__(self):
+        return f"{self.get_tipo_documento_display()} - {self.empleado}"
+      
+# Modelo Proceso de Solección
+class Seleccion(models.Model):
     empleado = models.ManyToManyField(DatosPersonales)
-    documento = models.CharField(max_length=25, choices= documento, blank=True, null=True)
-    numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
-    tipo = models.CharField(max_length=15, choices= tipo, blank=True, null=True)
-    asunto = models.CharField(max_length=100, blank=True)
-    fecha= models.DateField()
-    fecha_vigencia = models.DateField()
-    fecha_fin = models.DateField(blank=True, null=True)
-    dependencia = models.CharField(max_length=30, choices= dependencia, blank=True, null=True)
-    cargo = models.ManyToManyField(Cargo, blank=True)
-    nivel = models.ManyToManyField(Nivel, blank=True)
-    plaza = models.ManyToManyField(Plaza, blank=True)
-    pdf = models.FileField(upload_to='servicios_prestados/', verbose_name='Cargar PDF')
-
+    tipo_documento = models.PositiveSmallIntegerField(choices=documentos_seleccion, verbose_name='Tipo de Documento')
+    descripcion = models.CharField(max_length=250, blank=True, verbose_name='Descripción')
+    pdf = models.FileField(upload_to='documentos_seleccion/', verbose_name='Cargar PDF')
+    fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
+        
     def ver_pdf(self):
         if self.pdf:
             return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
         return "No disponible"
     
     ver_pdf.short_description = "Visualizar PDF"
-    
-    def save(self, *args, **kwargs):
-        if not self.asunto and self.fecha_vigencia and self.numero and self.tipo:
-            # Formatear la fecha
-            fecha_formateada = date_format(self.fecha_vigencia, "j \d\e F \d\e Y", use_l10n=True)
-            
-            # Texto personalizado según el tipo
-            if self.tipo == 'Nombramiento':
-                texto_tipo = "Nombrar con resolución"
-            elif self.tipo == 'Reasignacion':
-                texto_tipo = "Reasignar con resolución"
-            elif self.tipo == 'Ascenso':
-                texto_tipo = "Ascender con resolución"
-            elif self.tipo == 'Cese':
-                texto_tipo = "Cesar con resolución"
-            else:
-                texto_tipo = "Sin tipo definido"  # Caso por defecto
-
-            # Concatenar asunto
-            self.asunto = f"{texto_tipo} {self.numero}, a partir del {fecha_formateada}"
-        super().save(*args, **kwargs)
- 
-    def __str__(self):
-        return self.asunto
-    
+  
     class Meta:
-        verbose_name = 'Servicio Prestado'
-        verbose_name_plural = 'Servicios Prestados'
-
-# Programa
-class Programa(models.Model):
-    empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
-    denominacion = models.CharField(max_length=100)
-    codfun = models.CharField(max_length=4)
-    codpro = models.CharField(max_length=4)
-    codsub = models.CharField(max_length=4)
-    codact = models.CharField(max_length=4)
-    codcom = models.CharField(max_length=4)
-    codmet = models.CharField(max_length=4)
-
+        ordering = ['tipo_documento']  # Ordenar según el tipo
+        verbose_name = 'Proceso de Selección'
+        verbose_name_plural = 'Proceso de Selección'
+    
     def __str__(self):
-        return self.denominacion
+        return f"{self.get_tipo_documento_display()} - {self.empleado}"
+      
+# Modelo relacionado con PDFs
+class Vinculo(models.Model):
+  empleado = models.ManyToManyField(DatosPersonales)
+  documento = models.CharField(max_length=25, choices= documento, blank=True, null=True)
+  numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
+  tipo = models.CharField(max_length=15, choices= tipo, blank=True, null=True)
+  asunto = models.CharField(max_length=100, blank=True)
+  fecha = models.DateField()
+  fecha_vigencia = models.DateField()
+  fecha_fin = models.DateField(blank=True, null=True)
+  cargo = models.ManyToManyField(Cargo, blank=True)
+  nivel = models.ManyToManyField(Nivel, blank=True)
+  plaza = models.ManyToManyField(Plaza, blank=True)
+  pdf = models.FileField(upload_to='documentos_vinculo/', verbose_name='Cargar PDF')
 
-# Ausencias, Méritos y Deméritos
-class AusenciasMeritosDemeritos(models.Model):
+  def ver_pdf(self):
+      if self.pdf:
+          return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+      return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+  
+  def save(self, *args, **kwargs):
+      if not self.asunto and self.fecha_vigencia and self.numero and self.tipo:
+          # Formatear la fecha
+          fecha_formateada = date_format(self.fecha_vigencia, "j \d\e F \d\e Y", use_l10n=True)
+          
+          # Texto personalizado según el tipo
+          if self.tipo == 'Nombramiento':
+              texto_tipo = "Nombrar con resolución"
+          elif self.tipo == 'Reasignacion':
+              texto_tipo = "Reasignar con resolución"
+          elif self.tipo == 'Ascenso':
+              texto_tipo = "Ascender con resolución"
+          elif self.tipo == 'Cese':
+              texto_tipo = "Cesar con resolución"
+          else:
+              texto_tipo = "Sin tipo definido"  # Caso por defecto
+
+          # Concatenar asunto
+          self.asunto = f"{texto_tipo} {self.numero}, a partir del {fecha_formateada}"
+      super().save(*args, **kwargs)
+
+  def __str__(self):
+      return self.asunto
+  
+  class Meta:
+    ordering = ['-fecha']
+    verbose_name = 'Formalización de Vínculo'
+    verbose_name_plural = 'Formalización de Vínculo'
+
+# Modelo Inducción del Personal
+class Induccion(models.Model):
     empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
-    resolucion = models.CharField(max_length=50, unique=True)
-    motivo = models.CharField(max_length=50)
-    asunto = models.CharField(max_length=50)
-    desde = models.DateField()
-    hasta = models.DateField()
-    pdf = models.FileField(upload_to='ausencias_meritos_demeritos/', verbose_name='Cargar PDF')
-
+    tipo_documento = models.PositiveSmallIntegerField(choices=documentos_induccion, verbose_name='Tipo de Documento')
+    pdf = models.FileField(upload_to='documentos_induccion/', verbose_name='Cargar PDF')
+    fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
+        
     def ver_pdf(self):
         if self.pdf:
             return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
         return "No disponible"
     
     ver_pdf.short_description = "Visualizar PDF"
+  
+    class Meta:
+        ordering = ['tipo_documento']  # Ordenar según el tipo
+        unique_together = ('empleado', 'tipo_documento')
+        verbose_name = 'Inducción del Personal'
+        verbose_name_plural = 'Inducción del Personal'
     
     def __str__(self):
-        return self.resolucion
+        return f"{self.get_tipo_documento_display()} - {self.empleado}"
+      
+# Estudios Realizados
+class EstudiosRealizados(models.Model):
+  empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
+  inicio = models.DateField()
+  fin = models.DateField()
+  grado_instruccion = models.CharField(max_length=50)
+  especialidad = models.CharField(max_length=50)
+  sub_especialidad = models.CharField(max_length=50, blank=True, null=True)
+  cod_especialidad = models.CharField(max_length=50, blank=True, null=True)
+  fecha_expedicion = models.DateField()
+  pdf = models.FileField(upload_to='formacion_academica/', verbose_name='Cargar PDF')
 
-    class Meta:
-        verbose_name = 'Ausencias, Méritos y Deméritos'
-        verbose_name_plural = 'Ausencias, Méritos y Deméritos'
+  def ver_pdf(self):
+      if self.pdf:
+          return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+      return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+  
+  def __str__(self):
+      return self.grado_instruccion
+  
+  class Meta:
+    ordering = ['-fecha_expedicion']
+    verbose_name = 'Estudio Realizado'
+    verbose_name_plural = 'Estudios Realizados'
+        
+# Especializaciones, Diplomados, cursos, talleres
+class Cursos(models.Model):
+  empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
+  inicio = models.DateField()
+  fin = models.DateField()
+  descripcion = models.CharField(max_length=250)
+  duracion_horas = models.IntegerField()
+  fecha_expedicion = models.DateField()
+  pdf = models.FileField(upload_to='cursos/', verbose_name='Cargar PDF')
+
+  def ver_pdf(self):
+    if self.pdf:
+      return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+    return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+  
+  def __str__(self):
+    return self.descripcion
+  
+  class Meta:
+    ordering = ['-fecha_expedicion']
+    verbose_name = 'Especializaciones, Diplomados, Cursos, Talleres'
+    verbose_name_plural = 'Especializaciones, Diplomados, Cursos, Talleres'
+
+# Experiencia Laboral
+class Experiencia(models.Model):
+  empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
+  documento = models.CharField(max_length=100)
+  inicio = models.DateField()
+  fin = models.DateField()
+  descripcion = models.CharField(max_length=250)
+  pdf = models.FileField(upload_to='experiencia_laboral/', verbose_name='Cargar PDF')
+
+  def ver_pdf(self):
+    if self.pdf:
+      return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+    return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+  
+  def __str__(self):
+    return self.descripcion
+  
+  class Meta:
+    ordering = ['-inicio']
+    verbose_name = 'Especializaciones, Diplomados, Cursos, Talleres'
+    verbose_name_plural = 'Especializaciones, Diplomados, Cursos, Talleres'
+
+# Movimientos del Personal
+class Movimientos(models.Model):
+  empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
+  resolucion = models.CharField(max_length=50, unique=True)
+  motivo = models.CharField(max_length=50)
+  asunto = models.CharField(max_length=50)
+  desde = models.DateField()
+  hasta = models.DateField()
+  pdf = models.FileField(upload_to='movimientos_personal/', verbose_name='Cargar PDF')
+
+  def ver_pdf(self):
+    if self.pdf:
+      return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+    return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+  
+  def __str__(self):
+    return self.resolucion
+
+  class Meta:
+    verbose_name = 'Movimientos del Personal'
+    verbose_name_plural = 'Movimientos del Personal'
         
 # Bonificación Personal
-class BonificacionPersonal(models.Model):
+class Compensaciones(models.Model):
     empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
     resolucion = models.CharField(max_length=50, unique=True)
     fecha = models.DateField()
@@ -155,7 +286,7 @@ class BonificacionPersonal(models.Model):
     anios = models.IntegerField(verbose_name='años')
     meses = models.IntegerField()
     dias = models.IntegerField()
-    pdf = models.FileField(upload_to='bonificacion_personal/', verbose_name='Cargar PDF')
+    pdf = models.FileField(upload_to='compensaciones/', verbose_name='Cargar PDF')
 
     def ver_pdf(self):
         if self.pdf:
@@ -198,52 +329,40 @@ class TiempodeServicios(models.Model):
 
 # Pensionista Sobreviviente
 class PensionistaSobreviviente(models.Model):
-    empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
-    resolucion = models.CharField(max_length=25, unique=True)
-    fecha = models.DateField()
-    apellido_paterno = models.CharField(max_length=50)
-    apellido_materno = models.CharField(max_length=50)
-    nombres = models.CharField(max_length=50)
-    dni = models.CharField(max_length=8)
-    pdf = models.FileField(upload_to='pensionista_sobreviviente/', verbose_name='Cargar PDF')
-    
-    def ver_pdf(self):
-        if self.pdf:
-            return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
-        return "No disponible"
-    
-    ver_pdf.short_description = "Visualizar PDF"
+  empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
+  resolucion = models.CharField(max_length=25, unique=True)
+  fecha = models.DateField()
+  apellido_paterno = models.CharField(max_length=50)
+  apellido_materno = models.CharField(max_length=50)
+  nombres = models.CharField(max_length=50)
+  dni = models.CharField(max_length=8)
+  pdf = models.FileField(upload_to='pensionista_sobreviviente/', verbose_name='Cargar PDF')
+  
+  def ver_pdf(self):
+    if self.pdf:
+      return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+    return "No disponible"
 
-    def __str__(self):
-        return self.resolucion
-    
-    class Meta:
-        verbose_name = 'Pensionista sobreviviente'
-        verbose_name_plural = 'Pensionista Sobreviviente'
-    
-# Estudios Realizados
-class EstudiosRealizados(models.Model):
-    empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
-    inicio = models.DateField()
-    fin = models.DateField()
-    grado_instruccion = models.CharField(max_length=50)
-    especialidad = models.CharField(max_length=50)
-    sub_especialidad = models.CharField(max_length=50, blank=True, null=True)
-    cod_especialidad = models.CharField(max_length=50, blank=True, null=True)
-    fecha_expedicion = models.DateField()
-    pdf = models.FileField(upload_to='estudios_realizados/', verbose_name='Cargar PDF')
+  ver_pdf.short_description = "Visualizar PDF"
 
-    def ver_pdf(self):
-        if self.pdf:
-            return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
-        return "No disponible"
+  def __str__(self):
+    return self.resolucion
+  
+  class Meta:
+    verbose_name = 'Pensionista sobreviviente'
+    verbose_name_plural = 'Pensionista Sobreviviente'
     
-    ver_pdf.short_description = "Visualizar PDF"
-    
-    def __str__(self):
-        return self.grado_instruccion
-    
-    class Meta:
-        verbose_name = 'Estudio Realizado'
-        verbose_name_plural = 'Estudios Realizados'
+# Programa
+class Programa(models.Model):
+  empleado = models.ForeignKey(DatosPersonales, on_delete=models.CASCADE)
+  denominacion = models.CharField(max_length=100)
+  codfun = models.CharField(max_length=4)
+  codpro = models.CharField(max_length=4)
+  codsub = models.CharField(max_length=4)
+  codact = models.CharField(max_length=4)
+  codcom = models.CharField(max_length=4)
+  codmet = models.CharField(max_length=4)
+
+  def __str__(self):
+    return self.denominacion
         

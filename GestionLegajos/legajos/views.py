@@ -3,28 +3,28 @@ from django.urls import reverse
 from datetime import date
 from django.db.models import Q
 from django.views.generic.edit import CreateView
-from .models import DatosPersonales, ServiciosPrestados, AusenciasMeritosDemeritos, BonificacionPersonal, TiempodeServicios, PensionistaSobreviviente, EstudiosRealizados
-from .forms import DatosPersonalesForm, ServiciosPrestadosForm, EstudiosRealizadosForm, AusenciasMeritosDemeritosForm, BonificacionPersonalForm, TiempodeServiciosForm, PensionistaSobrevivienteForm
+from .models import DatosPersonales, Seleccion, Vinculo, Induccion, Movimientos, Compensaciones, TiempodeServicios, PensionistaSobreviviente, EstudiosRealizados, InfoPersonal
+from .forms import DatosPersonalesForm, VinculoForm, EstudiosRealizadosForm, MovimientosForm, CompensacionesForm, TiempodeServiciosForm, PensionistaSobrevivienteForm
 
 def datospersonales_lista(request):
-    query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
-    filters = Q(apellido_paterno__icontains=query) | Q(apellido_materno__icontains=query) | Q(nombres__icontains=query)
+  query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
+  filters = Q(apellido_paterno__icontains=query) | Q(apellido_materno__icontains=query) | Q(nombres__icontains=query)
 
-    empleados_cas = DatosPersonales.objects.filter(filters, modalidad='CAS')
-    empleados_nombrados = DatosPersonales.objects.filter(filters, modalidad='Nombrado')
-    empleados_cesantes = DatosPersonales.objects.filter(filters, modalidad='Cesante')
-    todos_empleados = DatosPersonales.objects.filter(filters)
+  empleados_cas = DatosPersonales.objects.filter(filters, modalidad='CAS')
+  empleados_nombrados = DatosPersonales.objects.filter(filters, modalidad='Nombrado')
+  empleados_cesantes = DatosPersonales.objects.filter(filters, modalidad='Cesante')
+  todos_empleados = DatosPersonales.objects.filter(filters)
 
-    # Preparar contexto
-    context = {
-        'empleados_cas': empleados_cas,
-        'empleados_nombrados': empleados_nombrados,
-        'empleados_cesantes': empleados_cesantes,
-        'todos_empleados': todos_empleados,
-        'query': query  # Para mantener el texto en el campo de búsqueda
-    }
+  # Preparar contexto
+  context = {
+    'empleados_cas': empleados_cas,
+    'empleados_nombrados': empleados_nombrados,
+    'empleados_cesantes': empleados_cesantes,
+    'todos_empleados': todos_empleados,
+    'query': query  # Para mantener el texto en el campo de búsqueda
+  }
 
-    return render(request, 'empleados.html', context)
+  return render(request, 'empleados.html', context)
 
 def empleado_crear(request):
     if request.method == 'POST':
@@ -36,30 +36,36 @@ def empleado_crear(request):
         form = DatosPersonalesForm()
     return render(request, 'empleado_crear.html', {'form': form})
   
-def info_personal(request, empleado_id):
+def info_general(request, empleado_id):
     empleado = get_object_or_404(DatosPersonales, id=empleado_id)
-    servicios = ServiciosPrestados.objects.filter(empleado=empleado)
-    ausencias = AusenciasMeritosDemeritos.objects.filter(empleado=empleado)
-    bonificaciones = BonificacionPersonal.objects.filter(empleado=empleado)
+    informacion_personal = InfoPersonal.objects.filter(empleado=empleado)
+    selecciones = Seleccion.objects.filter(empleado=empleado)
+    vinculos = Vinculo.objects.filter(empleado=empleado)
+    inducciones = Induccion.objects.filter(empleado=empleado)
+    movimientos = Movimientos.objects.filter(empleado=empleado)
+    compensaciones = Compensaciones.objects.filter(empleado=empleado)
     tiempos_servicio = TiempodeServicios.objects.filter(empleado=empleado)
     pensionistas = PensionistaSobreviviente.objects.filter(empleado=empleado)
     estudios = EstudiosRealizados.objects.filter(empleado=empleado)
     
     context = {
         'empleado': empleado,
-        'servicios': servicios,
-        'ausencias': ausencias,
-        'bonificaciones': bonificaciones,
+        'informacion_personal':informacion_personal,
+        'selecciones': selecciones,
+        'vinculos': vinculos,
+        'inducciones': inducciones,
+        'movimientos': movimientos,
+        'compensaciones': compensaciones,
         'tiempos_servicio': tiempos_servicio,
         'pensionistas': pensionistas,
         'estudios': estudios,
     }
-    return render(request, 'info_personal.html', context)
+    return render(request, 'info_general.html', context)
 
-class ServicioCrearView(CreateView):
-    model = ServiciosPrestados
-    form_class = ServiciosPrestadosForm
-    template_name = 'servicio_crear.html'
+class VinculoCrearView(CreateView):
+    model = Vinculo
+    form_class = VinculoForm
+    template_name = 'vinculo_crear.html'
 
     def get_initial(self):
         empleado_id = self.kwargs.get('empleado_id')
@@ -77,7 +83,7 @@ class ServicioCrearView(CreateView):
 
     def get_success_url(self):
         empleado_id = self.kwargs.get('empleado_id')
-        return reverse('legajos:info_personal', kwargs={'empleado_id': empleado_id})
+        return reverse('legajos:info_general', kwargs={'empleado_id': empleado_id})
     
     def form_valid(self, form):
         # Guarda el formulario
@@ -88,41 +94,41 @@ class ServicioCrearView(CreateView):
         if action == 'save_and_add_more':
             # Redirige a la misma página para seguir agregando
             empleado_id = self.kwargs.get('empleado_id')
-            return redirect('legajos:servicio_crear', empleado_id=empleado_id)
+            return redirect('legajos:vinculo_crear', empleado_id=empleado_id)
         elif action == 'save_and_exit':
             # Redirige a info_personal
             return super().form_valid(form)
 
         return super().form_valid(form)
 
-def servicio_editar(request, servicio_id, empleado_id=None):
-    servicio = get_object_or_404(ServiciosPrestados, id=servicio_id)
+def vinculo_editar(request, vinculo_id, empleado_id=None):
+    vinculo = get_object_or_404(Vinculo, id=vinculo_id)
 
     if not empleado_id:
-        empleado = servicio.empleado.first()
+        empleado = vinculo.empleado.first()
         empleado_id = empleado.id if empleado else None
 
     if request.method == 'POST':
-        form = ServiciosPrestadosForm(request.POST, request.FILES, instance=servicio)
+        form = VinculoForm(request.POST, request.FILES, instance=vinculo)
         if form.is_valid():
-            servicio = form.save(commit=False)
-            servicio.save()
+            vinculo = form.save(commit=False)
+            vinculo.save()
             form.save_m2m()
-            return redirect('legajos:info_personal', empleado_id=empleado_id)
+            return redirect('legajos:info_general', empleado_id=empleado_id)
     else:
-        form = ServiciosPrestadosForm(instance=servicio)
+        form = VinculoForm(instance=vinculo)
         # Corrección: Asignar el objeto date directamente
-        if servicio.fecha:
-            form.fields['fecha'].initial = servicio.fecha
-        if servicio.fecha_vigencia:
-            form.fields['fecha_vigencia'].initial = servicio.fecha_vigencia
+        if vinculo.fecha:
+            form.fields['fecha'].initial = vinculo.fecha
+        if vinculo.fecha_vigencia:
+            form.fields['fecha_vigencia'].initial = vinculo.fecha_vigencia
 
     context = {
         'form': form,
-        'servicio': servicio,
+        'vinculo': vinculo,
         'empleado_preseleccionado': empleado_id,
     }
-    return render(request, 'servicio_edit.html', context)
+    return render(request, 'vinculo_edit.html', context)
 
 # Agregar Estudios Realizados
 class EstudiosCrearView(CreateView):
@@ -199,10 +205,10 @@ def estudios_editar(request, estudio_id, empleado_id=None):
     return render(request, 'estudios_edit.html', context)
 
 #Agregar Ausencias, Méritos y Demeritos 
-class AusenciasCrearView(CreateView):
-    model = AusenciasMeritosDemeritos
-    form_class = AusenciasMeritosDemeritosForm
-    template_name = 'ausencias_crear.html'
+class MovimientosCrearView(CreateView):
+    model = Movimientos
+    form_class = MovimientosForm
+    template_name = 'movimientos_crear.html'
 
     def get_initial(self):
         # Preseleccionar el empleado con el ID proporcionado en la URL
@@ -222,7 +228,7 @@ class AusenciasCrearView(CreateView):
     def get_success_url(self):
         # Redirigir a la página de detalles del empleado luego de guardar
         empleado_id = self.kwargs.get('empleado_id')
-        return reverse('legajos:info_personal', kwargs={'empleado_id': empleado_id})
+        return reverse('legajos:info_general', kwargs={'empleado_id': empleado_id})
 
     def form_valid(self, form):
         # Asociar la ausencia al empleado automáticamente
@@ -234,47 +240,47 @@ class AusenciasCrearView(CreateView):
         action = self.request.POST.get('action')
         self.object = form.save()
         if action == 'save_and_add_more':
-            return redirect('legajos:ausencias_crear', empleado_id=empleado_id)
+            return redirect('legajos:movimientos_crear', empleado_id=empleado_id)
         elif action == 'save_and_exit':
             return super().form_valid(form)
 
         return super().form_valid(form)
 
 #Editar Ausencias, Méritos y Demeritos 
-def ausencias_editar(request, ausencia_id, empleado_id=None):
-    ausencia = get_object_or_404(AusenciasMeritosDemeritos, id=ausencia_id)
+def movimientos_editar(request, movimiento_id, empleado_id=None):
+    movimiento = get_object_or_404(Movimientos, id=movimiento_id)
 
     # Obtener el empleado relacionado, si no está en la URL
     if not empleado_id:
-        empleado = ausencia.empleado
+        empleado = movimiento.empleado
         empleado_id = empleado.id if empleado else None
 
     if request.method == 'POST':
-        form = AusenciasMeritosDemeritosForm(request.POST, request.FILES, instance=ausencia)
+        form = MovimientosForm(request.POST, request.FILES, instance=movimiento)
         if form.is_valid():
             ausencia = form.save(commit=False)
             ausencia.save()
-            return redirect('legajos:info_personal', empleado_id=empleado_id)
+            return redirect('legajos:info_general', empleado_id=empleado_id)
     else:
-        form = AusenciasMeritosDemeritosForm(instance=ausencia)
+        form = MovimientosForm(instance=movimiento)
         # Configurar inicialización de fechas si es necesario
-        if ausencia.desde:
-            form.fields['desde'].initial = ausencia.desde
+        if movimiento.desde:
+            form.fields['desde'].initial = movimiento.desde
         if ausencia.hasta:
-            form.fields['hasta'].initial = ausencia.hasta
+            form.fields['hasta'].initial = movimiento.hasta
 
     context = {
         'form': form,
-        'ausencia': ausencia,
+        'movimiento': movimiento,
         'empleado_preseleccionado': empleado_id,
     }
-    return render(request, 'ausencias_edit.html', context)
+    return render(request, 'movimientos_edit.html', context)
 
 # Agregar Bonificación Personal
-class BonificacionCrearView(CreateView):
-    model = BonificacionPersonal
-    form_class = BonificacionPersonalForm
-    template_name = 'bonificacion_crear.html'
+class CompensacionesCrearView(CreateView):
+    model = Compensaciones
+    form_class = CompensacionesForm
+    template_name = 'compensaciones_crear.html'
 
     def get_initial(self):
         # Preseleccionar el empleado con el ID proporcionado en la URL
@@ -294,7 +300,7 @@ class BonificacionCrearView(CreateView):
     def get_success_url(self):
         # Redirigir a la página de detalles del empleado luego de guardar
         empleado_id = self.kwargs.get('empleado_id')
-        return reverse('legajos:info_personal', kwargs={'empleado_id': empleado_id})
+        return reverse('legajos:info_general', kwargs={'empleado_id': empleado_id})
 
     def form_valid(self, form):
         # Asociar la bonificación al empleado automáticamente
@@ -306,39 +312,39 @@ class BonificacionCrearView(CreateView):
         action = self.request.POST.get('action')
         self.object = form.save()
         if action == 'save_and_add_more':
-            return redirect('legajos:bonificacion_crear', empleado_id=empleado_id)
+            return redirect('legajos:compensaciones_crear', empleado_id=empleado_id)
         elif action == 'save_and_exit':
             return super().form_valid(form)
 
         return super().form_valid(form)
 
 #Editar Bonificación Personal
-def bonificacion_editar(request, bonificacion_id, empleado_id=None):
-    bonificacion = get_object_or_404(BonificacionPersonal, id=bonificacion_id)
+def compensaciones_editar(request, compensaciones_id, empleado_id=None):
+    compensaciones = get_object_or_404(Compensaciones, id=compensaciones_id)
 
     # Obtener el empleado relacionado, si no está en la URL
     if not empleado_id:
-        empleado = bonificacion.empleado
+        empleado = compensaciones.empleado
         empleado_id = empleado.id if empleado else None
 
     if request.method == 'POST':
-        form = BonificacionPersonalForm(request.POST, request.FILES, instance=bonificacion)
+        form = CompensacionesForm(request.POST, request.FILES, instance=compensaciones)
         if form.is_valid():
-            bonificacion = form.save(commit=False)
-            bonificacion.save()
-            return redirect('legajos:info_personal', empleado_id=empleado_id)
+            compensaciones = form.save(commit=False)
+            compensaciones.save()
+            return redirect('legajos:info_general', empleado_id=empleado_id)
     else:
-        form = BonificacionPersonalForm(instance=bonificacion)
+        form = CompensacionesForm(instance=compensaciones)
         # Configurar inicialización de datos si es necesario
-        if bonificacion.fecha:
-            form.fields['fecha'].initial = bonificacion.fecha
+        if compensaciones.fecha:
+            form.fields['fecha'].initial = compensaciones.fecha
 
     context = {
         'form': form,
-        'bonificacion': bonificacion,
+        'compensaciones': compensaciones,
         'empleado_preseleccionado': empleado_id,
     }
-    return render(request, 'bonificacion_edit.html', context)
+    return render(request, 'compensaciones_edit.html', context)
 
 # Agregar Tiempo de Servicios
 class TiempoCrearView(CreateView):
