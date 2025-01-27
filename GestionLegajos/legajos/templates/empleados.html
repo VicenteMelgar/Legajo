@@ -39,15 +39,15 @@
 	 
 		
 		<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
-			<a class="flex-sm-fill text-sm-center nav-link active" id="orders-all-tab" data-bs-toggle="tab" href="#orders-all" role="tab" aria-controls="orders-all" aria-selected="true">Todos</a>
-			<a class="flex-sm-fill text-sm-center nav-link"  id="orders-paid-tab" data-bs-toggle="tab" href="#orders-paid" role="tab" aria-controls="orders-paid" aria-selected="false">Nombrados</a>
-			<a class="flex-sm-fill text-sm-center nav-link" id="orders-pending-tab" data-bs-toggle="tab" href="#orders-pending" role="tab" aria-controls="orders-pending" aria-selected="false">CAS</a>
-			<a class="flex-sm-fill text-sm-center nav-link" id="orders-cancelled-tab" data-bs-toggle="tab" href="#orders-cancelled" role="tab" aria-controls="orders-cancelled" aria-selected="false">Cesantes</a>
+			<a class="flex-sm-fill text-sm-center nav-link active" id="todos-tab" data-bs-toggle="tab" href="#todos" role="tab" aria-controls="todos" aria-selected="true">Todos</a>
+			<a class="flex-sm-fill text-sm-center nav-link"  id="nombrados-tab" data-bs-toggle="tab" href="#nombrados" role="tab" aria-controls="nombrados" aria-selected="false">Nombrados</a>
+			<a class="flex-sm-fill text-sm-center nav-link" id="cas-tab" data-bs-toggle="tab" href="#cas" role="tab" aria-controls="cas" aria-selected="false">CAS</a>
+			<a class="flex-sm-fill text-sm-center nav-link" id="pensionistas-tab" data-bs-toggle="tab" href="#pensionistas" role="tab" aria-controls="pensionistas" aria-selected="false">Cesantes</a>
 	</nav>
 	
 	
 	<div class="tab-content" id="orders-table-tab-content">
-				<div class="tab-pane fade show active" id="orders-all" role="tabpanel" aria-labelledby="orders-all-tab">
+				<div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
 				<div class="app-card app-card-orders-table shadow-sm mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -58,7 +58,7 @@
 									<th class="cell">Apellidos y Nombres</th>
 									<th class="cell">Email</th>
 									<th class="cell">Modalidad</th>
-									<th class="cell"></th>
+									<th class="cell">Ver</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -68,7 +68,9 @@
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><a class="btn-sm app-btn-secondary" href="{% url 'legajos:info_general' empleado.id %}">Ver</a></td>
+									<td class="cell"><span><a href="{% url 'legajos:info_general' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+									</svg></a></span></td>
 								</tr>
 								{% endfor %}	
 							</tbody>
@@ -80,7 +82,7 @@
 		
 				</div><!--//tab-pane-->
 				
-				<div class="tab-pane fade" id="orders-paid" role="tabpanel" aria-labelledby="orders-paid-tab">
+				<div class="tab-pane fade" id="nombrados" role="tabpanel" aria-labelledby="nombrados-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -92,7 +94,7 @@
 									<th class="cell">Apellidos y Nombres</th>
 									<th class="cell">Email</th>
 									<th class="cell">Modalidad</th>
-									<th class="cell"></th>
+									<th class="cell">Ver</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -102,7 +104,9 @@
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><a class="btn-sm app-btn-secondary" href="#">Ver</a></td>
+									<td class="cell"><span><a href="{% url 'legajos:info_general' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+									</svg></a></span></td>
 								</tr>
 								{% endfor %}	
 							</tbody>
@@ -112,7 +116,7 @@
 			</div><!--//app-card-->
 				</div><!--//tab-pane-->
 				
-				<div class="tab-pane fade" id="orders-pending" role="tabpanel" aria-labelledby="orders-pending-tab">
+				<div class="tab-pane fade" id="cas" role="tabpanel" aria-labelledby="cas-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -123,7 +127,7 @@
 									<th class="cell">Apellidos y Nombres</th>
 									<th class="cell">Email</th>
 									<th class="cell">Modalidad</th>
-									<th class="cell"></th>
+									<th class="cell">Ver</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -133,7 +137,9 @@
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><a class="btn-sm app-btn-secondary" href="#">Ver</a></td>
+									<td class="cell"><span><a href="{% url 'legajos:info_general' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+									</svg></a></span></td>
 								</tr>
 								{% endfor %}	
 							</tbody>
@@ -142,7 +148,7 @@
 					</div><!--//app-card-body-->		
 			</div><!--//app-card-->
 				</div><!--//tab-pane-->
-				<div class="tab-pane fade" id="orders-cancelled" role="tabpanel" aria-labelledby="orders-cancelled-tab">
+				<div class="tab-pane fade" id="pensionistas" role="tabpanel" aria-labelledby="pensionistas-tab">
 				<div class="app-card app-card-orders-table mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -153,7 +159,7 @@
 									<th class="cell">Apellidos y Nombres</th>
 									<th class="cell">Email</th>
 									<th class="cell">Modalidad</th>
-									<th class="cell"></th>
+									<th class="cell">Ver</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -163,7 +169,9 @@
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><a class="btn-sm app-btn-secondary" href="#">Ver</a></td>
+									<td class="cell"><span><a href="{% url 'legajos:info_general' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+									</svg></a></span></td>
 								</tr>
 								{% endfor %}	
 							</tbody>

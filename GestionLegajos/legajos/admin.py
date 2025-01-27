@@ -5,11 +5,8 @@ from .models import (
     Seleccion,
     Vinculo,
     Induccion,
-    Programa,
     Movimientos,
     Compensaciones,
-    TiempodeServicios,
-    PensionistaSobreviviente,
     EstudiosRealizados,
     Nivel,
     Cargo,
@@ -63,24 +60,12 @@ class InduccionAdmin(admin.ModelAdmin):
     list_filter = ('empleado', 'tipo_documento')
     search_fields = ('tipo_documento', 'empleado__nombres', 'empleado__apellido_paterno', 'empleado__apellido_materno', 'empleado__dni')
     
-@admin.register(PensionistaSobreviviente)
-class PensionistaSobrevivienteAdmin(admin.ModelAdmin):
-    list_display = ('resolucion', 'fecha', 'ver_pdf')
-    list_filter = ('empleado',) 
-    search_fields = ('resolucion',)
-    
 @admin.register(EstudiosRealizados)
 class EstudiosRealizadosAdmin(admin.ModelAdmin):
     list_display = ('grado_instruccion', 'especialidad', 'inicio', 'fin', 'ver_pdf')
     list_filter = ('empleado',) 
     search_fields = ('grado_instruccion',)
-    
-@admin.register(Programa)
-class ProgramaAdmin(admin.ModelAdmin):
-    list_display = ('denominacion', 'codfun', 'codpro', 'codsub', 'codact', 'codcom', 'codmet')
-    list_filter = ('empleado',) 
-    search_fields = ('denominacion',)
-    
+       
 @admin.register(Movimientos)
 class MovimientosAdmin(admin.ModelAdmin):
     list_display = ('resolucion', 'motivo', 'asunto', 'desde', 'hasta', 'ver_pdf')
@@ -90,11 +75,5 @@ class MovimientosAdmin(admin.ModelAdmin):
 @admin.register(Compensaciones)
 class CompensacionesAdmin(admin.ModelAdmin):
     list_display = ('resolucion', 'fecha', 'motivo', 'porcentaje', 'anios', 'meses', 'dias', 'ver_pdf')
-    list_filter = ('empleado',)
-    search_fields = ('resolucion',)
-    
-@admin.register(TiempodeServicios)
-class TiempodeServiciosAdmin(admin.ModelAdmin):
-    list_display = ('resolucion', 'desde', 'hasta', 'anios', 'meses', 'dias', 'ver_pdf')
     list_filter = ('empleado',)
     search_fields = ('resolucion',)

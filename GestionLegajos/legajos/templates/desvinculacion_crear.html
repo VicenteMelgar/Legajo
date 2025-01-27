@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+  <h2>Agregar Desvinculación</h2>
+
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      
+      <button type="submit" class="btn app-btn-primary" name="action" value="save_and_exit">Guardar</button>
+      <button type="submit" class="btn app-btn-primary" name="action" value="save_and_add_more">Guardar y agregar más</button>
+      <a href="{% url 'legajos:info_general' empleado_preseleccionado.id %}" class="btn app-btn-secondary">Cancelar</a>
+  </form>
+</div>
+
+{% endblock %}

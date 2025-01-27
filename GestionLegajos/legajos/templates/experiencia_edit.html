@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Editar Experiencia Laboral</h2>
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+      {% csrf_token %}
+      {{ form.as_p }}  
+
+      <button type="submit" class="btn app-btn-primary">Guardar Cambios</button>
+      <a href="{% url 'legajos:info_general' empleado_preseleccionado %}" class="btn app-btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}
