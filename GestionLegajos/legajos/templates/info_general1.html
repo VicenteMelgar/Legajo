@@ -1,0 +1,819 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="app-content pt-3 p-md-3 p-lg-4">
+	<div class="container-xl">
+		
+		<div class="row g-3 mb-4 align-items-center justify-content-between">
+			<div class="col-auto">
+				<h1 class="app-page-title mb-0">{{ empleado }}</h1>
+			</div>
+			<div class="col-auto">
+				<div class="page-utilities">
+					<div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+
+						<div class="col-auto">
+                <button class="btn app-btn-primary" type="button">
+                  Generar Reporte
+                </button>
+            </div>
+
+					</div><!--//row-->
+				</div><!--//table-utilities-->
+			</div><!--//col-auto-->
+		</div><!--//row-->
+		
+		<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+			<a class="flex-sm-fill text-sm-center nav-link active" id="informacion-tab" data-bs-toggle="tab" href="#informacion" role="tab" aria-controls="informacion" aria-selected="true">Información</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="incorporacion-tab" data-bs-toggle="tab" href="#incorporacion" role="tab" aria-controls="incorporacion" aria-selected="false">Incorporación</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="estudios-tab" data-bs-toggle="tab" href="#estudios" role="tab" aria-controls="estudios" aria-selected="false">Formación</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="experiencia-tab" data-bs-toggle="tab" href="#experiencia" role="tab" aria-controls="experiencia" aria-selected="false">Experiencia</a>
+      <a class="flex-sm-fill text-sm-center nav-link"  id="amd-tab" data-bs-toggle="tab" href="#amd" role="tab" aria-controls="orders-amd" aria-selected="false">Movimientos</a>
+			<a class="flex-sm-fill text-sm-center nav-link" id="compensaciones-tab" data-bs-toggle="tab" href="#compensaciones" role="tab" aria-controls="compensaciones" aria-selected="false">Compensaciones</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="evaluacion-tab" data-bs-toggle="tab" href="#evaluacion" role="tab" aria-controls="evaluacion" aria-selected="false">Evaluación</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="reconocimiento-tab" data-bs-toggle="tab" href="#reconocimiento" role="tab" aria-controls="reconocimiento" aria-selected="false">Reconocimientos</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="laboral-tab" data-bs-toggle="tab" href="#laboral" role="tab" aria-controls="laboral" aria-selected="false">Laboral</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="seguridad-tab" data-bs-toggle="tab" href="#seguridad" role="tab" aria-controls="seguridad" aria-selected="false">SST</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="desvinculacion-tab" data-bs-toggle="tab" href="#desvinculacion" role="tab" aria-controls="desvinculacion" aria-selected="false">Desvinculación</a>
+		</nav>
+
+    <div class="tab-content" id="orders-table-tab-content">
+      <div class="tab-pane fade show active" id="informacion" role="tabpanel" aria-labelledby="informacion-tab">
+        <div class="app-card app-card-orders-table mb-5">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:infopersonal_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for info_personal in informacion_personal %}
+                  <tr>
+                    <td class="cell"><span>{{ info_personal.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>
+                      <a href="{{ info_personal.pdf.url }}" target="_blank" class="text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                          <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                          <path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.7 11.7 0 0 0-1.997.406 11.3 11.3 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.026.044l.035-.012c.137-.056.355-.235.635-.572a8 8 0 0 0 .45-.606m1.64-1.33a13 13 0 0 1 1.01-.193 12 12 0 0 1-.51-.858 21 21 0 0 1-.5 1.05zm2.446.45q.226.245.435.41c.24.19.407.253.498.256a.1.1 0 0 0 .07-.015.3.3 0 0 0 .094-.125.44.44 0 0 0 .059-.2.1.1 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a4 4 0 0 0-.612-.053zM8.078 7.8a7 7 0 0 0 .2-.828q.046-.282.038-.465a.6.6 0 0 0-.032-.198.5.5 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822q.036.167.09.346z"/>
+                        </svg>
+                      </a></span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:infopersonal_editar' info_personal.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->
+
+			<div class="tab-pane fade" id="incorporacion" role="tabpanel" aria-labelledby="incorporacion-tab">
+        <div class="app-card app-card-orders-table shadow-sm mb-3">
+					<div class="app-card-body">
+						<div class="table-responsive">
+              <table class="table app-table-hover mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Proceso de Selección</th>
+										<th class="cell">Descripción</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:seleccion_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+                <tbody>
+                  {% for seleccion in selecciones %}
+                  <tr>
+                    <td class="cell"><span>{{ seleccion.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ seleccion.descripcion }}</span></td>
+                    <td class="cell"><span>{{ seleccion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:seleccion_editar' seleccion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+							</table>
+						</div><!--//table-responsive-->				 
+					</div><!--//app-card-body-->		
+				</div><!--//app-card-->
+  
+        <div class="app-card app-card-orders-table shadow-sm mb-3">
+					<div class="app-card-body">
+						<div class="table-responsive">
+							<table class="table app-table-hover mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Formalización de Vínculo</th>
+										<th class="cell">Fecha</th>
+										<th class="cell">Asunto</th>
+										<th class="cell">Cargo</th>
+										<th class="cell">Nivel</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:vinculo_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for vinculo in vinculos %}
+									<tr>
+										<td class="cell"><span>{{ vinculo.get_documento_display }} {{ vinculo.numero }}</span></td>
+										<td class="cell"><span class="truncate">{{ vinculo.fecha|date:"d/m/Y" }}</span></td>
+										<td class="cell">{{ vinculo.asunto }}</td>
+										<td class="cell"><span>
+											{% if vinculo.cargo.all %}
+												{% for cargo in vinculo.cargo.all %}
+													{{ cargo }}{% if not forloop.last %}, {% endif %}
+												{% endfor %}
+											{% else %}
+												Sin cargo registrado
+											{% endif %}
+										</span></td>
+										<td class="cell"><span>
+											{% if vinculo.nivel.all %}
+												{% for nivel in vinculo.nivel.all %}
+													{{ nivel }}{% if not forloop.last %}, {% endif %}
+												{% endfor %}
+											{% else %}
+												Sin nivel registrado
+											{% endif %}
+										</span></td>
+										<td class="cell"><span>{{ vinculo.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:vinculo_editar' vinculo.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->				 
+					</div><!--//app-card-body-->	
+        </div><!--//app-card-->
+      			
+        <div class="app-card app-card-orders-table mb-3">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Inducción del Personal</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:induccion_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for induccion in inducciones %}
+                  <tr>
+                    <td class="cell"><span>{{ induccion.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ induccion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:induccion_editar' induccion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+
+				<div class="app-card app-card-orders-table mb-3">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Periodo de Prueba</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:prueba_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for prueba in pruebas %}
+                  <tr>
+                    <td class="cell"><span>{{ prueba.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ prueba.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:prueba_editar' prueba.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->	
+
+			<div class="tab-pane fade" id="estudios" role="tabpanel" aria-labelledby="estudios-tab">
+				<div class="app-card app-card-orders-table mb-3">
+					<div class="app-card-body">
+						<div class="table-responsive">
+							<table class="table mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Inicio</th>
+										<th class="cell">Fin</th>
+										<th class="cell">Grado de Instrucción</th>
+										<th class="cell">Especialidad</th>
+										<th class="cell">Sub-Especialidad</th>
+										<th class="cell">Nº de RNE</th>
+										<th class="cell">Fecha de Expedición</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:estudios_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for estudio in estudios %}
+									<tr>
+										<td class="cell"><span>{{ estudio.inicio|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ estudio.fin|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ estudio.grado_instruccion }}</span></td>
+										<td class="cell"><span>{{ estudio.especialidad }}</span></td>
+										<td class="cell"><span>{{ estudio.sub_especialidad }}</span></td>
+										<td class="cell"><span>{{ estudio.cod_especialidad }}</span></td>
+										<td class="cell"><span>{{ estudio.fecha_expedicion|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ estudio.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:estudios_editar' estudio.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}	
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->
+					</div><!--//app-card-body-->		
+				</div><!--//app-card-->
+
+				<div class="app-card app-card-orders-table mb-3">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Fecha de Emisión</th>
+                    <th class="cell">Fecha de Vigencia</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:colegiatura_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for colegiatura in colegiaturas %}
+                  <tr>
+                    <td class="cell"><span>{{ colegiatura.get_tipo_documento_display }}</span></td>
+										<td class="cell"><span>{{ colegiatura.fecha_emision|date:"d/m/Y" }}</span></td>
+                    <td class="cell"><span>{{ colegiatura.fecha_vigencia|date:"d/m/Y" }}</span></td>
+                    <td class="cell"><span>{{ colegiatura.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:colegiatura_editar' colegiatura.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+
+				<div class="app-card app-card-orders-table mb-3">
+					<div class="app-card-body">
+						<div class="table-responsive">
+							<table class="table mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Tipo de Documento</th>
+										<th class="cell">Descripción</th>
+										<th class="cell">Inicio</th>
+										<th class="cell">Fin</th>
+										<th class="cell">Horas de duración</th>
+										<th class="cell">Fecha de Expedición</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:curso_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for curso in cursos %}
+									<tr>
+										<td class="cell"><span>{{ curso.get_tipo_documento_display }}</span></td>
+										<td class="cell"><span>{{ curso.descripcion }}</span></td>
+										<td class="cell"><span>{{ curso.inicio|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ curso.fin|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ curso.duracion_horas }}</span></td>
+										<td class="cell"><span>{{ curso.fecha_expedicion|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ curso.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:curso_editar' curso.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}	
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->
+					</div><!--//app-card-body-->		
+				</div><!--//app-card-->
+			</div><!--//tab-pane-->
+
+			<div class="tab-pane fade" id="experiencia" role="tabpanel" aria-labelledby="experiencia-tab">
+				<div class="app-card app-card-orders-table mb-5">
+					<div class="app-card-body">
+						<div class="table-responsive">
+							<table class="table mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Tipo de Documento</th>
+										<th class="cell">Descripción</th>
+										<th class="cell">Inicio</th>
+										<th class="cell">Fin</th>
+										<th class="cell">Fecha de Expedición</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:experiencia_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for experiencia in experiencias %}
+									<tr>
+										<td class="cell"><span>{{ experiencia.get_tipo_documento_display }}</span></td>
+										<td class="cell"><span>{{ experiencia.descripcion }}</span></td>
+                    <td class="cell"><span>{{ experiencia.inicio|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ experiencia.fin|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ experiencia.fecha_expedicion|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ experiencia.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:experiencia_editar' experiencia.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}	
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->
+					</div><!--//app-card-body-->		
+				</div><!--//app-card-->
+			</div><!--//tab-pane-->
+
+			<div class="tab-pane fade" id="amd" role="tabpanel" aria-labelledby="amd-tab">
+				<div class="app-card app-card-orders-table mb-5">
+					<div class="app-card-body">
+						<div class="table-responsive">	
+							<table class="table mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Resolución</th>
+                    <th class="cell">Tipo de Licencia</th>
+										<th class="cell">Motivo</th>
+										<th class="cell">Asunto</th>
+										<th class="cell">Desde</th>
+										<th class="cell">Hasta</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:movimientos_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for movimiento in movimientos %}
+									<tr>
+										<td class="cell"><span>{{ movimiento.resolucion }}</span></td>
+                    <td class="cell"><span>{{ movimiento.get_tipo_display }}</span></td>
+										<td class="cell"><span>{{ movimiento.motivo }}</span></td>
+										<td class="cell"><span>{{ movimiento.asunto }}</span></td>
+										<td class="cell"><span>{{ movimiento.desde|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ movimiento.hasta|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ movimiento.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:movimientos_editar' movimiento.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}	
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->
+					</div><!--//app-card-body-->		
+				</div><!--//app-card-->
+			</div><!--//tab-pane-->
+
+			<div class="tab-pane fade" id="compensaciones" role="tabpanel" aria-labelledby="compensaciones-tab">		
+        <div class="app-card app-card-orders-table mb-3">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:retencion_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for retencion in retenciones %}
+                  <tr>
+                    <td class="cell"><span>{{ retencion.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ retencion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:retencion_editar' retencion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+
+				<div class="app-card app-card-orders-table mb-3">
+					<div class="app-card-body">
+						<div class="table-responsive">
+							<table class="table mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Compensaciones por años de Servicios</th>
+										<th class="cell">Fecha</th>
+										<th class="cell">Motivo</th>
+										<th class="cell">Porcentaje</th>
+										<th class="cell">Años</th>
+										<th class="cell">Meses</th>
+										<th class="cell">Días</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:compensaciones_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for compensacion in compensaciones %}
+									<tr>
+										<td class="cell"><span>{{ compensacion.resolucion }}</span></td>
+										<td class="cell"><span>{{ compensacion.fecha|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>{{ compensacion.get_motivo_display}}</span></td>
+										<td class="cell"><span>{{ compensacion.porcentaje }}%</span></td>
+										<td class="cell"><span>{{ compensacion.anios }}</span></td>
+										<td class="cell"><span>{{ compensacion.meses }}</span></td>
+										<td class="cell"><span>{{ compensacion.dias }}</span></td>
+										<td class="cell"><span>{{ compensacion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:compensaciones_editar' compensacion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}	
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->
+					</div><!--//app-card-body-->		
+				</div><!--//app-card-->
+			</div><!--//tab-pane-->
+
+			<div class="tab-pane fade" id="evaluacion" role="tabpanel" aria-labelledby="evaluacion-tab">
+        <div class="app-card app-card-orders-table mb-3">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Evaluación de Desempeño</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:evaluacion_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for evaluacion in evaluaciones %}
+                  <tr>
+                    <td class="cell"><span>{{ evaluacion.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ evaluacion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:evaluacion_editar' evaluacion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+
+        <div class="app-card app-card-orders-table mb-3">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Progresión en la Carrera</th>
+										<th class="cell">Fecha</th>
+										<th class="cell">Nivel</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:progresion_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for progresion in progresiones %}
+                  <tr>
+                    <td class="cell"><span>{{ progresion.get_tipo_documento_display }}</span></td>
+										<td class="cell"><span>{{ progresion.fecha|date:"d/m/Y" }}</span></td>
+										<td class="cell"><span>
+											{% if progresion.nivel.all %}
+												{% for nivel in progresion.nivel.all %}
+													{{ nivel }}{% if not forloop.last %}, {% endif %}
+												{% endfor %}
+											{% else %}
+												Sin nivel registrado
+											{% endif %}
+										</span></td>
+										<td class="cell"><span>{{ progresion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:progresion_editar' progresion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+
+        <div class="app-card app-card-orders-table shadow-sm mb-3">
+					<div class="app-card-body">
+						<div class="table-responsive">
+							<table class="table app-table-hover mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">Desplazamiento</th>
+										<th class="cell">Fecha</th>
+										<th class="cell">Asunto</th>
+										<th class="cell">Cargo</th>
+										<th class="cell">Nivel</th>
+										<th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:desplazamiento_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for desplazamiento in desplazamientos %}
+									<tr>
+										<td class="cell"><span>{{ desplazamiento.get_documento_display }}</span></td>
+										<td class="cell"><span class="truncate">{{ desplazamiento.fecha|date:"d/m/Y" }}</span></td>
+										<td class="cell">{{ desplazamiento.asunto }}</td>
+										<td class="cell"><span>
+											{% if desplazamiento.cargo.all %}
+												{% for cargo in desplazamiento.cargo.all %}
+													{{ cargo }}{% if not forloop.last %}, {% endif %}
+												{% endfor %}
+											{% else %}
+												Sin cargo registrado
+											{% endif %}
+										</span></td>
+										<td class="cell"><span>
+											{% if desplazamiento.nivel.all %}
+												{% for nivel in desplazamiento.nivel.all %}
+													{{ nivel }}{% if not forloop.last %}, {% endif %}
+												{% endfor %}
+											{% else %}
+												Sin nivel registrado
+											{% endif %}
+										</span></td>
+										<td class="cell"><span>{{ desplazamiento.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:desplazamiento_editar' desplazamiento.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->				 
+					</div><!--//app-card-body-->	
+        </div><!--//app-card-->
+			</div><!--//tab-pane-->
+
+      <div class="tab-pane fade" id="reconocimiento" role="tabpanel" aria-labelledby="reconocimiento-tab">
+        <div class="app-card app-card-orders-table mb-5">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Reconocimento o Sanción</th>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Descripción</th>
+                    <th class="cell">Fecha</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:reconocimiento_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for reconocimiento in reconocimientos %}
+                  <tr>
+                    <td class="cell"><span>{{ reconocimiento.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.get_documento_display }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.descripcion }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.fecha|date:"d/m/Y" }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:reconocimiento_editar' reconocimiento.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->
+
+      <div class="tab-pane fade" id="laboral" role="tabpanel" aria-labelledby="laboral-tab">
+        <div class="app-card app-card-orders-table mb-5">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Relaciones Laborales</th>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Descripción</th>
+                    <th class="cell">Fecha</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:laboral_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for laboral in laborales %}
+                  <tr>
+                    <td class="cell"><span>{{ laboral.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ laboral.get_documento_display }}</span></td>
+                    <td class="cell"><span>{{ laboral.descripcion }}</span></td>
+                    <td class="cell"><span>{{ laboral.fecha|date:"d/m/Y" }}</span></td>
+                    <td class="cell"><span>{{ laboral.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:laboral_editar' laboral.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->
+
+      <div class="tab-pane fade" id="seguridad" role="tabpanel" aria-labelledby="seguridad-tab">
+        <div class="app-card app-card-orders-table mb-5">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Seguridad y Salud en el Trabajo y Bienestar Social</th>
+                    <th class="cell">Descripción</th>
+                    <th class="cell">Fecha de Inicio</th>
+                    <th class="cell">Fecha de Vigencia</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:seguridad_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for seguridad in seguridades %}
+                  <tr>
+                    <td class="cell"><span>{{ seguridad.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ seguridad.descripcion }}</span></td>
+                    <td class="cell"><span>{{ seguridad.fecha|date:"d/m/Y" }}</span></td>
+                    <td class="cell"><span>{{ seguridad.fecha_vigencia|date:"d/m/Y" }}</span></td>
+                    <td class="cell"><span>{{ seguridad.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:seguridad_editar' seguridad.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->
+
+      <div class="tab-pane fade" id="desvinculacion" role="tabpanel" aria-labelledby="desvinculacion-tab">
+        <div class="app-card app-card-orders-table mb-5">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Desvinculación</th>
+                    <th class="cell">Descripción</th>
+                    <th class="cell">Fecha</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell"><a href="{% url 'legajos:desvinculacion_crear' empleado.id %}" class="text-primary">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                        <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                        <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                      </svg>
+                    </a></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for desvinculacion in desvinculaciones %}
+                  <tr>
+                    <td class="cell"><span>{{ desvinculacion.get_tipo_documento_display }}</span></td>
+                    <td class="cell"><span>{{ desvinculacion.descripcion }}</span></td>
+                    <td class="cell"><span>{{ desvinculacion.fecha|date:"d/m/Y" }}</span></td>
+                    <td class="cell"><span>{{ desvinculacion.ver_pdf|safe }}</span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:desvinculacion_editar' desvinculacion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->
+
+		</div><!--//tab-content-->		
+	</div><!--//container-fluid-->
+</div><!--//app-content-->
+{% endblock content %}

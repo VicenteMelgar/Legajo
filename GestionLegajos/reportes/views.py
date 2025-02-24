@@ -1,17 +1,17 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from docxtpl import DocxTemplate
-from legajos.models import DatosPersonales, Vinculo
+from legajos.models import Empleado, Vinculo
 from io import BytesIO
 
 def formulario_reportes(request):
     # Obtener la lista de trabajadores
-    trabajadores = DatosPersonales.objects.all()
+    trabajadores = Empleado.objects.all()
     return render(request, 'formulario_reportes.html', {'trabajadores': trabajadores})
 
 def generar_constancia(request, id_trabajador):
     trabajador_id = request.GET.get('trabajador')  # ID del trabajador desde el formulario
-    trabajador = get_object_or_404(DatosPersonales, id=trabajador_id)  # Buscar el trabajador
+    trabajador = get_object_or_404(Empleado, id=trabajador_id)  # Buscar el trabajador
 
     # Filtrar servicios relacionados con el trabajador
     vinculo = Vinculo.objects.filter(empleado__id=trabajador_id)
@@ -25,7 +25,7 @@ def generar_constancia(request, id_trabajador):
     return render(request, 'constancia_trabajo.html', context)
 
 def descargar_constancia(request, trabajador_id):
-    trabajador = get_object_or_404(DatosPersonales, id=trabajador_id)
+    trabajador = get_object_or_404(Empleado, id=trabajador_id)
 
     # Filtrar servicios prestados seleccionados manualmente
     vinculo_ids = request.GET.getlist('vinculo')
@@ -59,7 +59,7 @@ def descargar_constancia(request, trabajador_id):
 
 def generar_informe(request, id_trabajador):
     trabajador_id = request.GET.get('trabajador')  # ID del trabajador desde el formulario
-    trabajador = get_object_or_404(DatosPersonales, id=trabajador_id)  # Buscar el trabajador
+    trabajador = get_object_or_404(Empleado, id=trabajador_id)  # Buscar el trabajador
 
     # Filtrar servicios relacionados con el trabajador
     vinculo = Vinculo.objects.filter(empleado__id=trabajador_id)
@@ -73,7 +73,7 @@ def generar_informe(request, id_trabajador):
     return render(request, 'informe_trabajo.html', context)
   
 def descargar_informe(request, trabajador_id):
-    trabajador = get_object_or_404(DatosPersonales, id=trabajador_id)
+    trabajador = get_object_or_404(Empleado, id=trabajador_id)
 
     # Filtrar servicios prestados seleccionados manualmente
     vinculo_ids = request.GET.getlist('vinculo')

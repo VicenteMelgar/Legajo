@@ -3,6 +3,14 @@ modalidad = (
   ('Nombrado', 'Nombrado'),
   ('Cesante', 'Cesante')
 )
+
+documentos_regimen = (
+  ('276', 'Régimen 276'),
+  ('CAS', 'Contrato Administrativo de Servicios'),
+  ('30057', 'Régimen de Servicio Civil' )
+)
+
+
 estados = (
   ('S', 'Soltero/a'),
   ('C', 'Casado/a')
@@ -14,10 +22,16 @@ sexo = (
 )
 
 tipo = (
-  ('Nombramiento', 'Nombramiento'),
-  ('Reasignacion', 'Reasignación'),
-  ('Ascenso', 'Ascenso'),
-  ('Cese', 'Cese')
+  (5, 'Nombramiento'),
+  (10, 'Reasignación'),
+  (15, 'Contrato a plazo fijo'),
+  (20, 'Destaque de otra Dependencia'),
+  (25, 'Designación de otra Dependencia'),
+)
+
+tipo_compensacion = (
+  (5, 'Por cumplir 25 años de Servicios'),
+  (10, 'Por cumplir 30 años de Servicios'),
 )
 
 tipo_desplazamiento = (
@@ -89,6 +103,8 @@ documentos_informacion = [
   (30, "DNI de los/las hijos/as menores de edad"),
   (33, "Certificado de discapacidad de el/la servidor/a"),
   (36, "Certificado de discapacidad de los/las hijos/as"),
+  (39, "Declaración Jurada por Nepotismo"),
+  (42, "Otros Documentos"),
 ]
 
 documentos_seleccion = [
@@ -108,9 +124,27 @@ documentos_prueba = [
 ]
 
 documentos_colegiatura = [
-  (3, "Colegiatura"),
-  (6, "Habilitación Profesional"),
+  (10, "Colegiatura"),
+  (20, "Habilitación Profesional"),
+  (30, "SERUM"),
 ]
+
+documentos_grado = [
+  (10, "Secundaria Completa"),
+  (20, "Superior Técnica Incompleta"),
+  (30, "Superior Técnica"),
+  (40, "Superior Universitario Incompleta"),
+  (50, "Superior Universitario"),
+  (60, "Especialidad"),
+  (70, "Maestría"),
+  (80, "Doctorado"),
+]
+
+documentos_especialidad = [
+  (10, "Especialidad"),
+  (20, "Subespecialidad"),
+]
+
 
 documentos_cursos = [
   (3, "Especialización"),
@@ -123,6 +157,8 @@ documentos_cursos = [
   (24, "Simposio"),
   (27, "Charla"),
   (30, "Taller"),
+  (33, "Certificado"),
+  (36, "Constancia"),
 ]
 
 documentos_experiencia = [
@@ -177,4 +213,14 @@ documentos_desvinculacion = [
   (25, "Entrega de cargo/puesto"),
   (30, "Liquidación de beneficios sociales y/o pensión"),
   (35, "Carta de no renovación de contrato a plazo determinado"),
+]
+
+motivo_progresion = [
+  (5, "Ascenso"),
+  (10, "Cambio de grupo Ocupacional"),
+]
+
+tipo_movimientos = [
+  (5, "LSGH"),
+  (10, "LCGH"),
 ]
