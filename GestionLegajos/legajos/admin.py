@@ -131,13 +131,13 @@ class MovimientosAdmin(admin.ModelAdmin):
     
 @admin.register(Retencion)
 class RetencionAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'ver_pdf', 'fecha_carga')
+    list_display = ('documento', 'fecha', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     
 @admin.register(Evaluacion)
 class EvaluacionAdmin(admin.ModelAdmin):
-    list_display = ('periodo', 'fecha', 'documento', 'puntaje', 'ver_pdf', 'fecha_carga')
+    list_display = ('periodo', 'fecha', 'documento', 'puntaje', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     

@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
-from .choices import estados, sexo, departamento, tipo, documento, modalidad, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_colegiatura, documentos_cursos, documentos_experiencia, documentos_retencion, documentos_evaluacion, tipo_desplazamiento, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, tipo_compensacion, motivo_progresion, tipo_movimientos, documentos_grado, documentos_especialidad, documentos_regimen
+from .choices import estados, sexo, departamento, tipo, documento, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_colegiatura, documentos_cursos, documentos_experiencia, documentos_retencion, documentos_evaluacion, tipo_desplazamiento, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, tipo_compensacion, motivo_progresion, tipo_movimientos, documentos_grado, documentos_especialidad, documentos_regimen
 from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
             
@@ -39,7 +39,6 @@ class Empleado(models.Model):
     estado_civil = models.CharField(max_length=10, choices= estados, blank=True, null=True)
     telefono = models.CharField(max_length=12, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
-    modalidad = models.CharField(max_length=25, choices= modalidad, blank=True)
     fecha_nacimiento = models.DateField(blank=True, null=True)
     departamento = models.CharField(max_length=50, choices= departamento, blank=True, null=True)
     provincia = models.CharField(max_length=50, blank=True, null=True)
@@ -397,8 +396,8 @@ class Movimientos(models.Model):
 class Retencion(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
   documento = models.PositiveSmallIntegerField(choices=documentos_retencion, verbose_name='Tipo de Documento')
+  fecha = models.DateTimeField(null=True, blank=True)
   pdf = models.FileField(upload_to='documentos_retencion/', verbose_name='Cargar PDF')
-  fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
       
   def ver_pdf(self):
     if self.pdf:
@@ -445,12 +444,11 @@ class Compensaciones(models.Model):
 # Modelo de Exoneración de Retención 
 class Evaluacion(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  documento = models.PositiveSmallIntegerField(choices=documentos_evaluacion, verbose_name='Tipo de Documento')
   periodo = models.CharField(max_length=50, blank=True, null=True)
   fecha = models.DateField(blank=True, null=True)
-  documento = models.PositiveSmallIntegerField(choices=documentos_evaluacion, verbose_name='Tipo de Documento')
   puntaje = models.PositiveSmallIntegerField(blank=True, null=True)
   pdf = models.FileField(upload_to='documentos_evaluacion/', verbose_name='Cargar PDF')
-  fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
       
   def ver_pdf(self):
     if self.pdf:

@@ -10,16 +10,10 @@ def datospersonales_lista(request):
   query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
   filters = Q(apellido_paterno__icontains=query) | Q(apellido_materno__icontains=query) | Q(nombres__icontains=query)
 
-  empleados_cas = Empleado.objects.filter(filters, modalidad='CAS')
-  empleados_nombrados = Empleado.objects.filter(filters, modalidad='Nombrado')
-  empleados_cesantes = Empleado.objects.filter(filters, modalidad='Cesante')
   todos_empleados = Empleado.objects.filter(filters)
 
   # Preparar contexto
   context = {
-    'empleados_cas': empleados_cas,
-    'empleados_nombrados': empleados_nombrados,
-    'empleados_cesantes': empleados_cesantes,
     'todos_empleados': todos_empleados,
     'query': query  # Para mantener el texto en el campo de búsqueda
   }
@@ -161,7 +155,7 @@ class InfoPersonalCrearView(CreateView):
 
     return super().form_valid(form)
 
-
+# Vista para editar Información Personal
 def infopersonal_editar(request, infopersonal_id, legajo_id=None):
   infopersonal = get_object_or_404(InfoPersonal, id=infopersonal_id)
 

@@ -13,7 +13,6 @@ class EmpleadoForm(forms.ModelForm):
             'carnet_extranjeria': forms.TextInput(attrs={'class': 'form-control'}),
             'sexo': forms.Select(attrs={'class': 'form-select'}),
             'estado_civil': forms.Select(attrs={'class': 'form-select'}),
-            'modalidad': forms.Select(attrs={'class': 'form-select'}),
             'departamento': forms.Select(attrs={'class': 'form-select'}),
             'provincia': forms.TextInput(attrs={'class': 'form-control'}),
             'distrito': forms.TextInput(attrs={'class': 'form-control'}),
@@ -190,10 +189,11 @@ class MovimientosForm(forms.ModelForm):
 class RetencionForm(forms.ModelForm):
     class Meta:
         model = Retencion
-        fields = ['legajo', 'documento', 'pdf']
+        fields = ['legajo', 'documento', 'fecha', 'pdf']
         widgets = {
           'legajo': forms.Select(attrs={'class': 'form-select'}),
           'documento': forms.Select(attrs={'class': 'form-select'}),
+          'fecha': forms.DateInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
@@ -205,7 +205,7 @@ class CompensacionesForm(forms.ModelForm):
           'legajo': forms.Select(attrs={'class': 'form-select'}),
           'resolucion': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
-          'motivo': forms.TextInput(attrs={'class': 'form-control'}),
+          'motivo': forms.Select(attrs={'class': 'form-select'}),
           'porcentaje': forms.TextInput(attrs={'class': 'form-control'}),
           'anios': forms.TextInput(attrs={'class': 'form-control'}),
           'meses': forms.TextInput(attrs={'class': 'form-control'}),
@@ -216,7 +216,7 @@ class CompensacionesForm(forms.ModelForm):
 class EvaluacionForm(forms.ModelForm):
     class Meta:
         model = Evaluacion
-        fields = ['legajo', 'documento', 'pdf']
+        fields = ['legajo', 'periodo', 'fecha', 'documento', 'puntaje', 'pdf']
         widgets = {
           'legajo': forms.Select(attrs={'class': 'form-select'}),
           'periodo': forms.TextInput(attrs={'class': 'form-control'}),
