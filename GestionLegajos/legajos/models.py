@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
-from .choices import estados, sexo, departamento, tipo, documento, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_colegiatura, documentos_cursos, documentos_experiencia, documentos_retencion, documentos_evaluacion, tipo_desplazamiento, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, tipo_compensacion, motivo_progresion, tipo_movimientos, documentos_grado, documentos_especialidad, documentos_regimen
+from .choices import estados, sexo, departamento, tipo, documento, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_colegiatura, documentos_cursos, documentos_experiencia, documentos_retencion, documentos_evaluacion, tipo_desplazamiento, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, motivo_progresion, tipo_movimientos, documentos_grado, documentos_especialidad, documentos_regimen
 from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
             
@@ -89,7 +89,8 @@ class Legajo(models.Model):
 # Modelo Información Personal
 class InfoPersonal(models.Model):
     legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-    documento = models.PositiveSmallIntegerField(choices=documentos_informacion, verbose_name='Tipo de Documento')
+    documento = models.CharField(max_length=100, choices=documentos_informacion, verbose_name='Tipo de Documento')
+    documento_otro = models.CharField(max_length=100, blank=True, verbose_name='Especificar otro documento')
     fecha = models.DateField(null=True, blank=True)
     pdf = models.FileField(upload_to='documentos_personales/', verbose_name='Cargar PDF')
         
@@ -106,15 +107,24 @@ class InfoPersonal(models.Model):
         verbose_name_plural = 'Información Personal'
     
     def __str__(self):
+        if self.documento_otro:
+            return f"{self.documento_otro} - {self.legajo}"
         return f"{self.get_documento_display()} - {self.legajo}"
       
 # Modelo Proceso de Selección
 class Seleccion(models.Model):
     legajo = models.ManyToManyField(Legajo)
-    documento = models.PositiveSmallIntegerField(choices=documentos_seleccion, verbose_name='Tipo de Documento')
+    documento = models.CharField(max_length=100, choices=documentos_seleccion, verbose_name='Tipo de Documento')
+    documento_otro = models.CharField(max_length=100, blank=True, verbose_name='Especificar otro documento')
     fecha = models.DateField(null=True, blank=True)
     descripcion = models.CharField(max_length=250, blank=True, verbose_name='Descripción')
     pdf = models.FileField(upload_to='documentos_seleccion/', verbose_name='Cargar PDF')
+        
+    def save(self, *args, **kwargs):
+        # Si no se selecciona "Otros", limpia el campo "documento_otro"
+        if self.documento != 'Otro Documento':
+            self.documento_otro = ''
+        super().save(*args, **kwargs)
         
     def ver_pdf(self):
         if self.pdf:
@@ -137,7 +147,7 @@ class Vinculo(models.Model):
   documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
   numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
   tipo = models.PositiveSmallIntegerField(choices= tipo, blank=True, null=True)
-  descripcion = models.CharField(max_length=100, blank=True)
+  descripcion = models.CharField(max_length=100, blank=True, verbose_name='Descripción')
   fecha = models.DateField(verbose_name="Fecha del Documento")
   fecha_vigencia = models.DateField(verbose_name="Fecha de Inicio de Vínculo")
   fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
@@ -159,15 +169,15 @@ class Vinculo(models.Model):
           fecha_formateada = date_format(self.fecha_vigencia, "j \d\e F \d\e Y", use_l10n=True)
           
           # Texto personalizado según el tipo
-          if self.tipo == 5:
+          if self.tipo == 10:
               texto_tipo = "Nombrar con resolución"
-          elif self.tipo == 10:
-              texto_tipo = "Reasignar con resolución"
-          elif self.tipo == 15:
-              texto_tipo = "Contratar a plazo fijo con resolución"
           elif self.tipo == 20:
+              texto_tipo = "Contratar en la modalidad CAS"
+          elif self.tipo == 30:
+              texto_tipo = "Contratar a plazo fijo con resolución"
+          elif self.tipo == 40:
               texto_tipo = "Destacar con resolución"
-          elif self.tipo == 25:
+          elif self.tipo == 50:
               texto_tipo = "Designar con resolución"
           else:
               texto_tipo = "Sin tipo definido"  # Caso por defecto
@@ -333,10 +343,22 @@ class Experiencia(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
   institucion = models.CharField(max_length=250, null=True, blank=True, verbose_name='Institución o Empresa')
   documento = models.PositiveSmallIntegerField(blank=True, null=True, choices=documentos_experiencia, verbose_name='Tipo de Documento')
+  numero = models.CharField(blank=True, null=True, max_length=50, unique=True, verbose_name='Número')
   cargo = models.CharField(max_length=250,)
-  descripcion = models.CharField(max_length=1500)
   fecha_inicio = models.DateField()
   fecha_fin = models.DateField()
+  cargo2 = models.CharField(max_length=250, blank=True, null=True, verbose_name='Cargo 2')
+  fecha_inicio2 = models.DateField(blank=True, null=True, verbose_name='Fecha Inicio 2')
+  fecha_fin2 = models.DateField(blank=True, null=True, verbose_name='Fecha Fin 2')
+  cargo3 = models.CharField(max_length=250, blank=True, null=True, verbose_name='Cargo 3')
+  fecha_inicio3 = models.DateField(blank=True, null=True, verbose_name='Fecha Inicio 3')
+  fecha_fin3 = models.DateField(blank=True, null=True, verbose_name='Fecha Fin 3')
+  cargo4 = models.CharField(max_length=250, blank=True, null=True, verbose_name='Cargo 4')
+  fecha_inicio4 = models.DateField(blank=True, null=True, verbose_name='Fecha Inicio 4')
+  fecha_fin4 = models.DateField(blank=True, null=True, verbose_name='Fecha Fin 4')
+  cargo5 = models.CharField(max_length=250, blank=True, null=True, verbose_name='Cargo 5')
+  fecha_inicio5 = models.DateField(blank=True, null=True, verbose_name='Fecha Inicio 5')
+  fecha_fin5 = models.DateField(blank=True, null=True, verbose_name='Fecha Fin 5')
   fecha_expedicion = models.DateField(blank=True, null=True)
   pdf = models.FileField(upload_to='experiencia_laboral/', verbose_name='Cargar PDF')
 
@@ -362,7 +384,7 @@ class Movimientos(models.Model):
   tipo = models.PositiveSmallIntegerField(choices=tipo_movimientos, blank=True, null=True, verbose_name='Tipo de Licencia')
   motivo = models.CharField(max_length=50)
   asunto = models.CharField(max_length=50)
-  desde = models.DateField()
+  desde = models.DateField(blank=True, null=True)
   hasta = models.DateField(blank=True, null=True)
   total_dias = models.PositiveIntegerField(blank=True, null=True, verbose_name='Total de Días')
   pdf = models.FileField(upload_to='movimientos_personal/', verbose_name='Cargar PDF')
@@ -418,13 +440,11 @@ class Retencion(models.Model):
 # Compensaciones
 class Compensaciones(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  resolucion = models.CharField(max_length=50, unique=True)
+  documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
+  numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
+  motivo = models.CharField(max_length=50)
+  descripcion = models.CharField(max_length=250, blank=True)
   fecha = models.DateField()
-  motivo = models.PositiveSmallIntegerField(choices= tipo_compensacion, blank=True, null=True)
-  porcentaje = models.DecimalField(max_digits=5, decimal_places=2)
-  anios = models.IntegerField(verbose_name='años')
-  meses = models.IntegerField()
-  dias = models.IntegerField()
   pdf = models.FileField(upload_to='compensaciones/', verbose_name='Cargar PDF')
 
   def ver_pdf(self):
@@ -469,12 +489,13 @@ class Evaluacion(models.Model):
 class Progresion(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
   documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
-  numero = models.CharField(max_length=100, null=True, blank=True)
-  motivo = models.PositiveSmallIntegerField(choices=motivo_progresion, blank=True, null=True, verbose_name='Motivo')
-  fecha = models.DateField(blank=True, null=True)
+  numero = models.CharField(max_length=100, null=True, blank=True, verbose_name='Número')
+  motivo = models.CharField(max_length=300, blank=True, null=True, verbose_name='Motivo')
+  descripcion = models.CharField(max_length=100, blank=True, null=True, verbose_name='Descripción')
+  fecha = models.DateField(verbose_name="Fecha del Documento")
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
   nivel = models.ManyToManyField(Nivel, blank=True)
   pdf = models.FileField(upload_to='documentos_progresion/', verbose_name='Cargar PDF')
-  fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
       
   def ver_pdf(self):
     if self.pdf:
@@ -498,7 +519,8 @@ class Desplazamiento(models.Model):
   numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
   tipo = models.PositiveSmallIntegerField(choices= tipo_desplazamiento, blank=True, null=True)
   asunto = models.CharField(max_length=100, blank=True)
-  fecha = models.DateField()
+  fecha = models.DateField(verbose_name="Fecha del Documento")
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
   fecha_vigencia = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
   cargo = models.ManyToManyField(Cargo, blank=True)
   nivel = models.ManyToManyField(Nivel, blank=True)
@@ -519,13 +541,13 @@ class Desplazamiento(models.Model):
           
           # Texto personalizado según el tipo
           if self.tipo == 5:
-              texto_tipo = "Nombrar con resolución Nº"
+              texto_tipo = "Nombrar con resolución"
           elif self.tipo == 10:
-              texto_tipo = "Rotar con resolución Nº"
+              texto_tipo = "Rotar con resolución"
           elif self.tipo == 15:
-              texto_tipo = "Destacar con resolución Nº"
+              texto_tipo = "Destacar con resolución"
           elif self.tipo == 20:
-              texto_tipo = "Encargar con resolución Nº"
+              texto_tipo = "Encargar con resolución"
           else:
               texto_tipo = "Sin tipo definido"  # Caso por defecto
 
@@ -546,10 +568,13 @@ class Reconocimiento(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
   documento_reconocimiento = models.PositiveSmallIntegerField(choices=documentos_reconocimientos, verbose_name='Reconocimientos y Sanciones')
   documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
+  numero = models.CharField(blank=True, null=True, max_length=50, verbose_name='Número')
   descripcion = models.CharField(max_length=250, blank=True, null=True)
-  fecha = models.DateField(blank=True, null=True)
+  fecha = models.DateField(blank=True, null=True, verbose_name='Fecha del Documento')
+  desde = models.DateField(blank=True, null=True, verbose_name='Fecha de Inicio')
+  hasta = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+  total_dias = models.PositiveIntegerField(blank=True, null=True, verbose_name='Total de Días')
   pdf = models.FileField(upload_to='documentos_reconocimiento/', verbose_name='Cargar PDF')
-  fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
       
   def ver_pdf(self):
     if self.pdf:
@@ -569,8 +594,8 @@ class Reconocimiento(models.Model):
 # Modelo de Relaciones individuales y colectivas
 class Laboral(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  documento = models.CharField(max_length=250, blank=True, null=True, verbose_name='Tipo de Documento')
   documento_laboral = models.PositiveSmallIntegerField(choices=documentos_laboral, verbose_name='Relaciones Laborales')
-  documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
   descripcion = models.CharField(max_length=250, blank=True, null=True)
   fecha = models.DateField(blank=True, null=True)
   pdf = models.FileField(upload_to='documentos_laboral/', verbose_name='Cargar PDF')
@@ -594,12 +619,13 @@ class Laboral(models.Model):
 # Modelo de Relaciones individuales y colectivas
 class Seguridad(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  documento = models.PositiveSmallIntegerField(choices=documentos_sst, verbose_name='SST y Bienestar social')
+  documento = models.PositiveSmallIntegerField(choices=documentos_sst, verbose_name='Tipo de Documento')
   descripcion = models.CharField(max_length=250, blank=True, null=True)
-  fecha = models.DateField(blank=True, null=True, verbose_name='Fecha de Inicio')
-  fecha_vigencia = models.DateField(blank=True, null=True, verbose_name='Fecha de Vigencia')
+  fecha = models.DateField(blank=True, null=True, verbose_name='Fecha del Documento')
+  fecha_inicio = models.DateField(blank=True, null=True, verbose_name='Fecha de Inicio')
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+  total_dias = models.PositiveIntegerField(blank=True, null=True, verbose_name='Total de Días')
   pdf = models.FileField(upload_to='documentos_sst/', verbose_name='Cargar PDF')
-  fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
       
   def ver_pdf(self):
     if self.pdf:
@@ -623,7 +649,6 @@ class Desvinculacion(models.Model):
   descripcion = models.CharField(max_length=250, blank=True, null=True)
   fecha = models.DateField(blank=True, null=True)
   pdf = models.FileField(upload_to='documentos_desvinculacion/', verbose_name='Cargar PDF')
-  fecha_carga = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de Carga')
       
   def ver_pdf(self):
     if self.pdf:
@@ -636,6 +661,58 @@ class Desvinculacion(models.Model):
     ordering = ['documento']  # Ordenar según el tipo
     verbose_name = 'Desvinculación'
     verbose_name_plural = 'Desvinculación'
+  
+  def __str__(self):
+    return f"{self.get_documento_display()} - {self.legajo}"
+  
+
+# Modelo de Finalización de Vinculo laboral
+class Final(models.Model):
+  legajo = models.ManyToManyField(Legajo)
+  documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
+  numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
+  descripcion = models.CharField(max_length=100, blank=True)
+  fecha = models.DateField(verbose_name='Fecha del Documento')
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+  cargo = models.ManyToManyField(Cargo, blank=True)
+  nivel = models.ManyToManyField(Nivel, blank=True)
+  plaza = models.ManyToManyField(Plaza, blank=True)
+  pdf = models.FileField(upload_to='documentos_final/', verbose_name='Cargar PDF')
+
+  def ver_pdf(self):
+      if self.pdf:
+          return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+      return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+
+  def __str__(self):
+      return self.descripcion
+  
+  class Meta:
+    ordering = ['-fecha']
+    verbose_name = 'Resolución de Finalización de Vínculo'
+    verbose_name_plural = 'Resolución de Finalización de Vínculo'
+    
+# Modelo de Otros Documentos
+class Otro(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  documento = models.CharField(max_length=250)
+  descripcion = models.CharField(max_length=500, blank=True, null=True)
+  fecha = models.DateField(blank=True, null=True)
+  pdf = models.FileField(upload_to='documentos_desvinculacion/', verbose_name='Cargar PDF')
+      
+  def ver_pdf(self):
+    if self.pdf:
+      return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+    return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+
+  class Meta:
+    ordering = ['documento']  # Ordenar según el tipo
+    verbose_name = 'Otro Documento'
+    verbose_name_plural = 'Otros Documentos'
   
   def __str__(self):
     return f"{self.get_documento_display()} - {self.legajo}"

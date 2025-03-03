@@ -1,5 +1,5 @@
 from django import forms
-from .models import Empleado, Legajo, InfoPersonal, Seleccion, Vinculo, Induccion, Prueba, Colegiatura, EstudiosRealizados, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Subespecialidad
+from .models import Empleado, Legajo, InfoPersonal, Seleccion, Vinculo, Induccion, Prueba, Colegiatura, EstudiosRealizados, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Subespecialidad, Final, Otro
 
 class EmpleadoForm(forms.ModelForm):
   class Meta:
@@ -36,10 +36,11 @@ class LegajoForm(forms.ModelForm):
 class InfoPersonalForm(forms.ModelForm):
     class Meta:
         model = InfoPersonal
-        fields = ['legajo', 'documento', 'fecha', 'pdf']
+        fields = ['legajo', 'documento', 'documento_otro', 'fecha', 'pdf']
         widgets = {
           'legajo': forms.Select(attrs={'class': 'form-select'}),
           'documento': forms.Select(attrs={'class': 'form-select'}),
+          'documento_otro': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
@@ -47,12 +48,13 @@ class InfoPersonalForm(forms.ModelForm):
 class SeleccionForm(forms.ModelForm):
     class Meta:
         model = Seleccion
-        fields = ['legajo', 'documento', 'fecha', 'descripcion', 'pdf']
+        fields = ['legajo', 'documento', 'documento_otro', 'descripcion', 'fecha', 'pdf']
         widgets = {
           'legajo': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'documento': forms.Select(attrs={'class': 'form-select'}),
-          'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'documento_otro': forms.TextInput(attrs={'class': 'form-control'}),
           'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+          'fecha': forms.DateInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
                 
@@ -157,15 +159,27 @@ class CursoForm(forms.ModelForm):
 class ExperienciaForm(forms.ModelForm):
   class Meta:
     model = Experiencia
-    fields = ['legajo', 'institucion', 'documento', 'cargo', 'descripcion', 'fecha_inicio', 'fecha_fin', 'fecha_expedicion', 'pdf']
+    fields = '__all__'
     widgets = {
       'legajo': forms.Select(attrs={'class': 'form-select'}),
       'institucion': forms.TextInput(attrs={'class': 'form-control'}),
       'documento': forms.Select(attrs={'class': 'form-select'}),
+      'numero': forms.TextInput(attrs={'class': 'form-control'}),
       'cargo': forms.TextInput(attrs={'class': 'form-control'}),
-      'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
       'fecha_inicio': forms.DateInput(attrs={'class': 'form-control'}),
       'fecha_fin': forms.DateInput(attrs={'class': 'form-control'}),
+      'cargo2': forms.TextInput(attrs={'class': 'form-control'}),
+      'fecha_inicio2': forms.DateInput(attrs={'class': 'form-control'}),
+      'fecha_fin2': forms.DateInput(attrs={'class': 'form-control'}),
+      'cargo3': forms.TextInput(attrs={'class': 'form-control'}),
+      'fecha_inicio3': forms.DateInput(attrs={'class': 'form-control'}),
+      'fecha_fin3': forms.DateInput(attrs={'class': 'form-control'}),
+      'cargo4': forms.TextInput(attrs={'class': 'form-control'}),
+      'fecha_inicio4': forms.DateInput(attrs={'class': 'form-control'}),
+      'fecha_fin4': forms.DateInput(attrs={'class': 'form-control'}),
+      'cargo5': forms.TextInput(attrs={'class': 'form-control'}),
+      'fecha_inicio5': forms.DateInput(attrs={'class': 'form-control'}),
+      'fecha_fin5': forms.DateInput(attrs={'class': 'form-control'}),
       'fecha_expedicion': forms.DateInput(attrs={'class': 'form-control'}),
       'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
     }
@@ -203,13 +217,11 @@ class CompensacionesForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
           'legajo': forms.Select(attrs={'class': 'form-select'}),
-          'resolucion': forms.TextInput(attrs={'class': 'form-control'}),
+          'documento': forms.Select(attrs={'class': 'form-select'}),
+          'numero': forms.TextInput(attrs={'class': 'form-control'}),
+          'motivo': forms.TextInput(attrs={'class': 'form-control'}),
+          'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
-          'motivo': forms.Select(attrs={'class': 'form-select'}),
-          'porcentaje': forms.TextInput(attrs={'class': 'form-control'}),
-          'anios': forms.TextInput(attrs={'class': 'form-control'}),
-          'meses': forms.TextInput(attrs={'class': 'form-control'}),
-          'dias': forms.TextInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
@@ -229,13 +241,15 @@ class EvaluacionForm(forms.ModelForm):
 class ProgresionForm(forms.ModelForm):
     class Meta:
         model = Progresion
-        fields = ['legajo', 'documento', 'numero', 'motivo', 'fecha', 'nivel', 'pdf']
+        fields = ['legajo', 'documento', 'numero', 'motivo', 'descripcion', 'fecha', 'fecha_inicio', 'nivel', 'pdf']
         widgets = {
           'legajo': forms.Select(attrs={'class': 'form-select'}),
           'documento': forms.Select(attrs={'class': 'form-select'}),
           'numero': forms.TextInput(attrs={'class': 'form-control'}),
-          'motivo': forms.Select(attrs={'class': 'form-select'}),
+          'motivo': forms.TextInput(attrs={'class': 'form-control'}),
+          'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'fecha_inicio': forms.DateInput(attrs={'class': 'form-control'}),
           'nivel': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
@@ -251,6 +265,7 @@ class DesplazamientoForm(forms.ModelForm):
           'tipo': forms.Select(attrs={'class': 'form-select'}),
           'asunto': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'fecha_inicio': forms.DateInput(attrs={'class': 'form-control'}),
           'fecha_vigencia': forms.DateInput(attrs={'class': 'form-control'}),
           'cargo': forms.SelectMultiple(attrs={'class': 'form-select'}),
           'nivel': forms.SelectMultiple(attrs={'class': 'form-select'}),
@@ -266,8 +281,12 @@ class ReconocimientoForm(forms.ModelForm):
           'legajo': forms.Select(attrs={'class': 'form-select'}),
           'documento_reconocimiento': forms.Select(attrs={'class': 'form-select'}),
           'documento': forms.Select(attrs={'class': 'form-select'}),
+          'numero': forms.TextInput(attrs={'class': 'form-control'}),
           'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'desde': forms.DateInput(attrs={'class': 'form-control'}),
+          'hasta': forms.DateInput(attrs={'class': 'form-control'}),
+          'total_dias': forms.TextInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
@@ -277,8 +296,8 @@ class LaboralForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
           'legajo': forms.Select(attrs={'class': 'form-select'}),
+          'documento': forms.TextInput(attrs={'class': 'form-control'}),
           'documento_laboral': forms.Select(attrs={'class': 'form-select'}),
-          'documento': forms.Select(attrs={'class': 'form-select'}),
           'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
@@ -293,7 +312,9 @@ class SeguridadForm(forms.ModelForm):
           'documento': forms.Select(attrs={'class': 'form-select'}),
           'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
-          'fecha_vigencia': forms.DateInput(attrs={'class': 'form-control'}),
+          'fecha_inicio': forms.DateInput(attrs={'class': 'form-control'}),
+          'fecha_fin': forms.DateInput(attrs={'class': 'form-control'}),
+          'total_dias': forms.TextInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
         
@@ -308,3 +329,33 @@ class DesvinculacionForm(forms.ModelForm):
           'fecha': forms.DateInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+        
+class FinalForm(forms.ModelForm):
+    class Meta:
+        model = Final
+        fields = '__all__'
+        widgets = {
+          'legajo': forms.SelectMultiple(attrs={'class': 'form-select'}),
+          'documento': forms.Select(attrs={'class': 'form-select'}),
+          'numero': forms.TextInput(attrs={'class': 'form-control'}),
+          'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+          'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'fecha_fin': forms.DateInput(attrs={'class': 'form-control'}),
+          'cargo': forms.SelectMultiple(attrs={'class': 'form-select'}),
+          'nivel': forms.SelectMultiple(attrs={'class': 'form-select'}),
+          'plaza': forms.SelectMultiple(attrs={'class': 'form-select'}),
+          'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        
+class OtroForm(forms.ModelForm):
+    class Meta:
+        model = Otro
+        fields = '__all__'
+        widgets = {
+          'legajo': forms.Select(attrs={'class': 'form-select'}),
+          'documento': forms.TextInput(attrs={'class': 'form-control'}),
+          'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+          'fecha': forms.DateInput(attrs={'class': 'form-control'}),
+          'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
+        

@@ -26,18 +26,18 @@
             </div>
             <div class="card-body">
                 <form method="get" action="{% url 'reportes:descargar_informe' trabajador.id %}">
-                    {% for servicio in servicios %}
+                    {% for vinculo in vinculos %}
                     <div class="form-check">
                         <input 
                             type="checkbox" 
                             class="form-check-input" 
-                            name="servicios" 
-                            value="{{ servicio.id }}" 
-                            id="servicio-{{ servicio.id }}"
+                            name="vinculos" 
+                            value="{{ vinculo.id }}" 
+                            id="servicio-{{ vinculo.id }}"
                         >
-                        <label class="form-check-label" for="servicio-{{ servicio.id }}">
-                            {{ servicio.cargo.all|join:", " }} en {{ servicio.dependencia }}
-                            ({{ servicio.fecha_vigencia|date:"d/m/Y" }} - {{ servicio.fecha_fin|date:"d/m/Y"|default:"actualidad" }})
+                        <label class="form-check-label" for="vinculo-{{ vinculo.id }}">
+                            {{ vinculo.cargo.all|join:", " }} en {{ vinculo.descripcion }}
+                            ({{ vinculo.fecha_vigencia|date:"d/m/Y" }} - {{ vinculo.fecha_fin|date:"d/m/Y"|default:"actualidad" }})
                         </label>
                     </div>
                     {% endfor %}

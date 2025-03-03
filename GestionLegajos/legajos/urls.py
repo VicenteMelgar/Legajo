@@ -1,6 +1,6 @@
 from django.urls import path
 from .import views 
-from .views import InfoPersonalCrearView, VinculoCrearView, SeleccionCrearView, InduccionCrearView, PruebaCrearView, ColegiaturaCrearView, EstudiosCrearView, SubespecialidadCrearView, CursoCrearView, ExperienciaCrearView, MovimientosCrearView, RetencionCrearView, CompensacionesCrearView, EvaluacionCrearView, ProgresionCrearView, DesplazamientoCrearView, ReconocimientoCrearView, LaboralCrearView, SeguridadCrearView, DesvinculacionCrearView
+from .views import InfoPersonalCrearView, VinculoCrearView, SeleccionCrearView, InduccionCrearView, PruebaCrearView, ColegiaturaCrearView, EstudiosCrearView, SubespecialidadCrearView, CursoCrearView, ExperienciaCrearView, MovimientosCrearView, RetencionCrearView, CompensacionesCrearView, EvaluacionCrearView, ProgresionCrearView, DesplazamientoCrearView, ReconocimientoCrearView, LaboralCrearView, SeguridadCrearView, DesvinculacionCrearView, FinalCrearView, OtroCrearView
 
 app_name='legajos'
 
@@ -51,6 +51,10 @@ urlpatterns = [
   path('seguridad/editar/<int:seguridad_id>/', views.seguridad_editar, name='seguridad_editar'),
   path('desvinculacion/crear/<int:legajo_id>/', DesvinculacionCrearView.as_view(), name='desvinculacion_crear'),
   path('desvinculacion/editar/<int:desvinculacion_id>/', views.desvinculacion_editar, name='desvinculacion_editar'),
+  path('final/crear/<int:legajo_id>/', FinalCrearView.as_view(), name='final_crear'),
+  path('final/editar/<int:final_id>/', views.final_editar, name='final_editar'),
+  path('otro/crear/<int:legajo_id>/', OtroCrearView.as_view(), name='otro_crear'),
+  path('otro/editar/<int:otro_id>/', views.otro_editar, name='otro_editar'),
   path('documentos/', views.documentos, name='documentos'),
   path('dashboard/', views.dashboard, name='dashboard'),
 ]

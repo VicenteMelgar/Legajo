@@ -24,6 +24,8 @@ from .models import (
     Laboral,
     Seguridad,
     Desvinculacion,
+    Final,
+    Otro,
 )
 
 admin.site.site_header = "DASHBOARD LEGAJO"
@@ -70,7 +72,7 @@ class LegajoAdmin(admin.ModelAdmin):
     
 @admin.register(InfoPersonal)
 class InfoPersonalAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'fecha', 'ver_pdf')
+    list_display = ('documento', 'documento_otro', 'fecha', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     
@@ -119,7 +121,7 @@ class CursoAdmin(admin.ModelAdmin):
 
 @admin.register(Experiencia)
 class ExperienciaAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'descripcion', 'cargo', 'fecha_inicio', 'fecha_fin', 'fecha_expedicion', 'ver_pdf')
+    list_display = ('documento', 'numero', 'cargo', 'fecha_inicio', 'fecha_fin', 'fecha_expedicion', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
 
@@ -143,19 +145,19 @@ class EvaluacionAdmin(admin.ModelAdmin):
     
 @admin.register(Progresion)
 class ProgresionAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'numero', 'fecha', 'ver_pdf', 'fecha_carga')
+    list_display = ('documento', 'numero', 'fecha', 'fecha_inicio', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     
 @admin.register(Desplazamiento)
 class DesplazamientoAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'tipo', 'asunto', 'ver_pdf')
+    list_display = ('documento', 'tipo', 'asunto', 'fecha', 'fecha_inicio', 'fecha_vigencia', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     
 @admin.register(Reconocimiento)
 class ReconocimientoAdmin(admin.ModelAdmin):
-    list_display = ('documento_reconocimiento', 'documento', 'descripcion', 'fecha', 'ver_pdf', 'fecha_carga')
+    list_display = ('documento_reconocimiento', 'documento', 'descripcion', 'fecha', 'ver_pdf')
     list_filter = ('documento_reconocimiento', 'documento')
     search_fields = ('documento',)
     
@@ -167,18 +169,30 @@ class LaboralAdmin(admin.ModelAdmin):
     
 @admin.register(Seguridad)
 class SeguridadAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'descripcion', 'fecha', 'ver_pdf', 'fecha_carga')
+    list_display = ('documento', 'descripcion', 'fecha', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     
 @admin.register(Compensaciones)
 class CompensacionesAdmin(admin.ModelAdmin):
-    list_display = ('resolucion', 'fecha', 'motivo', 'porcentaje', 'anios', 'meses', 'dias', 'ver_pdf')
-    list_filter = ('legajo',)
-    search_fields = ('resolucion',)
+    list_display = ('documento', 'numero', 'motivo', 'descripcion', 'fecha', 'ver_pdf')
+    list_filter = ('documento',)
+    search_fields = ('documento',)
     
 @admin.register(Desvinculacion)
 class DesviculacionAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'descripcion', 'fecha', 'ver_pdf', 'fecha_carga')
+    list_display = ('documento', 'descripcion', 'fecha', 'ver_pdf')
+    list_filter = ('documento',)
+    search_fields = ('documento',)
+
+@admin.register(Final)
+class FinalAdmin(admin.ModelAdmin):
+    list_display = ('documento', 'numero', 'descripcion', 'fecha', 'fecha_fin', 'ver_pdf')
+    list_filter = ('documento',)
+    search_fields = ('documento',)
+    
+@admin.register(Otro)
+class OtroAdmin(admin.ModelAdmin):
+    list_display = ('documento', 'descripcion', 'fecha', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)

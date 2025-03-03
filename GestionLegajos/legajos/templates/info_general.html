@@ -35,6 +35,7 @@
       <a class="flex-sm-fill text-sm-center nav-link" id="laboral-tab" data-bs-toggle="tab" href="#laboral" role="tab" aria-controls="laboral" aria-selected="false">Laboral</a>
       <a class="flex-sm-fill text-sm-center nav-link" id="seguridad-tab" data-bs-toggle="tab" href="#seguridad" role="tab" aria-controls="seguridad" aria-selected="false">SST</a>
       <a class="flex-sm-fill text-sm-center nav-link" id="desvinculacion-tab" data-bs-toggle="tab" href="#desvinculacion" role="tab" aria-controls="desvinculacion" aria-selected="false">Desvinculación</a>
+      <a class="flex-sm-fill text-sm-center nav-link" id="otros-tab" data-bs-toggle="tab" href="#otros" role="tab" aria-controls="otros" aria-selected="false">Otros</a>
 		</nav>
 
     <div class="tab-content" id="orders-table-tab-content">
@@ -62,7 +63,11 @@
                 <tbody>
                   {% for info_personal in informacion_personal %}
                   <tr>
-                    <td class="cell"><span>{{ info_personal.get_documento_display }}</span></td>
+                    <td class="cell"><span>{% if info_personal.documento == "Otro Documento" or info_personal.documento is None %}
+                      {{ "" }}
+                  {% else %}
+                      {{ info_personal.documento }}
+                  {% endif %}{{ info_personal.documento_otro }}</span></td>
                     <td class="cell"><span>{{ info_personal.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ info_personal.pdf.url }}" target="_blank" class="text-primary">
@@ -101,6 +106,7 @@
 								<thead>
 									<tr>
 										<th class="cell">Tipo de Documento</th>
+                    <th class="cell">Descripción</th>
 										<th class="cell">Fecha</th>
 										<th class="cell">Documento</th>
                     <th class="cell">Editar</a></th>
@@ -109,7 +115,12 @@
                 <tbody>
                   {% for seleccion in selecciones %}
                   <tr>
-                    <td class="cell"><span>{{ seleccion.get_documento_display }}</span></td>
+                    <td class="cell"><span>{% if seleccion.documento == "Otro Documento" or seleccion.documento is None %}
+                      {{ "" }}
+                  {% else %}
+                      {{ seleccion.documento }}
+                  {% endif %}{{ seleccion.documento_otro }}</span></td>
+                    <td class="cell"><span>{{ seleccion.descripcion }}</span></td>
                     <td class="cell"><span>{{ seleccion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ seleccion.pdf.url }}" target="_blank" class="text-primary">
@@ -126,6 +137,7 @@
 									{% for vinculo in vinculos %}
 									<tr>
 										<td class="cell"><span>{{ vinculo.get_documento_display }} {{ vinculo.numero }}</span></td>
+                    <td class="cell"><span>{{ vinculo.descripcion }}</span></td>
 										<td class="cell"><span class="truncate">{{ vinculo.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ vinculo.pdf.url }}" target="_blank" class="text-primary">
@@ -142,6 +154,7 @@
                   {% for induccion in inducciones %}
                   <tr>
                     <td class="cell"><span>{{ induccion.get_documento_display }}</span></td>
+                    <td class="cell"><span>{{ induccion.descripcion }}</span></td>
                     <td class="cell"><span>{{ induccion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ induccion.pdf.url }}" target="_blank" class="text-primary">
@@ -158,6 +171,7 @@
                   {% for prueba in pruebas %}
                   <tr>
                     <td class="cell"><span>{{ prueba.get_documento_display }}</span></td>
+                    <td class="cell"><span>{{ prueba.descripcion }}</span></td>
                     <td class="cell"><span>{{ prueba.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ prueba.pdf.url }}" target="_blank" class="text-primary">
@@ -195,8 +209,9 @@
               <table class="table app-table-hover mb-0 text-left">
 								<thead>
 									<tr>
-										<th class="cell">Formación Académica</th>
+										<th class="cell">Tipo de Documento</th>
 										<th class="cell">Fecha de Expedición</th>
+                    <th class="cell">Válido Hasta</th>
 										<th class="cell">Documento</th>
                     <th class="cell">Editar</a></th>
 									</tr>
@@ -206,6 +221,7 @@
                   <tr>
                     <td class="cell"><span>{{ estudio.get_grado_instruccion_display }}: {{ estudio.especialidad }}</span></td>
                     <td class="cell"><span>{{ estudio.fecha_expedicion|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ estudio.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ estudio.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -221,7 +237,8 @@
 									{% for subespecialidad in subespecialidades %}
 									<tr>
 										<td class="cell"><span>{{ subespecialidad.get_documento_display }} {{ subespecialidad.mencion }}</span></td>
-										<td class="cell"><span class="truncate">{{ subespecialidad.fecha_expedicion|date:"d/m/Y"|default_if_none:"" }}</span></td>
+										<td class="cell"><span>{{ subespecialidad.fecha_expedicion|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ subespecialidad.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ subespecialidad.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -238,6 +255,7 @@
                   <tr>
                     <td class="cell"><span>{{ colegiatura.get_documento_display }}</span></td>
                     <td class="cell"><span>{{ colegiatura.fecha_emision|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ colegiatura.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ colegiatura.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -254,6 +272,7 @@
                   <tr>
                     <td class="cell"><span>{{ curso.get_documento_display }}: {{ curso.descripcion }}</span></td>
                     <td class="cell"><span>{{ curso.fecha_expedicion|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ curso.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ curso.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -289,8 +308,7 @@
                   <tr>
                     <th class="cell">Institución o Empresa</th>
                     <th class="cell">Tipo de Documento</th>
-                    <th class="cell">Fecha Inicio</th>
-                    <th class="cell">Fecha Fin</th>
+                    <th class="cell">Descripción</th>
                     <th class="cell">Documento</th>
                     <th class="cell">Editar</th>
                   </tr>
@@ -299,9 +317,8 @@
                   {% for experiencia in experiencias %}
                   <tr>
                     <td class="cell"><span>{{ experiencia.institucion }}</span></td>
-                    <td class="cell"><span>{{ experiencia.get_documento_display }}: {{ experiencia.descripcion }}</span></td>
-                    <td class="cell"><span>{{ experiencia.fecha_inicio|date:"d/m/Y"|default_if_none:"" }}</span></td>
-                    <td class="cell"><span>{{ experiencia.fecha_fin|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ experiencia.get_documento_display }}</span></td>
+                    <td class="cell"><span>{{ experiencia.cargo }} {{ experiencia.fecha_inicio|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.fecha_fin|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.cargo2|default_if_none:"" }} {{ experiencia.fecha_inicio2|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.fecha_fin2|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.cargo3|default_if_none:"" }} {{ experiencia.fecha_inicio3|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.fecha_fin3|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.cargo4|default_if_none:"" }} {{ experiencia.fecha_inicio4|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.fecha_fin4|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.cargo5|default_if_none:"" }} {{ experiencia.fecha_inicio5|date:"d/m/Y"|default_if_none:"" }} {{ experiencia.fecha_fin5|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ experiencia.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -335,7 +352,7 @@
 							<table class="table mb-0 text-left">
 								<thead>
 									<tr>
-										<th class="cell">Resolución</th>
+										<th class="cell">Tipo de Documento</th>
                     <th class="cell">Tipo de Licencia</th>
 										<th class="cell">Motivo</th>
 										<th class="cell">Asunto</th>
@@ -391,6 +408,8 @@
                 <thead>
                   <tr>
                     <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Motivo</th>
+                    <th class="cell">Descripción</th>
                     <th class="cell">Fecha</th>
                     <th class="cell">Documento</th>
                     <th class="cell">Editar</th>
@@ -400,6 +419,8 @@
                   {% for retencion in retenciones %}
                   <tr>
                     <td class="cell"><span>{{ retencion.get_documento_display }}</span></td>
+                    <td class="cell"><span>{{ retencion.motivo }}</span></td>
+                    <td class="cell"><span>{{ retencion.descripcion }}</span></td>
                     <td class="cell"><span>{{ retencion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ retencion.pdf.url }}" target="_blank" class="text-primary">
@@ -415,7 +436,9 @@
                   {% endfor %}	
                   {% for compensacion in compensaciones %}
 									<tr>
-										<td class="cell"><span>{{ compensacion.resolucion }} - {{ compensacion.get_motivo_display}}</span></td>
+										<td class="cell"><span>{{ compensacion.get_documento_display }} - {{ compensacion.numero}}</span></td>
+                    <td class="cell"><span>{{ compensacion.motivo }}</span></td>
+                    <td class="cell"><span>{{ compensacion.descripcion }}</span></td>
 										<td class="cell"><span>{{ compensacion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ compensacion.pdf.url }}" target="_blank" class="text-primary">
@@ -453,6 +476,7 @@
                 <thead>
                   <tr>
                     <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Motivo</th>
                     <th class="cell">Fecha</th>
                     <th class="cell">Documento</th>
                     <th class="cell">Editar</th>
@@ -462,6 +486,7 @@
                   {% for evaluacion in evaluaciones %}
                   <tr>
                     <td class="cell"><span>{{ evaluacion.get_documento_display }} {{ evaluacion.periodo }}</span></td>
+                    <td class="cell"><span>{{ evaluacion.motivo }}</span></td>
                     <td class="cell"><span>{{ evaluacion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ evaluacion.pdf.url }}" target="_blank" class="text-primary">
@@ -477,8 +502,9 @@
                   {% endfor %}	
                   {% for progresion in progresiones %}
                   <tr>
-                    <td class="cell"><span>{{ progresion.get_documento_display }} - {{ progresion.get_motivo_display }}</span></td>
-										<td class="cell"><span>{{ progresion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ progresion.get_documento_display }} {{ progresion.numero }}</span></td>
+										<td class="cell"><span>{{ progresion.motivo}}</span></td>
+                    <td class="cell"><span>{{ progresion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ progresion.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -493,8 +519,9 @@
                   {% endfor %}
                   {% for desplazamiento in desplazamientos %}
 									<tr>
-										<td class="cell"><span>{{ desplazamiento.get_documento_display }} - {{ desplazamiento.asunto }}</span></td>
-										<td class="cell"><span>{{ desplazamiento.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
+										<td class="cell"><span>{{ desplazamiento.get_documento_display }} {{ desplazamiento.numero }}</span></td>
+                    <td class="cell"><span>{{ desplazamiento.asunto }}</span></td>
+                    <td class="cell"><span>{{ desplazamiento.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ desplazamiento.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -531,7 +558,10 @@
                     <th class="cell">Reconocimento o Sanción</th>
                     <th class="cell">Tipo de Documento</th>
                     <th class="cell">Descripción</th>
-                    <th class="cell">Fecha</th>
+                    <th class="cell">Fecha del Documento</th>
+                    <th class="cell">Inicio</th>
+                    <th class="cell">Fin</th>
+                    <th class="cell">Total de días</th>
                     <th class="cell">Documento</th>
                     <th class="cell">Editar</th>
                   </tr>
@@ -540,9 +570,12 @@
                   {% for reconocimiento in reconocimientos %}
                   <tr>
                     <td class="cell"><span>{{ reconocimiento.get_documento_reconocimiento_display }}</span></td>
-                    <td class="cell"><span>{{ reconocimiento.get_documento_display }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.get_documento_display }} {{ reconocimiento.numero|default_if_none:"" }}</span></td>
                     <td class="cell"><span>{{ reconocimiento.descripcion }}</span></td>
                     <td class="cell"><span>{{ reconocimiento.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.desde|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.hasta|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ reconocimiento.total_dias|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ reconocimiento.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -576,8 +609,8 @@
               <table class="table mb-0 text-left">
                 <thead>
                   <tr>
-                    <th class="cell">Relaciones Laborales</th>
                     <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Relaciones Laborales</th>
                     <th class="cell">Descripción</th>
                     <th class="cell">Fecha</th>
                     <th class="cell">Documento</th>
@@ -587,8 +620,8 @@
                 <tbody>
                   {% for laboral in laborales %}
                   <tr>
+                    <td class="cell"><span>{{ laboral.documento }}</span></td>
                     <td class="cell"><span>{{ laboral.get_documento_laboral_display }}</span></td>
-                    <td class="cell"><span>{{ laboral.get_documento_display }}</span></td>
                     <td class="cell"><span>{{ laboral.descripcion }}</span></td>
                     <td class="cell"><span>{{ laboral.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
@@ -626,8 +659,10 @@
                   <tr>
                     <th class="cell">Tipo de Documento</th>
                     <th class="cell">Descripción</th>
+                    <th class="cell">Fecha del Documento</th>
                     <th class="cell">Fecha de Inicio</th>
-                    <th class="cell">Fecha de Vigencia</th>
+                    <th class="cell">Fecha de Fin</th>
+                    <th class="cell">Total Días</th>
                     <th class="cell">Documento</th>
                     <th class="cell">Editar</th>
                   </tr>
@@ -638,7 +673,9 @@
                     <td class="cell"><span>{{ seguridad.get_documento_display }}</span></td>
                     <td class="cell"><span>{{ seguridad.descripcion }}</span></td>
                     <td class="cell"><span>{{ seguridad.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
-                    <td class="cell"><span>{{ seguridad.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ seguridad.fecha_inicio|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ seguridad.fecha_fin|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ seguridad.total_dias }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ seguridad.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -662,7 +699,8 @@
         <!-- Sección para agregar información al Legajo -->
         <div class="d-flex justify-content-center mb-3">
           <div class="btn-group mt-2" role="group" aria-label="Basic example">
-            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:desvinculacion_crear' legajo.id %}" class="text-primary">Desvinculación +</a></button>
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:desvinculacion_crear' legajo.id %}" class="text-primary">Documentos de Finalización de Vínculo Laboral +</a></button>
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:final_crear' legajo.id %}" class="text-primary">Resolución de Finalización de Vínculo Laboral +</a></button>
           </div>
         </div> 
 
@@ -693,6 +731,69 @@
                         </svg>
                       </a></span></td>
                     <td class="cell"><span><a href="{% url 'legajos:desvinculacion_editar' desvinculacion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                  {% for final in finales %}
+                  <tr>
+                    <td class="cell"><span>{{ final.get_documento_display }} {{ final.numero }}</span></td>
+                    <td class="cell"><span>{{ final.descripcion }}</span></td>
+                    <td class="cell"><span>{{ final.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>
+                      <a href="{{ final.pdf.url }}" target="_blank" class="text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                          <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                          <path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.7 11.7 0 0 0-1.997.406 11.3 11.3 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.026.044l.035-.012c.137-.056.355-.235.635-.572a8 8 0 0 0 .45-.606m1.64-1.33a13 13 0 0 1 1.01-.193 12 12 0 0 1-.51-.858 21 21 0 0 1-.5 1.05zm2.446.45q.226.245.435.41c.24.19.407.253.498.256a.1.1 0 0 0 .07-.015.3.3 0 0 0 .094-.125.44.44 0 0 0 .059-.2.1.1 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a4 4 0 0 0-.612-.053zM8.078 7.8a7 7 0 0 0 .2-.828q.046-.282.038-.465a.6.6 0 0 0-.032-.198.5.5 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822q.036.167.09.346z"/>
+                        </svg>
+                      </a></span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:final_editar' final.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+                  </tr>
+                  {% endfor %}	
+                </tbody>
+              </table>
+            </div><!--//table-responsive-->
+          </div><!--//app-card-body-->		
+        </div><!--//app-card-->
+      </div><!--//tab-pane-->
+
+      <div class="tab-pane fade" id="otros" role="tabpanel" aria-labelledby="otros-tab">
+        <!-- Sección para agregar información al Legajo -->
+        <div class="d-flex justify-content-center mb-3">
+          <div class="btn-group mt-2" role="group" aria-label="Basic example">
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:otro_crear' legajo.id %}" class="text-primary">Otros Documentos +</a></button>
+          </div>
+        </div> 
+
+        <div class="app-card app-card-orders-table mb-5">
+          <div class="app-card-body">
+            <div class="table-responsive">	
+              <table class="table mb-0 text-left">
+                <thead>
+                  <tr>
+                    <th class="cell">Tipo de Documento</th>
+                    <th class="cell">Descripción</th>
+                    <th class="cell">Fecha</th>
+                    <th class="cell">Documento</th>
+                    <th class="cell">Editar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for otro in otros %}
+                  <tr>
+                    <td class="cell"><span>{{ otro.documento }}</span></td>
+                    <td class="cell"><span>{{ otro.descripcion }}</span></td>
+                    <td class="cell"><span>{{ otro.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>
+                      <a href="{{ otro.pdf.url }}" target="_blank" class="text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                          <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                          <path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.7 11.7 0 0 0-1.997.406 11.3 11.3 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.026.044l.035-.012c.137-.056.355-.235.635-.572a8 8 0 0 0 .45-.606m1.64-1.33a13 13 0 0 1 1.01-.193 12 12 0 0 1-.51-.858 21 21 0 0 1-.5 1.05zm2.446.45q.226.245.435.41c.24.19.407.253.498.256a.1.1 0 0 0 .07-.015.3.3 0 0 0 .094-.125.44.44 0 0 0 .059-.2.1.1 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a4 4 0 0 0-.612-.053zM8.078 7.8a7 7 0 0 0 .2-.828q.046-.282.038-.465a.6.6 0 0 0-.032-.198.5.5 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822q.036.167.09.346z"/>
+                        </svg>
+                      </a></span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:otro_editar' otro.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                       <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                     </svg></a></span></td>
                   </tr>

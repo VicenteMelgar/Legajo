@@ -3,8 +3,8 @@ from django.urls import reverse
 from datetime import date
 from django.db.models import Q
 from django.views.generic.edit import CreateView
-from .models import Empleado, Seleccion, Vinculo, Seleccion, Induccion, Prueba, Colegiatura, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo
-from .forms import EmpleadoForm, LegajoForm, InfoPersonalForm, VinculoForm, SeleccionForm, InduccionForm, PruebaForm, ColegiaturaForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ProgresionForm, DesplazamientoForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm
+from .models import Empleado, Seleccion, Vinculo, Seleccion, Induccion, Prueba, Colegiatura, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Final, Otro
+from .forms import EmpleadoForm, LegajoForm, InfoPersonalForm, VinculoForm, SeleccionForm, InduccionForm, PruebaForm, ColegiaturaForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ProgresionForm, DesplazamientoForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, FinalForm, OtroForm
 
 def datospersonales_lista(request):
   query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
@@ -48,7 +48,7 @@ def empleado_editar(request, empleado_id):
     form = EmpleadoForm(request.POST, instance=empleado)
     if form.is_valid():
       form.save()
-      return redirect('legajos:info_general', empleado_id=empleado_id)  # Cambia por el nombre de tu vista de lista
+      return redirect('legajos:datos_personales')  # Cambia por el nombre de tu vista de lista
   else:
     form = EmpleadoForm(instance=empleado)
   
@@ -87,7 +87,9 @@ def info_general(request, legajo_id):
         'reconocimiento_set',
         'laboral_set',
         'seguridad_set',
-        'desvinculacion_set'
+        'desvinculacion_set',
+        'final_set',
+        'otro_set'
     ), id=legajo_id)
 
     context = {
@@ -112,6 +114,8 @@ def info_general(request, legajo_id):
         'laborales': legajo.laboral_set.all(),
         'seguridades': legajo.seguridad_set.all(),
         'desvinculaciones': legajo.desvinculacion_set.all(),
+        'finales': legajo.final_set.all(),
+        'otros': legajo.otro_set.all(),
     }
     return render(request, 'info_general.html', context)
 
@@ -219,6 +223,7 @@ class SeleccionCrearView(CreateView):
 
     return super().form_valid(form)
 
+# Vista para editar Selección 
 def seleccion_editar(request, seleccion_id, legajo_id=None):
   seleccion = get_object_or_404(Seleccion, id=seleccion_id)
 
@@ -299,11 +304,6 @@ def vinculo_editar(request, vinculo_id, legajo_id=None):
       return redirect('legajos:info_general', legajo_id=legajo_id)
   else:
     form = VinculoForm(instance=vinculo)
-    # Corrección: Asignar el objeto date directamente
-    if vinculo.fecha:
-        form.fields['fecha'].initial = vinculo.fecha
-    if vinculo.fecha_vigencia:
-        form.fields['fecha_vigencia'].initial = vinculo.fecha_vigencia
 
   context = {
     'form': form,
@@ -1423,6 +1423,135 @@ def desvinculacion_editar(request, desvinculacion_id, legajo_id=None):
     'legajo_preseleccionado': legajo_id,
   }
   return render(request, 'desvinculacion_edit.html', context)
+
+# Vista para crear Finalización de Vínculo
+class FinalCrearView(CreateView):
+  model = Final
+  form_class = FinalForm
+  template_name = 'final_crear.html'
+
+  def get_initial(self):
+    legajo_id = self.kwargs.get('legajo_id')
+    initial = super().get_initial()
+    if legajo_id:
+      initial['legajo'] = [legajo_id]
+    return initial
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    legajo_id = self.kwargs.get('legajo_id')
+    if legajo_id:
+      context['legajo_preseleccionado'] = Legajo.objects.get(id=legajo_id)
+    return context
+
+  def get_success_url(self):
+    legajo_id = self.kwargs.get('legajo_id')
+    return reverse('legajos:info_general', kwargs={'legajo_id': legajo_id})
+
+  def form_valid(self, form):
+    # Guarda el formulario
+    self.object = form.save()
+
+    # Maneja la acción según el botón presionado
+    action = self.request.POST.get('action')
+    if action == 'save_and_add_more':
+      # Redirige a la misma página para seguir agregando
+      legajo_id = self.kwargs.get('legajo_id')
+      return redirect('legajos:final_crear', legajo_id=legajo_id)
+    elif action == 'save_and_exit':
+      # Redirige a info_personal
+      return super().form_valid(form) 
+
+    return super().form_valid(form)
+
+def final_editar(request, final_id, legajo_id=None):
+  final = get_object_or_404(Final, id=final_id)
+
+  if not legajo_id:
+    legajo = final.legajo.first()
+    legajo_id = legajo.id if legajo else None
+
+  if request.method == 'POST':
+    form = FinalForm(request.POST, request.FILES, instance=final)
+    if form.is_valid():
+      final = form.save(commit=False)
+      final.save()
+      form.save_m2m()
+      return redirect('legajos:info_general', legajo_id=legajo_id)
+  else:
+    form = FinalForm(instance=final)
+
+  context = {
+    'form': form,
+    'final': final,
+    'legajo_preseleccionado': legajo_id,
+  }
+  return render(request, 'final_edit.html', context)
+
+# Vista para crear Otros Documentos
+class OtroCrearView(CreateView):
+  model = Otro
+  form_class = OtroForm
+  template_name = 'otro_crear.html'
+
+  def get_initial(self):
+    legajo_id = self.kwargs.get('legajo_id')
+    initial = super().get_initial()
+    if legajo_id:
+      initial['legajo'] = [legajo_id]
+    return initial
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    legajo_id = self.kwargs.get('legajo_id')
+    if legajo_id:
+      context['legajo_preseleccionado'] = Legajo.objects.get(id=legajo_id)
+    return context
+
+  def get_success_url(self):
+    legajo_id = self.kwargs.get('legajo_id')
+    return reverse('legajos:info_general', kwargs={'legajo_id': legajo_id})
+
+  def form_valid(self, form):
+    # Guarda el formulario
+    self.object = form.save()
+
+    # Maneja la acción según el botón presionado
+    action = self.request.POST.get('action')
+    if action == 'save_and_add_more':
+      # Redirige a la misma página para seguir agregando
+      legajo_id = self.kwargs.get('legajo_id')
+      return redirect('legajos:otro_crear', legajo_id=legajo_id)
+    elif action == 'save_and_exit':
+      # Redirige a info_personal
+      return super().form_valid(form) 
+
+    return super().form_valid(form)
+
+
+def otro_editar(request, otro_id, legajo_id=None):
+  otro = get_object_or_404(Otro, id=otro_id)
+
+  if not legajo_id:
+    legajo = otro.legajo
+    legajo_id = legajo.id if legajo else None
+
+  if request.method == 'POST':
+    form = OtroForm(request.POST, request.FILES, instance=otro)
+    if form.is_valid():
+      otro = form.save(commit=False)
+      otro.save()
+      form.save_m2m()
+      return redirect('legajos:info_general', legajo_id=legajo_id)
+  else:
+    form = OtroForm(instance=otro)
+
+  context = {
+    'form': form,
+    'otro': otro,
+    'legajo_preseleccionado': legajo_id,
+  }
+  return render(request, 'otro_edit.html', context)
 
 # Vista para seccion documentos
 def documentos(request):
