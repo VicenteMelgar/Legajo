@@ -1,15 +1,113 @@
-modalidad = (
-  ('CAS', 'CAS'),
+condicion_laboral = (
   ('Nombrado', 'Nombrado'),
-  ('Cesante', 'Cesante')
+  ('Contratado', 'Contratado a Plazo Fijo'),
+  ('CAS', 'Contrato Administrativo de Servicios'),
+)
+
+documento_identidad = (
+  ('DNI', 'Documento Nacional de Identidad'),
+  ('Carnet de Extranjería', 'Carnet de Extranjería'),
 )
 
 documentos_regimen = (
-  ('276', 'Régimen 276'),
+  ('276', 'Régimen del Decreto Legislativo 276'),
   ('CAS', 'Contrato Administrativo de Servicios'),
   ('30057', 'Régimen de Servicio Civil' )
 )
 
+grupo_ocupacional = (
+  ('Auxiliares', 'Auxiliares'),
+  ('Funcionarios y Directivos', 'Funcionarios y Directivos'),
+  ('Profesionales', 'Profesionales'),
+  ('Profesionales de la Salud', 'Profesionales de la Salud'),
+  ('Tecnicos', 'Tecnicos'),
+)
+
+cargos = (
+  ('ASISTENTE EJECUTIVO II', 'ASISTENTE EJECUTIVO II'),
+  ('ASISTENTE EN SERVICIOS DE SALUD I', 'ASISTENTE EN SERVICIOS DE SALUD I'),
+  ('ASISTENTE PROFESIONAL I', 'ASISTENTE PROFESIONAL I'),
+  ('ASISTENTE/A ADMINISTRATIVO/A I', 'ASISTENTE/A ADMINISTRATIVO/A I'),
+  ('AUXILIAR ADMINISTRATIVO/A', 'AUXILIAR ADMINISTRATIVO/A'),
+  ('AUXILIAR ASISTENCIAL', 'AUXILIAR ASISTENCIAL'),
+  ('DIRECTOR ADJUNTO', 'DIRECTOR ADJUNTO'),
+  ('DIRECTOR DE HOSPITAL III', 'DIRECTOR DE HOSPITAL III'),
+  ('DIRECTOR/A EJECUTIVO/A', 'DIRECTOR/A EJECUTIVO/A'),
+  ('ENFERMERA/O', 'ENFERMERA/O'),
+  ('ENFERMERA/O ESPECIALISTA', 'ENFERMERA/O ESPECIALISTA'),
+  ('ESPECIALISTA ADMINISTRATIVO I', 'ESPECIALISTA ADMINISTRATIVO I'),
+  ('ESPECIALISTA EN SALUD PUBLICA I', 'ESPECIALISTA EN SALUD PUBLICA I'),
+  ('JEFE DE OFICINA', 'JEFE DE OFICINA'),
+  ('JEFE DE ORGANO DE CONTROL INSTITUCIONAL', 'JEFE DE ORGANO DE CONTROL INSTITUCIONAL'),
+  ('MEDICO', 'MEDICO'),
+  ('MEDICO ESPECIALISTA', 'MEDICO ESPECIALISTA') ,
+  ('NUTRICIONISTA', 'NUTRICIONISTA'),
+  ('ODONTOLOGO', 'ODONTOLOGO'),
+  ('PILOTO DE AMBULANCIA', 'PILOTO DE AMBULANCIA'),
+  ('PSICOLOGO', 'PSICOLOGO'),
+  ('QUIMICO FARMACEUTICO', 'QUIMICO FARMACEUTICO'),
+  ('TECNICO ADMINISTRATIVO I', 'TECNICO ADMINISTRATIVO I'),
+  ('TECNICO ADMINISTRATIVO III', 'TECNICO ADMINISTRATIVO III'),
+  ('TECNICO ASISTENCIAL', 'TECNICO ASISTENCIAL'),
+  ('TECNICO EN ARCHIVO', 'TECNICO EN ARCHIVO'),
+  ('TECNICO EN ENFERMERIA', 'TECNICO EN ENFERMERIA'),
+  ('TECNICO EN ENFERMERIA I', 'TECNICO EN ENFERMERIA I'),
+  ('TECNICO EN FARMACIA I', 'TECNICO EN FARMACIA I'),
+  ('TECNICO EN LABORATORIO I', 'TECNICO EN LABORATORIO I'),
+  ('TECNICO EN NUTRICION I', 'TECNICO EN NUTRICION I'),
+  ('TECNICO EN PLANIFICACION', 'TECNICO EN PLANIFICACION'),
+  ('TECNICO EN REHABILITACION', 'TECNICO EN REHABILITACION'),
+  ('TECNICO EN SERVICIOS GENERALES I', 'TECNICO EN SERVICIOS GENERALES I'),
+  ('TECNICO ESPECIALIZADO', 'TECNICO ESPECIALIZADO'),
+  ('TECNICO/A ADMINISTRATIVO/A II', 'TECNICO/A ADMINISTRATIVO/A II'),
+  ('TECNOLOGO MEDICO', 'TECNOLOGO MEDICO'),
+  ('TRABAJADOR DE SERVICIOS GENERALES', 'TRABAJADOR DE SERVICIOS GENERALES'),
+  ('TRABAJADOR SOCIAL', 'TRABAJADOR DE SERVICIOS GENERALES')
+)
+
+niveles = (
+  ('CD-I', 'CD-I'),
+  ('CD-V', 'CD-V'),
+  ('ENF-10', 'ENF-10'),  
+  ('ENF-11', 'ENF-11'),
+  ('ENF-12', 'ENF-12'),
+  ('ENF-13', 'ENF-13'),
+  ('ENF-14', 'ENF-14'),
+  ('F-3', 'F-3'), 
+  ('F-4', 'F-4'), 
+  ('F-5', 'F-5'), 
+  ('G5-V', 'G5-V'),
+  ('MC-1', 'MC-1'),
+  ('MC-2', 'MC-2'),
+  ('MC-3', 'MC-3'),
+  ('MC-4', 'MC-4'),
+  ('MC-5', 'MC-5'),
+  ('OPS-IV', 'OPS-IV'),
+  ('OPS-V', 'OPS-V'),
+  ('OPS-VIII', 'OPS-VIII'),
+  ('PS-IV', 'PS-IV'),
+  ('PS-V', 'PS-V'),
+  ('PS-VI', 'PS-VI'),
+  ('PS-VII', 'PS-VII'),
+  ('PS-VIII', 'PS-VIII'),
+  ('SAA', 'SAA'),
+  ('SAB', 'SAB'),
+  ('SAC', 'SAC'),
+  ('SAD', 'SAD'),
+  ('SAF', 'SAF'),
+  ('SPC', 'SPC'),
+  ('SPD', 'SPD'),
+  ('SPE', 'SPE'),
+  ('SPF', 'SPF'),
+  ('STA', 'STA'),
+  ('STB', 'STB'),
+  ('STC', 'STC'),
+  ('STD', 'STD'),
+  ('STE', 'STE'),
+  ('STF', 'STF'),
+  ('TM-1', 'TM-1'),
+  ('TM-2', 'TM-2'),
+)
 
 estados = (
   ('S', 'Soltero/a'),
@@ -23,8 +121,8 @@ sexo = (
 
 tipo = (
   (10, 'Nombramiento'),
-  (20, 'Contrato Administrativo de Servicios'),
-  (30, 'Contrato a plazo fijo'),
+  (20, 'Contrato'),
+  (30, 'Adenda'),
   (40, 'Destaque de otra Dependencia'),
   (50, 'Designación de otra Dependencia'),
 )
@@ -33,7 +131,8 @@ tipo_desplazamiento = (
   (10, 'Designación'),
   (20, 'Rotación'),
   (30, 'Destaque'),
-  (40, 'Encargatura')
+  (40, 'Encargatura'),
+  (50, 'Permuta')
 )
 
 departamento = (
@@ -72,11 +171,6 @@ cargo = (
   ('Auxiliar Administrativo', 'Auxiliar Administrativo'),
   ('Asistente Administrativo', 'Asistente Administrativo'),
   ('Coordinador', 'Coordinador')
-)
-
-nivel = (
-  ('STD', 'STD'),
-  ('SAA', 'SAA')
 )
 
 documento = (
@@ -119,21 +213,14 @@ documentos_prueba = [
   (10, "Evaluación y resultados del período de prueba"),
 ]
 
-documentos_colegiatura = [
-  (10, "Colegiatura"),
-  (20, "Habilitación Profesional"),
-  (30, "SERUM"),
-]
-
 documentos_grado = [
   (10, "Secundaria Completa"),
   (20, "Superior Técnica Incompleta"),
   (30, "Superior Técnica"),
   (40, "Superior Universitario Incompleta"),
   (50, "Superior Universitario"),
-  (60, "Especialidad"),
-  (70, "Maestría"),
-  (80, "Doctorado"),
+  (60, "Maestría"),
+  (70, "Doctorado"),
 ]
 
 documentos_especialidad = [
@@ -169,13 +256,9 @@ documentos_retencion = [
   (20, "Exoneración de retención de quinta categoría"),
 ]
 
-documentos_evaluacion = [
-  (10, "Factores de evaluación"),
-  (20, "Registro de evidencias"),
-  (30, "Formato de reunión de seguimiento"),
-  (40, "Notificación de evaluación obtenida"),
-  (50, "Acta de retroalimentación de resultados de desempeño"),
-  (60, "Plan de mejora"),
+periodo_evaluacion = [
+  ("I", "I"),
+  ("II", "II"),
 ]
 
 documentos_reconocimientos = [

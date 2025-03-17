@@ -3,8 +3,8 @@ from django.urls import reverse
 from datetime import date
 from django.db.models import Q
 from django.views.generic.edit import CreateView
-from .models import Empleado, Seleccion, Vinculo, Seleccion, Induccion, Prueba, Colegiatura, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Final, Otro
-from .forms import EmpleadoForm, LegajoForm, InfoPersonalForm, VinculoForm, SeleccionForm, InduccionForm, PruebaForm, ColegiaturaForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ProgresionForm, DesplazamientoForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, FinalForm, OtroForm
+from .models import Empleado, Seleccion, Vinculo, Seleccion, Induccion, Prueba, Habilitacion, Serum, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Final, Otro
+from .forms import EmpleadoForm, LegajoForm, InfoPersonalForm, VinculoForm, SeleccionForm, InduccionForm, PruebaForm, HabilitacionForm, SerumForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ProgresionForm, DesplazamientoForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, FinalForm, OtroForm
 
 def datospersonales_lista(request):
   query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
@@ -73,7 +73,8 @@ def info_general(request, legajo_id):
         'vinculo_set',
         'induccion_set',
         'prueba_set',
-        'colegiatura_set',
+        'habilitacion_set',
+        'serum_set',
         'curso_set',
         'experiencia_set',
         'estudiosrealizados_set',
@@ -99,7 +100,8 @@ def info_general(request, legajo_id):
         'vinculos': legajo.vinculo_set.all(),
         'inducciones': legajo.induccion_set.all(),
         'pruebas': legajo.prueba_set.all(),
-        'colegiaturas': legajo.colegiatura_set.all(),
+        'habilitaciones': legajo.habilitacion_set.all(),
+        'serums': legajo.serum_set.all(),
         'cursos': legajo.curso_set.all(),
         'experiencias': legajo.experiencia_set.all(),
         'estudios': legajo.estudiosrealizados_set.all(),
@@ -439,11 +441,11 @@ def prueba_editar(request, prueba_id, legajo_id=None):
   }
   return render(request, 'prueba_edit.html', context)
 
-# Vista para crear Colegiatura o Habilitación Profesional
-class ColegiaturaCrearView(CreateView):
-  model = Colegiatura
-  form_class = ColegiaturaForm
-  template_name = 'colegiatura_crear.html'
+# Vista para crear Habilitación Profesional
+class HabilitacionCrearView(CreateView):
+  model = Habilitacion
+  form_class = HabilitacionForm
+  template_name = 'habilitacion_crear.html'
   
   def get_initial(self):
     legajo_id = self.kwargs.get('legajo_id')
@@ -473,34 +475,97 @@ class ColegiaturaCrearView(CreateView):
     action = self.request.POST.get('action')
     self.object = form.save()
     if action == 'save_and_add_more':
-      return redirect('legajos:colegiatura_crear', legajo_id=legajo_id)
+      return redirect('legajos:habilitacion_crear', legajo_id=legajo_id)
     elif action == 'save_and_exit':
       return super().form_valid(form)
 
     return super().form_valid(form)
 
-def colegiatura_editar(request, colegiatura_id, legajo_id=None):
-  colegiatura = get_object_or_404(Colegiatura, id=colegiatura_id)
+def habilitacion_editar(request, habilitacion_id, legajo_id=None):
+  habilitacion = get_object_or_404(Habilitacion, id=habilitacion_id)
 
   if not legajo_id:
-    legajo = colegiatura.legajo
+    legajo = habilitacion.legajo
     legajo_id = legajo.id if legajo else None
 
   if request.method == 'POST':
-    form = ColegiaturaForm(request.POST, request.FILES, instance=colegiatura)
+    form = HabilitacionForm(request.POST, request.FILES, instance=habilitacion)
     if form.is_valid():
-      colegiatura = form.save(commit=False)
-      colegiatura.save()
+      habilitacion = form.save(commit=False)
+      habilitacion.save()
       return redirect('legajos:info_general', legajo_id=legajo_id)
   else:
-    form = ColegiaturaForm(instance=colegiatura)
+    form = HabilitacionForm(instance=habilitacion)
 
   context = {
     'form': form,
-    'colegiatura': colegiatura,
+    'habilitacion': habilitacion,
     'legajo_preseleccionado': legajo_id,
   }
-  return render(request, 'colegiatura_edit.html', context)
+  return render(request, 'habilitacion_edit.html', context)
+
+# Vista para crear Habilitación Profesional
+class SerumCrearView(CreateView):
+  model = Serum
+  form_class = SerumForm
+  template_name = 'serum_crear.html'
+  
+  def get_initial(self):
+    legajo_id = self.kwargs.get('legajo_id')
+    initial = super().get_initial()
+    if legajo_id:
+      initial['legajo'] = Legajo.objects.get(id=legajo_id)  # Obtener la instancia completa
+    return initial
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    legajo_id = self.kwargs.get('legajo_id')
+    if legajo_id:
+      context['legajo_preseleccionado'] = Legajo.objects.get(id=legajo_id)
+    return context
+
+  def get_success_url(self):
+    legajo_id = self.kwargs.get('legajo_id')
+    return reverse('legajos:info_general', kwargs={'legajo_id': legajo_id})
+
+  def form_valid(self, form):
+    # Asociar el serum al legajo automáticamente
+    legajo_id = self.kwargs.get('legajo_id')
+    if legajo_id:
+      form.instance.legajo = Legajo.objects.get(id=legajo_id)
+
+    # Manejo de la acción del botón
+    action = self.request.POST.get('action')
+    self.object = form.save()
+    if action == 'save_and_add_more':
+      return redirect('legajos:serum_crear', legajo_id=legajo_id)
+    elif action == 'save_and_exit':
+      return super().form_valid(form)
+
+    return super().form_valid(form)
+
+def serum_editar(request, serum_id, legajo_id=None):
+  serum = get_object_or_404(Serum, id=serum_id)
+
+  if not legajo_id:
+    legajo = serum.legajo
+    legajo_id = legajo.id if legajo else None
+
+  if request.method == 'POST':
+    form = SerumForm(request.POST, request.FILES, instance=serum)
+    if form.is_valid():
+      serum = form.save(commit=False)
+      serum.save()
+      return redirect('legajos:info_general', legajo_id=legajo_id)
+  else:
+    form = SerumForm(instance=serum)
+
+  context = {
+    'form': form,
+    'serum': serum,
+    'legajo_preseleccionado': legajo_id,
+  }
+  return render(request, 'serum_edit.html', context)
 
 # Agregar Estudios Realizados
 class EstudiosCrearView(CreateView):

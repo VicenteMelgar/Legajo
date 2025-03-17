@@ -26,12 +26,12 @@
     <div class="app-card-body mt-4">
       <form method="get" action="{% url 'reportes:generar_informe' 0 %}">
         <select id="trabajador" name="trabajador" class="form-select">
-            <option value="" disabled selected>Selecciona un trabajador</option>
-            {% for trabajador in trabajadores %}
-                <option value="{{ trabajador.id }}">{{ trabajador.nombres }} {{ trabajador.apellido_paterno }} {{ trabajador.apellido_materno }}</option>
-            {% endfor %}
+          <option value="" disabled selected>Selecciona un trabajador</option>
+          {% for trabajador in trabajadores %}
+              <option value="{{ trabajador.empleado.id }}">{{ trabajador.empleado.nombres }} {{ trabajador.empleado.apellido_paterno }} {{ trabajador.empleado.apellido_materno }}</option>
+          {% endfor %}
         </select>
-        <button type="submit" class="btn app-btn-primary mt-2">Generar Informe Situacional</button>
+        <button type="submit" class="btn app-btn-primary mt-2">Generar Informe Escalafonario</button>
       </form>
     </div>
 	</div><!--//container-fluid-->

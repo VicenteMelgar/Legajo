@@ -1,6 +1,6 @@
 from django.urls import path
 from .import views 
-from .views import InfoPersonalCrearView, VinculoCrearView, SeleccionCrearView, InduccionCrearView, PruebaCrearView, ColegiaturaCrearView, EstudiosCrearView, SubespecialidadCrearView, CursoCrearView, ExperienciaCrearView, MovimientosCrearView, RetencionCrearView, CompensacionesCrearView, EvaluacionCrearView, ProgresionCrearView, DesplazamientoCrearView, ReconocimientoCrearView, LaboralCrearView, SeguridadCrearView, DesvinculacionCrearView, FinalCrearView, OtroCrearView
+from .views import InfoPersonalCrearView, VinculoCrearView, SeleccionCrearView, InduccionCrearView, PruebaCrearView, HabilitacionCrearView, EstudiosCrearView, SerumCrearView, SubespecialidadCrearView, CursoCrearView, ExperienciaCrearView, MovimientosCrearView, RetencionCrearView, CompensacionesCrearView, EvaluacionCrearView, ProgresionCrearView, DesplazamientoCrearView, ReconocimientoCrearView, LaboralCrearView, SeguridadCrearView, DesvinculacionCrearView, FinalCrearView, OtroCrearView
 
 app_name='legajos'
 
@@ -21,10 +21,12 @@ urlpatterns = [
   path('induccion/editar/<int:induccion_id>/', views.induccion_editar, name='induccion_editar'),
   path('prueba/crear/<int:legajo_id>/', PruebaCrearView.as_view(), name='prueba_crear'),
   path('prueba/editar/<int:prueba_id>/', views.prueba_editar, name='prueba_editar'),
-  path('colegiatura/crear/<int:legajo_id>/', ColegiaturaCrearView.as_view(), name='colegiatura_crear'),
-  path('colegiatura/editar/<int:colegiatura_id>/', views.colegiatura_editar, name='colegiatura_editar'),
+  path('habilitacion/crear/<int:legajo_id>/', HabilitacionCrearView.as_view(), name='habilitacion_crear'),
+  path('habilitacion/editar/<int:habilitacion_id>/', views.habilitacion_editar, name='habilitacion_editar'),
   path('estudios/crear/<int:legajo_id>/', EstudiosCrearView.as_view(), name='estudios_crear'),
   path('estudios/editar/<int:estudio_id>/', views.estudios_editar, name='estudios_editar'),
+  path('serum/crear/<int:legajo_id>/', SerumCrearView.as_view(), name='serum_crear'),
+  path('serum/editar/<int:serum_id>/', views.serum_editar, name='serum_editar'),
   path('subespecialidad/crear/<int:legajo_id>/', SubespecialidadCrearView.as_view(), name='subespecialidad_crear'),
   path('subespecialidad/editar/<int:subespecialidad_id>/', views.subespecialidad_editar, name='subespecialidad_editar'),
   path('curso/crear/<int:legajo_id>/', CursoCrearView.as_view(), name='curso_crear'),

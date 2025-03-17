@@ -197,8 +197,9 @@
          <div class="d-flex justify-content-center mb-3">
           <div class="btn-group mt-2" role="group" aria-label="Basic example">
             <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:estudios_crear' legajo.id %}" class="text-primary">Estudios Realizados +</a></button>
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:serum_crear' legajo.id %}" class="text-primary">SERUM +</a></button>
             <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:subespecialidad_crear' legajo.id %}" class="text-primary">Especialidad-Subespecialidad +</a></button>
-            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:colegiatura_crear' legajo.id %}" class="text-primary">Colegiatura, Habilitación Profesional, SERUM +</a></button>
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:habilitacion_crear' legajo.id %}" class="text-primary">Habilitación Profesional +</a></button>
             <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:curso_crear' legajo.id %}" class="text-primary">Especialización, Diplomado, Curso, Taller +</a></button>
           </div>
         </div>
@@ -233,10 +234,27 @@
                       <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                     </svg></a></span></td>
                   </tr>
-                  {% endfor %}	
+                  {% endfor %}
+									{% for serum in serums %}
+									<tr>
+										<td class="cell"><span>SERUM: {{ serum.registro }}</span></td>
+										<td class="cell"><span>{{ serum.fecha_emision|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ serum.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>
+                      <a href="{{ serum.pdf.url }}" target="_blank" class="text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+                          <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                          <path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.7 11.7 0 0 0-1.997.406 11.3 11.3 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.026.044l.035-.012c.137-.056.355-.235.635-.572a8 8 0 0 0 .45-.606m1.64-1.33a13 13 0 0 1 1.01-.193 12 12 0 0 1-.51-.858 21 21 0 0 1-.5 1.05zm2.446.45q.226.245.435.41c.24.19.407.253.498.256a.1.1 0 0 0 .07-.015.3.3 0 0 0 .094-.125.44.44 0 0 0 .059-.2.1.1 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a4 4 0 0 0-.612-.053zM8.078 7.8a7 7 0 0 0 .2-.828q.046-.282.038-.465a.6.6 0 0 0-.032-.198.5.5 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822q.036.167.09.346z"/>
+                        </svg>
+                      </a></span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:serum_editar' serum.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                    </svg></a></span></td>
+									</tr>
+									{% endfor %}	
 									{% for subespecialidad in subespecialidades %}
 									<tr>
-										<td class="cell"><span>{{ subespecialidad.get_documento_display }} {{ subespecialidad.mencion }}</span></td>
+										<td class="cell"><span>{{ subespecialidad.get_documento_display }}: {{ subespecialidad.mencion }}</span></td>
 										<td class="cell"><span>{{ subespecialidad.fecha_expedicion|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>{{ subespecialidad.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
@@ -251,11 +269,11 @@
                     </svg></a></span></td>
 									</tr>
 									{% endfor %}
-                  {% for colegiatura in colegiaturas %}
+                  {% for habilitacion in habilitaciones %}
                   <tr>
-                    <td class="cell"><span>{{ colegiatura.get_documento_display }}</span></td>
-                    <td class="cell"><span>{{ colegiatura.fecha_emision|date:"d/m/Y"|default_if_none:"" }}</span></td>
-                    <td class="cell"><span>{{ colegiatura.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>Habilitación Profesional: {{ habilitacion.registro }}</span></td>
+                    <td class="cell"><span>{{ habilitacion.fecha_emision|date:"d/m/Y"|default_if_none:"" }}</span></td>
+                    <td class="cell"><span>{{ habilitacion.fecha_vigencia|date:"d/m/Y"|default_if_none:"" }}</span></td>
                     <td class="cell"><span>
                       <a href="{{ colegiatura.pdf.url }}" target="_blank" class="text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
@@ -263,7 +281,7 @@
                           <path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.7 11.7 0 0 0-1.997.406 11.3 11.3 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.026.044l.035-.012c.137-.056.355-.235.635-.572a8 8 0 0 0 .45-.606m1.64-1.33a13 13 0 0 1 1.01-.193 12 12 0 0 1-.51-.858 21 21 0 0 1-.5 1.05zm2.446.45q.226.245.435.41c.24.19.407.253.498.256a.1.1 0 0 0 .07-.015.3.3 0 0 0 .094-.125.44.44 0 0 0 .059-.2.1.1 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a4 4 0 0 0-.612-.053zM8.078 7.8a7 7 0 0 0 .2-.828q.046-.282.038-.465a.6.6 0 0 0-.032-.198.5.5 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822q.036.167.09.346z"/>
                         </svg>
                       </a></span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:colegiatura_editar' colegiatura.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                    <td class="cell"><span><a href="{% url 'legajos:habilitacion_editar' habilitacion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                       <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                     </svg></a></span></td>
                   </tr>

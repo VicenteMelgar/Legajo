@@ -9,11 +9,9 @@ from .models import (
     Movimientos,
     Compensaciones,
     EstudiosRealizados,
-    Nivel,
-    Cargo,
-    Plaza,
     Prueba,
-    Colegiatura,
+    Habilitacion,
+    Serum,
     Curso,
     Experiencia,
     Retencion,
@@ -31,28 +29,16 @@ from .models import (
 admin.site.site_header = "DASHBOARD LEGAJO"
 admin.site.site_title = "Panel de Administración"
 admin.site.index_title = "Bienvenido al Sistema de Administración"
-
-@admin.register(Nivel)
-class NivelAdmin(admin.ModelAdmin):
-    list_display = ('denominacion',)
-    
-@admin.register(Cargo)
-class CargoAdmin(admin.ModelAdmin):
-    list_display = ('denominacion',)
-    
-@admin.register(Plaza)
-class PlazaAdmin(admin.ModelAdmin):
-    list_display = ('denominacion',)
-    
+ 
 @admin.register(Empleado)
 class EmpleadoAdmin(admin.ModelAdmin):
-    list_display = ('apellido_paterno', 'apellido_materno', 'nombres', 'dni', 'carnet_extranjeria', 'email')
-    search_fields = ('apellido_paterno', 'apellido_materno', 'nombres', 'dni')
+    list_display = ('apellido_paterno', 'apellido_materno', 'nombres', 'numero_documento', 'email')
+    search_fields = ('apellido_paterno', 'apellido_materno', 'nombres', 'numero_documento')
 
 @admin.register(Legajo)
 class LegajoAdmin(admin.ModelAdmin):
-    list_display = ('empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'empleado_dni', 'regimen_laboral', 'activo')
-    search_fields = ('empleado__apellido_paterno', 'empleado__apellido_materno', 'empleado__nombres', 'empleado__dni', 'regimen_laboral')
+    list_display = ('empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'empleado_numero_documento', 'regimen_laboral', 'activo')
+    search_fields = ('empleado__apellido_paterno', 'empleado__apellido_materno', 'empleado__nombres', 'empleado__numero_documento', 'regimen_laboral')
 
     def empleado_apellido_paterno(self, obj):
         return obj.empleado.apellido_paterno
@@ -66,9 +52,9 @@ class LegajoAdmin(admin.ModelAdmin):
         return obj.empleado.nombres
     empleado_nombres.short_description = 'Nombres'
 
-    def empleado_dni(self, obj):
-        return obj.empleado.dni
-    empleado_dni.short_description = 'DNI'
+    def empleado_numero_documento(self, obj):
+        return obj.empleado.numero_documento
+    empleado_numero_documento.short_description = 'DNI'
     
 @admin.register(InfoPersonal)
 class InfoPersonalAdmin(admin.ModelAdmin):
@@ -85,7 +71,7 @@ class SeleccionAdmin(admin.ModelAdmin):
     
 @admin.register(Vinculo)
 class VinculoAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'numero', 'tipo', 'descripcion', 'fecha_vigencia', 'ver_pdf')
+    list_display = ('documento', 'numero', 'tipo', 'descripcion', 'fecha_inicio', 'ver_pdf')
     list_filter = ('tipo',)
     search_fields = ('documento',)
     filter_horizontal = ('legajo',)
@@ -102,11 +88,17 @@ class PruebaAdmin(admin.ModelAdmin):
     list_filter = ('documento',)
     search_fields = ('documento',)
     
-@admin.register(Colegiatura)
-class ColegiaturaAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'fecha_emision', 'fecha_vigencia', 'ver_pdf')
-    list_filter = ('documento',)
-    search_fields = ('documento',)
+@admin.register(Habilitacion)
+class HabilitacionAdmin(admin.ModelAdmin):
+    list_display = ('registro', 'fecha_emision', 'fecha_vigencia', 'ver_pdf')
+    list_filter = ('registro',)
+    search_fields = ('registro',)
+    
+@admin.register(Serum)
+class SerumAdmin(admin.ModelAdmin):
+    list_display = ('registro', 'fecha_emision', 'ver_pdf')
+    list_filter = ('registro',)
+    search_fields = ('registro',)
 
 @admin.register(EstudiosRealizados)
 class EstudiosRealizadosAdmin(admin.ModelAdmin):
@@ -115,7 +107,7 @@ class EstudiosRealizadosAdmin(admin.ModelAdmin):
        
 @admin.register(Curso)
 class CursoAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'descripcion', 'inicio', 'fin', 'duracion', 'fecha_expedicion', 'ver_pdf')
+    list_display = ('documento', 'descripcion', 'inicio', 'fin', 'horas', 'creditos', 'fecha_expedicion', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
 
@@ -139,9 +131,9 @@ class RetencionAdmin(admin.ModelAdmin):
     
 @admin.register(Evaluacion)
 class EvaluacionAdmin(admin.ModelAdmin):
-    list_display = ('periodo', 'fecha', 'documento', 'puntaje', 'ver_pdf')
-    list_filter = ('documento',)
-    search_fields = ('documento',)
+    list_display = ('periodo', 'anio', 'puntaje', 'ver_pdf')
+    list_filter = ('anio',)
+    search_fields = ('anio',)
     
 @admin.register(Progresion)
 class ProgresionAdmin(admin.ModelAdmin):
@@ -151,7 +143,7 @@ class ProgresionAdmin(admin.ModelAdmin):
     
 @admin.register(Desplazamiento)
 class DesplazamientoAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'tipo', 'asunto', 'fecha', 'fecha_inicio', 'fecha_vigencia', 'ver_pdf')
+    list_display = ('documento', 'tipo', 'asunto', 'fecha', 'fecha_inicio', 'fecha_fin', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     

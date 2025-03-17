@@ -63,7 +63,7 @@
 							<tbody>
 								{% for legajo in legajos %}
 								<tr>
-									<td class="cell">{{legajo.empleado.dni}}</td>
+									<td class="cell">{{legajo.empleado.numero_documento}}</td>
 									<td class="cell"><span class="truncate">{{legajo.empleado.apellido_paterno}} {{legajo.empleado.apellido_materno}} {{legajo.empleado.nombres}}</span></td>
 									<td class="cell">{{legajo.get_regimen_laboral_display}}</td>
                   <td>

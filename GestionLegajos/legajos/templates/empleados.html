@@ -64,8 +64,8 @@
 							<tbody>
 								{% for empleado in todos_empleados %}
 								<tr>
-									<td class="cell">{{empleado.dni}}</td>
-									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
+									<td class="cell">{{empleado.numero_documento}}</td>
+									<td class="cell">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</td>
 									<td class="cell">{{empleado.email|default_if_none:"-"}}</td>
 									<td class="cell"><span>{{empleado.telefono|default_if_none:"-"}}</span></td>
 									<td class="cell"><span><a href="{% url 'legajos:empleado_editar' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
@@ -100,7 +100,7 @@
 							<tbody>
 								{% for empleado in empleados_nombrados %}
 								<tr>
-									<td class="cell">{{empleado.dni}}</td>
+									<td class="cell">{{empleado.numero_documento}}</td>
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
@@ -133,7 +133,7 @@
 							<tbody>
 								{% for empleado in empleados_cas %}
 								<tr>
-									<td class="cell">{{empleado.dni}}</td>
+									<td class="cell">{{empleado.numero_documento}}</td>
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
@@ -165,7 +165,7 @@
 							<tbody>
 								{% for empleado in empleados_cesantes %}
 								<tr>
-									<td class="cell">{{empleado.dni}}</td>
+									<td class="cell">{{empleado.numero_documento}}</td>
 									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
 									<td class="cell">{{empleado.email}}</td>
 									<td class="cell"><span>{{empleado.modalidad}}</span></td>
