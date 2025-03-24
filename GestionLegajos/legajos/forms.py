@@ -1,5 +1,5 @@
 from django import forms
-from .models import Empleado, Legajo, InfoPersonal, Seleccion, Vinculo, Induccion, Prueba, Habilitacion, Serum, EstudiosRealizados, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Subespecialidad, Final, Otro
+from .models import Empleado, Legajo, InfoPersonal, Seleccion, Vinculo, Induccion, Prueba, Habilitacion, Serum, EstudiosRealizados, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, Reconocimiento, Laboral, Seguridad, Desvinculacion, Subespecialidad, Otro
 
 class EmpleadoForm(forms.ModelForm):
   class Meta:
@@ -252,7 +252,7 @@ class EvaluacionForm(forms.ModelForm):
           'puntaje': forms.TextInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-
+"""
 class ProgresionForm(forms.ModelForm):
     class Meta:
         model = Progresion
@@ -290,7 +290,7 @@ class DesplazamientoForm(forms.ModelForm):
           'nivel': forms.Select(attrs={'class': 'form-select'}),
           'plaza': forms.TextInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-        }
+        } """
         
 class ReconocimientoForm(forms.ModelForm):
     class Meta:
@@ -348,7 +348,8 @@ class DesvinculacionForm(forms.ModelForm):
           'fecha': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
-        
+  
+"""        
 class FinalForm(forms.ModelForm):
     class Meta:
         model = Final
@@ -366,7 +367,7 @@ class FinalForm(forms.ModelForm):
           'nivel': forms.Select(attrs={'class': 'form-select'}),
           'plaza': forms.TextInput(attrs={'class': 'form-control'}),
           'pdf': forms.ClearableFileInput(attrs={'class': 'form-control'}),
-        }
+        } """
         
 class OtroForm(forms.ModelForm):
     class Meta:

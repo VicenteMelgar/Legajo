@@ -15,6 +15,12 @@ documentos_regimen = (
   ('30057', 'Régimen de Servicio Civil' )
 )
 
+departamento_oficina = (
+  ('Oficina de Economía', 'Oficina de Economía'),
+  ('Oficina de Logística', 'Oficina de Logística'),
+  ('Oficina de Personal', 'Oficina de Personal'),
+)
+
 grupo_ocupacional = (
   ('Auxiliares', 'Auxiliares'),
   ('Funcionarios y Directivos', 'Funcionarios y Directivos'),
@@ -119,20 +125,22 @@ sexo = (
   ('M', 'Masculino')
 )
 
-tipo = (
-  (10, 'Nombramiento'),
-  (20, 'Contrato'),
-  (30, 'Adenda'),
-  (40, 'Destaque de otra Dependencia'),
-  (50, 'Designación de otra Dependencia'),
-)
-
-tipo_desplazamiento = (
-  (10, 'Designación'),
-  (20, 'Rotación'),
-  (30, 'Destaque'),
-  (40, 'Encargatura'),
-  (50, 'Permuta')
+tipo_vinculo = (
+  ('Nombramiento', 'Nombramiento'),
+  ('Contrato', 'Contrato'),
+  ('Adenda', 'Adenda'),
+  ('Asignación de Funciones', 'Asignación de Funciones'),
+  ('Destaque de otra Dependencia', 'Destaque de otra Dependencia'),
+  ('Renovación de Destaque de otra Dependencia', 'Renovación de Destaque de otra Dependencia'),
+  ('Destaque a otra Dependencia', 'Destaque a otra Dependencia'),
+  ('Designación de otra Dependencia', 'Designación de otra Dependencia'),
+  ('Designación a otra Dependencia', 'Designación a otra Dependencia'),
+  ('Rotación', 'Rotación'), 
+  ('Encargatura', 'Encargatura'),
+  ('Renovación de Encargatura', 'Renovación de Encargatura'),
+  ('Permuta', 'Permuta'),
+  ('Ascenso', 'Ascenso'),
+  ('Cambio de grupo Ocupacional', 'Cambio de grupo Ocupacional'),
 )
 
 departamento = (
@@ -174,9 +182,9 @@ cargo = (
 )
 
 documento = (
-  (10, 'Resolución Administrativa'),
-  (20, 'Resolución Directoral'),
-  (30, 'Memorando')
+  ('R.A.', 'Resolución Administrativa'),
+  ('R.D.', 'Resolución Directoral'),
+  ('Memorando', 'Memorando')
 )
 
 documentos_informacion = [
@@ -289,11 +297,6 @@ documentos_desvinculacion = [
   (30, "Liquidación de beneficios sociales y/o pensión"),
   (40, "Carta de no renovación de contrato a plazo determinado"),
   (50, "Otro Documento"),
-]
-
-motivo_progresion = [
-  (10, "Ascenso"),
-  (20, "Cambio de grupo Ocupacional"),
 ]
 
 tipo_movimientos = [

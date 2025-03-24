@@ -1,6 +1,12 @@
 from django.contrib import admin
 from .models import (
     Empleado,
+    Oficina,
+    Condicion,
+    Grupo,
+    Cargo,
+    Nivel,
+    Plaza,
     Legajo,
     InfoPersonal,
     Seleccion,
@@ -16,13 +22,10 @@ from .models import (
     Experiencia,
     Retencion,
     Evaluacion,
-    Progresion,
-    Desplazamiento,
     Reconocimiento,
     Laboral,
     Seguridad,
     Desvinculacion,
-    Final,
     Otro,
 )
 
@@ -34,6 +37,36 @@ admin.site.index_title = "Bienvenido al Sistema de Administración"
 class EmpleadoAdmin(admin.ModelAdmin):
     list_display = ('apellido_paterno', 'apellido_materno', 'nombres', 'numero_documento', 'email')
     search_fields = ('apellido_paterno', 'apellido_materno', 'nombres', 'numero_documento')
+
+@admin.register(Oficina)
+class OficinaAdmin(admin.ModelAdmin):
+    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+
+@admin.register(Condicion)
+class CondicionAdmin(admin.ModelAdmin):
+    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+
+@admin.register(Grupo)
+class GrupoAdmin(admin.ModelAdmin):
+    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+    
+@admin.register(Cargo)
+class CargoAdmin(admin.ModelAdmin):
+    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+    
+@admin.register(Nivel)
+class NivelAdmin(admin.ModelAdmin):
+    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+
+@admin.register(Plaza)
+class PlazaAdmin(admin.ModelAdmin):
+    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
 
 @admin.register(Legajo)
 class LegajoAdmin(admin.ModelAdmin):
@@ -71,7 +104,7 @@ class SeleccionAdmin(admin.ModelAdmin):
     
 @admin.register(Vinculo)
 class VinculoAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'numero', 'tipo', 'descripcion', 'fecha_inicio', 'ver_pdf')
+    list_display = ('documento', 'numero', 'tipo', 'descripcion', 'ver_pdf')
     list_filter = ('tipo',)
     search_fields = ('documento',)
     filter_horizontal = ('legajo',)
@@ -135,18 +168,6 @@ class EvaluacionAdmin(admin.ModelAdmin):
     list_filter = ('anio',)
     search_fields = ('anio',)
     
-@admin.register(Progresion)
-class ProgresionAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'numero', 'fecha', 'fecha_inicio', 'ver_pdf')
-    list_filter = ('documento',)
-    search_fields = ('documento',)
-    
-@admin.register(Desplazamiento)
-class DesplazamientoAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'tipo', 'asunto', 'fecha', 'fecha_inicio', 'fecha_fin', 'ver_pdf')
-    list_filter = ('documento',)
-    search_fields = ('documento',)
-    
 @admin.register(Reconocimiento)
 class ReconocimientoAdmin(admin.ModelAdmin):
     list_display = ('documento_reconocimiento', 'documento', 'descripcion', 'fecha', 'ver_pdf')
@@ -174,12 +195,6 @@ class CompensacionesAdmin(admin.ModelAdmin):
 @admin.register(Desvinculacion)
 class DesviculacionAdmin(admin.ModelAdmin):
     list_display = ('documento', 'descripcion', 'fecha', 'ver_pdf')
-    list_filter = ('documento',)
-    search_fields = ('documento',)
-
-@admin.register(Final)
-class FinalAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'numero', 'descripcion', 'fecha', 'fecha_fin', 'ver_pdf')
     list_filter = ('documento',)
     search_fields = ('documento',)
     

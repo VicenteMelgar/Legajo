@@ -482,8 +482,8 @@
         <div class="d-flex justify-content-center mb-3">
           <div class="btn-group mt-2" role="group" aria-label="Basic example">
             <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:evaluacion_crear' legajo.id %}" class="text-primary">Evaluación de Desempeño +</a></button>
-            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:progresion_crear' legajo.id %}" class="text-primary">Progresión en la Carrera +</a></button>
-            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:desplazamiento_crear' legajo.id %}" class="text-primary">Desplazamiento +</a></button>
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:vinculo_crear' legajo.id %}" class="text-primary">Progresión en la Carrera +</a></button>
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:vinculo_crear' legajo.id %}" class="text-primary">Desplazamiento +</a></button>
           </div>
         </div>     
 
@@ -718,7 +718,7 @@
         <div class="d-flex justify-content-center mb-3">
           <div class="btn-group mt-2" role="group" aria-label="Basic example">
             <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:desvinculacion_crear' legajo.id %}" class="text-primary">Documentos de Finalización de Vínculo Laboral +</a></button>
-            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:final_crear' legajo.id %}" class="text-primary">Resolución de Finalización de Vínculo Laboral +</a></button>
+            <button type="button" class="btn app-btn-secondary"><a href="{% url 'legajos:vinculo_crear' legajo.id %}" class="text-primary">Resolución de Finalización de Vínculo Laboral +</a></button>
           </div>
         </div> 
 

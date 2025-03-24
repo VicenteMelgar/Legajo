@@ -1,6 +1,6 @@
 from django.urls import path
 from .import views 
-from .views import InfoPersonalCrearView, VinculoCrearView, SeleccionCrearView, InduccionCrearView, PruebaCrearView, HabilitacionCrearView, EstudiosCrearView, SerumCrearView, SubespecialidadCrearView, CursoCrearView, ExperienciaCrearView, MovimientosCrearView, RetencionCrearView, CompensacionesCrearView, EvaluacionCrearView, ProgresionCrearView, DesplazamientoCrearView, ReconocimientoCrearView, LaboralCrearView, SeguridadCrearView, DesvinculacionCrearView, FinalCrearView, OtroCrearView
+from .views import InfoPersonalCrearView, VinculoCrearView, SeleccionCrearView, InduccionCrearView, PruebaCrearView, HabilitacionCrearView, EstudiosCrearView, SerumCrearView, SubespecialidadCrearView, CursoCrearView, ExperienciaCrearView, MovimientosCrearView, RetencionCrearView, CompensacionesCrearView, EvaluacionCrearView, ReconocimientoCrearView, LaboralCrearView, SeguridadCrearView, DesvinculacionCrearView, OtroCrearView
 
 app_name='legajos'
 
@@ -41,10 +41,6 @@ urlpatterns = [
   path('compensaciones/editar/<int:compensaciones_id>/', views.compensaciones_editar, name='compensaciones_editar'),
   path('evaluacion/crear/<int:legajo_id>/', EvaluacionCrearView.as_view(), name='evaluacion_crear'),
   path('evaluacion/editar/<int:evaluacion_id>/', views.evaluacion_editar, name='evaluacion_editar'),
-  path('progresion/crear/<int:legajo_id>/', ProgresionCrearView.as_view(), name='progresion_crear'),
-  path('progresion/editar/<int:progresion_id>/', views.progresion_editar, name='progresion_editar'),
-  path('desplazamiento/crear/<int:legajo_id>/', DesplazamientoCrearView.as_view(), name='desplazamiento_crear'),
-  path('desplazamiento/editar/<int:desplazamiento_id>/', views.desplazamiento_editar, name='desplazamiento_editar'),
   path('reconocimiento/crear/<int:legajo_id>/', ReconocimientoCrearView.as_view(), name='reconocimiento_crear'),
   path('reconocimiento/editar/<int:reconocimiento_id>/', views.reconocimiento_editar, name='reconocimiento_editar'),
   path('laboral/crear/<int:legajo_id>/', LaboralCrearView.as_view(), name='laboral_crear'),
@@ -53,8 +49,6 @@ urlpatterns = [
   path('seguridad/editar/<int:seguridad_id>/', views.seguridad_editar, name='seguridad_editar'),
   path('desvinculacion/crear/<int:legajo_id>/', DesvinculacionCrearView.as_view(), name='desvinculacion_crear'),
   path('desvinculacion/editar/<int:desvinculacion_id>/', views.desvinculacion_editar, name='desvinculacion_editar'),
-  path('final/crear/<int:legajo_id>/', FinalCrearView.as_view(), name='final_crear'),
-  path('final/editar/<int:final_id>/', views.final_editar, name='final_editar'),
   path('otro/crear/<int:legajo_id>/', OtroCrearView.as_view(), name='otro_crear'),
   path('otro/editar/<int:otro_id>/', views.otro_editar, name='otro_editar'),
   path('documentos/', views.documentos, name='documentos'),

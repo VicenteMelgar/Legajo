@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from docxtpl import DocxTemplate
-from legajos.models import Legajo, Vinculo, Desplazamiento
+from legajos.models import Legajo, Vinculo
 from io import BytesIO
 import datetime
 import locale
@@ -37,8 +37,9 @@ def descargar_constancia(request, trabajador_id):
     vinculo_ids = request.GET.getlist('vinculos')
     vinculos = Vinculo.objects.filter(id__in=vinculo_ids, legajo__in=[trabajador])
 
-    # Filtrar desplazamientos del trabajador
-    desplazamientos = Desplazamiento.objects.filter(legajo=trabajador)
+    # Filtrar desplazamientos seleccionados manualmente
+    desplazamiento_ids = request.GET.getlist('desplazamientos')
+    desplazamientos = Desplazamiento.objects.filter(id__in=desplazamiento_ids, legajo__in=[trabajador])
 
     # Configurar el idioma a español
     locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
@@ -124,8 +125,9 @@ def descargar_informe(request, trabajador_id):
     vinculo_ids = request.GET.getlist('vinculos')
     vinculos = Vinculo.objects.filter(id__in=vinculo_ids, legajo__in=[trabajador])
 
-    # Filtrar desplazamientos del trabajador
-    desplazamientos = Desplazamiento.objects.filter(legajo=trabajador)
+    # Filtrar desplazamientos seleccionados manualmente
+    desplazamiento_ids = request.GET.getlist('desplazamientos')
+    desplazamientos = Desplazamiento.objects.filter(id__in=desplazamiento_ids, legajo__in=[trabajador])
 
     # Configurar el idioma a español
     locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')

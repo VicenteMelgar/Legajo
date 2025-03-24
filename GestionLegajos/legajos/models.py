@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
-from .choices import estados, sexo, departamento, tipo, documento, documento_identidad, condicion_laboral, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_cursos, documentos_experiencia, documentos_retencion, periodo_evaluacion, tipo_desplazamiento, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, motivo_progresion, tipo_movimientos, documentos_grado, documentos_especialidad, documentos_regimen, grupo_ocupacional, cargos, niveles
+from .choices import estados, sexo, departamento, tipo_vinculo, documento, documento_identidad, condicion_laboral, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_cursos, documentos_experiencia, documentos_retencion, periodo_evaluacion, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, tipo_movimientos, documentos_grado, documentos_especialidad, departamento_oficina, documentos_regimen, grupo_ocupacional, cargos, niveles
 from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
             
@@ -114,18 +114,11 @@ class Seleccion(models.Model):
 # Modelo de Vinculo laboral
 class Vinculo(models.Model):
   legajo = models.ManyToManyField(Legajo)
-  documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
+  documento = models.CharField(max_length=50, choices=documento, verbose_name='Tipo de Documento')
   numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
-  tipo = models.PositiveSmallIntegerField(choices= tipo, blank=True, null=True)
-  descripcion = models.CharField(max_length=100, blank=True, verbose_name='Descripción')
+  tipo = models.CharField(max_length=100, choices= tipo_vinculo, blank=True, null=True)
+  descripcion = models.CharField(max_length=1000, blank=True, verbose_name='Descripción')
   fecha = models.DateField(verbose_name="Fecha del Documento")
-  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio de Vínculo")
-  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
-  condicion_laboral = models.CharField(max_length=100, choices= condicion_laboral)
-  grupo_ocupacional = models.CharField(max_length=100, choices= grupo_ocupacional)
-  cargo = models.CharField(blank=True, null=True, max_length=100, choices= cargos)
-  nivel = models.CharField(blank=True, null=True, max_length=100, choices= niveles)
-  plaza = models.CharField(blank=True, null=True, max_length=10, verbose_name='Plaza (airhsp)')
   pdf = models.FileField(upload_to='documentos_vinculo/', verbose_name='Cargar PDF')
 
   def ver_pdf(self):
@@ -134,29 +127,6 @@ class Vinculo(models.Model):
       return "No disponible"
   
   ver_pdf.short_description = "Visualizar PDF"
-  
-  def save(self, *args, **kwargs):
-      if not self.descripcion and self.fecha_inicio and self.numero and self.tipo:
-          # Formatear la fecha
-          fecha_formateada = date_format(self.fecha_inicio, "j \d\e F \d\e Y", use_l10n=True)
-          
-          # Texto personalizado según el tipo
-          if self.tipo == 10:
-              texto_tipo = "Nombrar con resolución"
-          elif self.tipo == 20:
-              texto_tipo = "Contratar en la modalidad CAS"
-          elif self.tipo == 30:
-              texto_tipo = "Contratar a plazo fijo con resolución"
-          elif self.tipo == 40:
-              texto_tipo = "Destacar con resolución"
-          elif self.tipo == 50:
-              texto_tipo = "Designar con resolución"
-          else:
-              texto_tipo = "Sin tipo definido"  # Caso por defecto
-
-          # Concatenar asunto
-          self.descripcion = f"{texto_tipo} {self.numero}, a partir del {fecha_formateada}"
-      super().save(*args, **kwargs)
 
   def __str__(self):
       return self.descripcion
@@ -165,6 +135,102 @@ class Vinculo(models.Model):
     ordering = ['-fecha']
     verbose_name = 'Formalización de Vínculo'
     verbose_name_plural = 'Formalización de Vínculo'
+    
+# Modelo de oficina
+class Oficina(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
+  denominacion = models.CharField(max_length=100, choices=departamento_oficina, verbose_name='Denominación')
+  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Departamento u Oficina'
+    verbose_name_plural = 'Departamentos u Oficinas'
+    
+# Modelo de Condición Laboral 
+class Condicion(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
+  denominacion = models.CharField(max_length=100, choices= condicion_laboral, verbose_name='Denominación')
+  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Condición Laboral'
+    verbose_name_plural = 'Condiciónes Laborales'
+
+# Modelo de Grupo Ocupacional
+class Grupo(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
+  denominacion = models.CharField(max_length=100, choices= grupo_ocupacional, verbose_name='Denominación')
+  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Grupo Ocupacional'
+    verbose_name_plural = 'Grupos Ocupacionales'
+    
+# Modelo de Cargo
+class Cargo(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
+  denominacion = models.CharField(max_length=100, choices= cargos, verbose_name='Denominación')
+  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Cargo'
+    verbose_name_plural = 'Cargos'
+    
+# Modelo de Nivel
+class Nivel(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
+  denominacion = models.CharField(max_length=100, choices= niveles, verbose_name='Denominación')
+  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Nivel'
+    verbose_name_plural = 'Niveles'
+
+# Modelo de Plaza
+class Plaza(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
+  denominacion = models.CharField(max_length=100, choices= niveles, verbose_name='Número de Plaza (airhsp)')
+  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Plaza (airhsp)'
+    verbose_name_plural = 'Plaza (airhsp)'
 
 # Modelo Inducción del Personal
 class Induccion(models.Model):
@@ -483,7 +549,7 @@ class Evaluacion(models.Model):
   def __str__(self):
     return f"{self.get_documento_display()} - {self.legajo}"
   
-  # Modelo de Progresión en la Carrera
+""" # Modelo de Progresión en la Carrera
 class Progresion(models.Model):
   legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
   documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
@@ -563,7 +629,7 @@ class Desplazamiento(models.Model):
   class Meta:
     ordering = ['-fecha']
     verbose_name = 'Desplazamiento'
-    verbose_name_plural = 'Desplazamiento'
+    verbose_name_plural = 'Desplazamiento' """
     
 # Modelo de Reconocimientos y Sanciones
 class Reconocimiento(models.Model):
@@ -668,7 +734,7 @@ class Desvinculacion(models.Model):
     return f"{self.get_documento_display()} - {self.legajo}"
   
 
-# Modelo de Finalización de Vinculo laboral
+"""# Modelo de Finalización de Vinculo laboral
 class Final(models.Model):
   legajo = models.ManyToManyField(Legajo)
   documento = models.PositiveSmallIntegerField(choices=documento, verbose_name='Tipo de Documento')
@@ -696,7 +762,7 @@ class Final(models.Model):
   class Meta:
     ordering = ['-fecha']
     verbose_name = 'Resolución de Finalización de Vínculo'
-    verbose_name_plural = 'Resolución de Finalización de Vínculo'
+    verbose_name_plural = 'Resolución de Finalización de Vínculo' """
     
 # Modelo de Otros Documentos
 class Otro(models.Model):

@@ -3,8 +3,8 @@ from django.urls import reverse
 from datetime import date
 from django.db.models import Q
 from django.views.generic.edit import CreateView
-from .models import Empleado, Seleccion, Vinculo, Seleccion, Induccion, Prueba, Habilitacion, Serum, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Progresion, Desplazamiento, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Final, Otro
-from .forms import EmpleadoForm, LegajoForm, InfoPersonalForm, VinculoForm, SeleccionForm, InduccionForm, PruebaForm, HabilitacionForm, SerumForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ProgresionForm, DesplazamientoForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, FinalForm, OtroForm
+from .models import Empleado, Vinculo, Seleccion, Induccion, Prueba, Habilitacion, Serum, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Otro
+from .forms import EmpleadoForm, LegajoForm, InfoPersonalForm, VinculoForm, SeleccionForm, InduccionForm, PruebaForm, HabilitacionForm, SerumForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, OtroForm
 
 def datospersonales_lista(request):
   query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
@@ -83,13 +83,10 @@ def info_general(request, legajo_id):
         'retencion_set',
         'compensaciones_set',
         'evaluacion_set',
-        'progresion_set',
-        'desplazamiento_set',
         'reconocimiento_set',
         'laboral_set',
         'seguridad_set',
         'desvinculacion_set',
-        'final_set',
         'otro_set'
     ), id=legajo_id)
 
@@ -110,13 +107,10 @@ def info_general(request, legajo_id):
         'retenciones': legajo.retencion_set.all(),
         'compensaciones': legajo.compensaciones_set.all(),
         'evaluaciones': legajo.evaluacion_set.all(),
-        'progresiones': legajo.progresion_set.all(),
-        'desplazamientos': legajo.desplazamiento_set.all(),
         'reconocimientos': legajo.reconocimiento_set.all(),
         'laborales': legajo.laboral_set.all(),
         'seguridades': legajo.seguridad_set.all(),
         'desvinculaciones': legajo.desvinculacion_set.all(),
-        'finales': legajo.final_set.all(),
         'otros': legajo.otro_set.all(),
     }
     return render(request, 'info_general.html', context)
@@ -1105,7 +1099,7 @@ def evaluacion_editar(request, evaluacion_id, legajo_id=None):
   }
   return render(request, 'evaluacion_edit.html', context)
 
-# Vista para crear Progresión
+"""# Vista para crear Progresión
 class ProgresionCrearView(CreateView):
   model = Progresion
   form_class = ProgresionForm
@@ -1231,7 +1225,7 @@ def desplazamiento_editar(request, desplazamiento_id, legajo_id=None):
     'desplazamiento': desplazamiento,
     'legajo_preseleccionado': legajo_id,
   }
-  return render(request, 'desplazamiento_edit.html', context)
+  return render(request, 'desplazamiento_edit.html', context) """
 
 # Vista para crear Reconocimientos y Sanciones
 class ReconocimientoCrearView(CreateView):
@@ -1489,7 +1483,7 @@ def desvinculacion_editar(request, desvinculacion_id, legajo_id=None):
   }
   return render(request, 'desvinculacion_edit.html', context)
 
-# Vista para crear Finalización de Vínculo
+"""# Vista para crear Finalización de Vínculo
 class FinalCrearView(CreateView):
   model = Final
   form_class = FinalForm
@@ -1551,7 +1545,7 @@ def final_editar(request, final_id, legajo_id=None):
     'final': final,
     'legajo_preseleccionado': legajo_id,
   }
-  return render(request, 'final_edit.html', context)
+  return render(request, 'final_edit.html', context) """
 
 # Vista para crear Otros Documentos
 class OtroCrearView(CreateView):
