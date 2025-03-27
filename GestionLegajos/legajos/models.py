@@ -1,10 +1,35 @@
 from django.db import models
 from django.utils.html import format_html
-from .choices import estados, sexo, departamento, tipo_vinculo, documento, documento_identidad, condicion_laboral, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_cursos, documentos_experiencia, documentos_retencion, periodo_evaluacion, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, tipo_movimientos, documentos_grado, documentos_especialidad, departamento_oficina, documentos_regimen, grupo_ocupacional, cargos, niveles
+from .choices import estados, sexo, departamento, tipo_vinculo, tipo_historial, documento, documento_identidad, condicion_laboral, documentos_informacion, documentos_seleccion, documentos_induccion, documentos_prueba, documentos_cursos, documentos_experiencia, documentos_retencion, periodo_evaluacion, documentos_reconocimientos, documentos_laboral, documentos_sst, documentos_desvinculacion, tipo_movimientos, documentos_grado, documentos_especialidad, departamento_oficina, documentos_regimen, grupo_ocupacional, cargos, niveles
 from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
+from django.db.models import Q
             
-# Modelo principal
+# Modelo de Resolución
+class Resolucion(models.Model):
+  documento = models.CharField(max_length=100, choices= documento, blank=True, null=True)
+  numero = models.CharField(max_length=50, unique=True, verbose_name='Número de Resolución')
+  tipo = models.CharField(max_length=100, choices=tipo_vinculo)
+  otro = models.CharField(max_length=1000, null=True, blank=True, verbose_name='Otro Documento, Especificar:')
+  fecha = models.DateField(verbose_name="Fecha del Documento")
+  pdf = models.FileField(upload_to='resoluciones/', verbose_name='Cargar PDF')
+
+  def ver_pdf(self):
+      if self.pdf:
+          return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
+      return "No disponible"
+  
+  ver_pdf.short_description = "Visualizar PDF"
+
+  def __str__(self):
+      return self.numero
+  
+  class Meta:
+    ordering = ['-fecha']
+    verbose_name = 'Resolución'
+    verbose_name_plural = 'Resoluciones'
+    
+# Modelo para agregar empleado
 class Empleado(models.Model):
     apellido_paterno = models.CharField(max_length=50)
     apellido_materno = models.CharField(max_length=50)
@@ -20,6 +45,24 @@ class Empleado(models.Model):
     provincia = models.CharField(max_length=50, blank=True, null=True)
     distrito = models.CharField(max_length=50, blank=True, null=True)
     domicilio = models.CharField(max_length=100, blank=True, null=True)
+    
+    def oficina_actual(self):
+        return self.oficinahistorial_set.filter(fecha_fin__isnull=True).order_by('-fecha_inicio').first()
+
+    def condicion_actual(self):
+        return self.condicionhistorial_set.filter(fecha_fin__isnull=True).order_by('-fecha_inicio').first()
+
+    def grupo_actual(self):
+        return self.grupohistorial_set.filter(fecha_fin__isnull=True).order_by('-fecha_inicio').first()
+
+    def cargo_actual(self):
+        return self.cargohistorial_set.filter(fecha_fin__isnull=True).order_by('-fecha_inicio').first()
+
+    def nivel_actual(self):
+        return self.nivelhistorial_set.filter(fecha_fin__isnull=True).order_by('-fecha_inicio').first()
+
+    def plaza_actual(self):
+        return self.plazahistorial_set.filter(fecha_fin__isnull=True).order_by('-fecha_inicio').first()
 
     def __str__(self):
         return f"{self.apellido_paterno} {self.apellido_materno}, {self.nombres}"
@@ -29,6 +72,102 @@ class Empleado(models.Model):
         verbose_name = 'Empleado'
         verbose_name_plural = 'Empleados'
 
+# Modelo de oficina
+class OficinaHistorial(models.Model):
+  empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+  resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, verbose_name='Resolución')
+  denominacion = models.CharField(max_length=100, choices=departamento_oficina, verbose_name='Departamento u Oficina')
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Departamento u Oficina'
+    verbose_name_plural = 'Departamentos u Oficinas'
+    
+# Modelo de Condición Laboral 
+class CondicionHistorial(models.Model):
+  empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+  resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, verbose_name='Resolución')
+  denominacion = models.CharField(max_length=100, choices= condicion_laboral, verbose_name='Denominación')
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Condición Laboral'
+    verbose_name_plural = 'Condiciónes Laborales'
+
+# Modelo de Grupo Ocupacional
+class GrupoHistorial(models.Model):
+  empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+  resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, verbose_name='Resolución')
+  denominacion = models.CharField(max_length=100, choices= grupo_ocupacional, verbose_name='Denominación')
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Grupo Ocupacional'
+    verbose_name_plural = 'Grupos Ocupacionales'
+    
+# Modelo de Cargo
+class CargoHistorial(models.Model):
+  empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+  resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, verbose_name='Resolución')
+  denominacion = models.CharField(max_length=100, choices= cargos, verbose_name='Cargo')
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Cargo'
+    verbose_name_plural = 'Cargos'
+    
+# Modelo de Nivel
+class NivelHistorial(models.Model):
+  empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+  resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, verbose_name='Resolución')
+  denominacion = models.CharField(max_length=100, choices= niveles, verbose_name='Denominación')
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Nivel'
+    verbose_name_plural = 'Niveles'
+
+# Modelo de Plaza
+class PlazaHistorial(models.Model):
+  empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE)
+  resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, verbose_name='Resolución')
+  denominacion = models.CharField(max_length=100, verbose_name='Número de Plaza (airhsp)')
+  fecha_inicio = models.DateField(null=True, blank=True, verbose_name="Fecha de Inicio")
+  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
+
+  def __str__(self):
+      return self.denominacion
+  
+  class Meta:
+    ordering = ['-fecha_inicio']
+    verbose_name = 'Plaza (airhsp)'
+    verbose_name_plural = 'Plaza (airhsp)'
+     
 # Modelo para Aperturar Legajos
 class Legajo(models.Model):
     empleado = models.ForeignKey(Empleado, on_delete=models.CASCADE, related_name='legajos')
@@ -55,6 +194,21 @@ class Legajo(models.Model):
         if self.activo:
             # Desactiva los otros legajos del mismo empleado
             Legajo.objects.filter(empleado=self.empleado).exclude(id=self.id).update(activo=False)
+            
+# Modelo de Vinculo laboral
+class Vinculo(models.Model):
+  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
+  tipo = models.CharField(max_length=100, choices=tipo_historial)
+  resolucion = models.ForeignKey(Resolucion, on_delete=models.CASCADE, verbose_name='Resolución')
+  descripcion = models.CharField(max_length=1000, blank=True, verbose_name='Descripción')
+  
+  def __str__(self):
+      return self.descripcion
+  
+  class Meta:
+    ordering = ['descripcion']
+    verbose_name = 'Historial Laboral'
+    verbose_name_plural = 'Historial Laboral'
 
 # Modelo Información Personal
 class InfoPersonal(models.Model):
@@ -110,128 +264,7 @@ class Seleccion(models.Model):
     
     def __str__(self):
         return f"{self.get_documento_display()} - {self.legajo}"
-      
-# Modelo de Vinculo laboral
-class Vinculo(models.Model):
-  legajo = models.ManyToManyField(Legajo)
-  documento = models.CharField(max_length=50, choices=documento, verbose_name='Tipo de Documento')
-  numero = models.CharField(max_length=50, unique=True, verbose_name='Número')
-  tipo = models.CharField(max_length=100, choices= tipo_vinculo, blank=True, null=True)
-  descripcion = models.CharField(max_length=1000, blank=True, verbose_name='Descripción')
-  fecha = models.DateField(verbose_name="Fecha del Documento")
-  pdf = models.FileField(upload_to='documentos_vinculo/', verbose_name='Cargar PDF')
-
-  def ver_pdf(self):
-      if self.pdf:
-          return format_html('<a href="{}" target="_blank">Ver PDF</a>', self.pdf.url)
-      return "No disponible"
-  
-  ver_pdf.short_description = "Visualizar PDF"
-
-  def __str__(self):
-      return self.descripcion
-  
-  class Meta:
-    ordering = ['-fecha']
-    verbose_name = 'Formalización de Vínculo'
-    verbose_name_plural = 'Formalización de Vínculo'
-    
-# Modelo de oficina
-class Oficina(models.Model):
-  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
-  denominacion = models.CharField(max_length=100, choices=departamento_oficina, verbose_name='Denominación')
-  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
-  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
-
-  def __str__(self):
-      return self.denominacion
-  
-  class Meta:
-    ordering = ['-fecha_inicio']
-    verbose_name = 'Departamento u Oficina'
-    verbose_name_plural = 'Departamentos u Oficinas'
-    
-# Modelo de Condición Laboral 
-class Condicion(models.Model):
-  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
-  denominacion = models.CharField(max_length=100, choices= condicion_laboral, verbose_name='Denominación')
-  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
-  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
-
-  def __str__(self):
-      return self.denominacion
-  
-  class Meta:
-    ordering = ['-fecha_inicio']
-    verbose_name = 'Condición Laboral'
-    verbose_name_plural = 'Condiciónes Laborales'
-
-# Modelo de Grupo Ocupacional
-class Grupo(models.Model):
-  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
-  denominacion = models.CharField(max_length=100, choices= grupo_ocupacional, verbose_name='Denominación')
-  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
-  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
-
-  def __str__(self):
-      return self.denominacion
-  
-  class Meta:
-    ordering = ['-fecha_inicio']
-    verbose_name = 'Grupo Ocupacional'
-    verbose_name_plural = 'Grupos Ocupacionales'
-    
-# Modelo de Cargo
-class Cargo(models.Model):
-  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
-  denominacion = models.CharField(max_length=100, choices= cargos, verbose_name='Denominación')
-  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
-  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
-
-  def __str__(self):
-      return self.denominacion
-  
-  class Meta:
-    ordering = ['-fecha_inicio']
-    verbose_name = 'Cargo'
-    verbose_name_plural = 'Cargos'
-    
-# Modelo de Nivel
-class Nivel(models.Model):
-  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
-  denominacion = models.CharField(max_length=100, choices= niveles, verbose_name='Denominación')
-  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
-  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
-
-  def __str__(self):
-      return self.denominacion
-  
-  class Meta:
-    ordering = ['-fecha_inicio']
-    verbose_name = 'Nivel'
-    verbose_name_plural = 'Niveles'
-
-# Modelo de Plaza
-class Plaza(models.Model):
-  legajo = models.ForeignKey(Legajo, on_delete=models.CASCADE)
-  vinculo = models.ForeignKey(Vinculo, on_delete=models.CASCADE)
-  denominacion = models.CharField(max_length=100, choices= niveles, verbose_name='Número de Plaza (airhsp)')
-  fecha_inicio = models.DateField(verbose_name="Fecha de Inicio")
-  fecha_fin = models.DateField(blank=True, null=True, verbose_name='Fecha de Finalización')
-
-  def __str__(self):
-      return self.denominacion
-  
-  class Meta:
-    ordering = ['-fecha_inicio']
-    verbose_name = 'Plaza (airhsp)'
-    verbose_name_plural = 'Plaza (airhsp)'
-
+        
 # Modelo Inducción del Personal
 class Induccion(models.Model):
   legajo = models.ManyToManyField(Legajo)

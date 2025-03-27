@@ -1,12 +1,13 @@
 from django.contrib import admin
 from .models import (
     Empleado,
-    Oficina,
-    Condicion,
-    Grupo,
-    Cargo,
-    Nivel,
-    Plaza,
+    Resolucion,
+    OficinaHistorial,
+    CondicionHistorial,
+    GrupoHistorial,
+    CargoHistorial,
+    NivelHistorial,
+    PlazaHistorial,
     Legajo,
     InfoPersonal,
     Seleccion,
@@ -38,36 +39,137 @@ class EmpleadoAdmin(admin.ModelAdmin):
     list_display = ('apellido_paterno', 'apellido_materno', 'nombres', 'numero_documento', 'email')
     search_fields = ('apellido_paterno', 'apellido_materno', 'nombres', 'numero_documento')
 
-@admin.register(Oficina)
-class OficinaAdmin(admin.ModelAdmin):
-    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
-    search_fields = ('denominacion',)
+@admin.register(Resolucion)
+class ResolucionAdmin(admin.ModelAdmin):
+    list_display = ('documento', 'numero', 'tipo', 'fecha')
+    search_fields = ('documento', 'numero', 'tipo', 'fecha')
 
-@admin.register(Condicion)
-class CondicionAdmin(admin.ModelAdmin):
-    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
-    search_fields = ('denominacion',)
-
-@admin.register(Grupo)
-class GrupoAdmin(admin.ModelAdmin):
-    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+@admin.register(OficinaHistorial)
+class OficinaHistorialAdmin(admin.ModelAdmin):
+    list_display = ('empleado_numero_documento', 'empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'denominacion', 'fecha_inicio', 'fecha_fin')
     search_fields = ('denominacion',)
     
-@admin.register(Cargo)
-class CargoAdmin(admin.ModelAdmin):
-    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
+    def empleado_numero_documento(self, obj):
+        return obj.empleado.numero_documento
+    empleado_numero_documento.short_description = 'DNI'
+    
+    def empleado_apellido_paterno(self, obj):
+        return obj.empleado.apellido_paterno
+    empleado_apellido_paterno.short_description = 'Apellido Paterno'
+
+    def empleado_apellido_materno(self, obj):
+        return obj.empleado.apellido_materno
+    empleado_apellido_materno.short_description = 'Apellido Materno'
+
+    def empleado_nombres(self, obj):
+        return obj.empleado.nombres
+    empleado_nombres.short_description = 'Nombres'
+
+@admin.register(CondicionHistorial)
+class CondicionHistorialAdmin(admin.ModelAdmin):
+    list_display = ('empleado_numero_documento', 'empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'denominacion', 'fecha_inicio', 'fecha_fin')
     search_fields = ('denominacion',)
     
-@admin.register(Nivel)
-class NivelAdmin(admin.ModelAdmin):
-    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
-    search_fields = ('denominacion',)
+    def empleado_numero_documento(self, obj):
+        return obj.empleado.numero_documento
+    empleado_numero_documento.short_description = 'DNI'
+    
+    def empleado_apellido_paterno(self, obj):
+        return obj.empleado.apellido_paterno
+    empleado_apellido_paterno.short_description = 'Apellido Paterno'
 
-@admin.register(Plaza)
-class PlazaAdmin(admin.ModelAdmin):
-    list_display = ('denominacion', 'fecha_inicio', 'fecha_fin')
-    search_fields = ('denominacion',)
+    def empleado_apellido_materno(self, obj):
+        return obj.empleado.apellido_materno
+    empleado_apellido_materno.short_description = 'Apellido Materno'
 
+    def empleado_nombres(self, obj):
+        return obj.empleado.nombres
+    empleado_nombres.short_description = 'Nombres'
+
+@admin.register(GrupoHistorial)
+class GrupoHistorialAdmin(admin.ModelAdmin):
+    list_display = ('empleado_numero_documento', 'empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+    
+    def empleado_numero_documento(self, obj):
+        return obj.empleado.numero_documento
+    empleado_numero_documento.short_description = 'DNI'
+    
+    def empleado_apellido_paterno(self, obj):
+        return obj.empleado.apellido_paterno
+    empleado_apellido_paterno.short_description = 'Apellido Paterno'
+
+    def empleado_apellido_materno(self, obj):
+        return obj.empleado.apellido_materno
+    empleado_apellido_materno.short_description = 'Apellido Materno'
+
+    def empleado_nombres(self, obj):
+        return obj.empleado.nombres
+    empleado_nombres.short_description = 'Nombres'
+    
+@admin.register(CargoHistorial)
+class CargoHistorialAdmin(admin.ModelAdmin):
+    list_display = ('empleado_numero_documento', 'empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+    
+    def empleado_numero_documento(self, obj):
+        return obj.empleado.numero_documento
+    empleado_numero_documento.short_description = 'DNI'
+    
+    def empleado_apellido_paterno(self, obj):
+        return obj.empleado.apellido_paterno
+    empleado_apellido_paterno.short_description = 'Apellido Paterno'
+
+    def empleado_apellido_materno(self, obj):
+        return obj.empleado.apellido_materno
+    empleado_apellido_materno.short_description = 'Apellido Materno'
+
+    def empleado_nombres(self, obj):
+        return obj.empleado.nombres
+    empleado_nombres.short_description = 'Nombres'
+    
+@admin.register(NivelHistorial)
+class NivelHistorialAdmin(admin.ModelAdmin):
+    list_display = ('empleado_numero_documento', 'empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+    
+    def empleado_numero_documento(self, obj):
+        return obj.empleado.numero_documento
+    empleado_numero_documento.short_description = 'DNI'
+    
+    def empleado_apellido_paterno(self, obj):
+        return obj.empleado.apellido_paterno
+    empleado_apellido_paterno.short_description = 'Apellido Paterno'
+
+    def empleado_apellido_materno(self, obj):
+        return obj.empleado.apellido_materno
+    empleado_apellido_materno.short_description = 'Apellido Materno'
+
+    def empleado_nombres(self, obj):
+        return obj.empleado.nombres
+    empleado_nombres.short_description = 'Nombres'
+
+@admin.register(PlazaHistorial)
+class PlazaHistorialAdmin(admin.ModelAdmin):
+    list_display = ('empleado_numero_documento', 'empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'denominacion', 'fecha_inicio', 'fecha_fin')
+    search_fields = ('denominacion',)
+    
+    def empleado_numero_documento(self, obj):
+        return obj.empleado.numero_documento
+    empleado_numero_documento.short_description = 'DNI'
+    
+    def empleado_apellido_paterno(self, obj):
+        return obj.empleado.apellido_paterno
+    empleado_apellido_paterno.short_description = 'Apellido Paterno'
+
+    def empleado_apellido_materno(self, obj):
+        return obj.empleado.apellido_materno
+    empleado_apellido_materno.short_description = 'Apellido Materno'
+
+    def empleado_nombres(self, obj):
+        return obj.empleado.nombres
+    empleado_nombres.short_description = 'Nombres'
+    
 @admin.register(Legajo)
 class LegajoAdmin(admin.ModelAdmin):
     list_display = ('empleado_apellido_paterno', 'empleado_apellido_materno', 'empleado_nombres', 'empleado_numero_documento', 'regimen_laboral', 'activo')
@@ -98,16 +200,14 @@ class InfoPersonalAdmin(admin.ModelAdmin):
 @admin.register(Seleccion)
 class SeleccionAdmin(admin.ModelAdmin):
     list_display = ('documento', 'descripcion', 'ver_pdf', 'fecha')
-    list_filter = ('legajo', 'documento')
+    list_filter = ('documento', )
     search_fields = ('documento',)
     filter_horizontal = ('legajo',)
     
 @admin.register(Vinculo)
 class VinculoAdmin(admin.ModelAdmin):
-    list_display = ('documento', 'numero', 'tipo', 'descripcion', 'ver_pdf')
-    list_filter = ('tipo',)
-    search_fields = ('documento',)
-    filter_horizontal = ('legajo',)
+    list_display = ('legajo', 'tipo', 'resolucion', 'descripcion',)
+    search_fields = ('descripcion',)
 
 @admin.register(Induccion)
 class InduccionAdmin(admin.ModelAdmin):

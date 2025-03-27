@@ -1,0 +1,21 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="app-content pt-3 p-md-3 p-lg-4">
+	<div class="container-xl">
+		
+    <div class="col-auto">
+      <h2 class="text-center">Agregar Nuevo Documento</h2>
+    </div>
+	 
+		<div class="app-card-body">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+      <button type="submit" class="btn app-btn-primary" >Guardar</button>
+      <a href="{% url 'legajos:documentos' %}" class="btn app-btn-secondary">Cancelar</a>
+      </form>
+    </div><!--//app-card-body-->
+	
+	</div><!--//container-fluid-->
+</div><!--//app-content-->
+{% endblock content %}

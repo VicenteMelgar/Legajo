@@ -3,44 +3,72 @@ from django.urls import reverse
 from datetime import date
 from django.db.models import Q
 from django.views.generic.edit import CreateView
-from .models import Empleado, Vinculo, Seleccion, Induccion, Prueba, Habilitacion, Serum, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Otro
-from .forms import EmpleadoForm, LegajoForm, InfoPersonalForm, VinculoForm, SeleccionForm, InduccionForm, PruebaForm, HabilitacionForm, SerumForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, OtroForm
+from .models import Empleado, OficinaHistorial, CondicionHistorial, GrupoHistorial, CargoHistorial, NivelHistorial, PlazaHistorial, Vinculo, Resolucion, Seleccion, Induccion, Prueba, Habilitacion, Serum, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Otro
+from .forms import EmpleadoForm, OficinaHistorialForm, LegajoForm, InfoPersonalForm, VinculoForm, ResolucionForm, SeleccionForm, InduccionForm, PruebaForm, HabilitacionForm, SerumForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, OtroForm
 
 def datospersonales_lista(request):
-  query = request.GET.get('searchorders', '')  # Obtén el texto ingresado en el buscador
-  filters = Q(apellido_paterno__icontains=query) | Q(apellido_materno__icontains=query) | Q(nombres__icontains=query)
+    query = request.GET.get('searchorders', '')  # Texto ingresado en el buscador
+    filters = Q(apellido_paterno__icontains=query) | Q(apellido_materno__icontains=query) | Q(nombres__icontains=query)
 
-  todos_empleados = Empleado.objects.filter(filters)
+    empleados = Empleado.objects.filter(filters)
 
-  # Preparar contexto
-  context = {
-    'todos_empleados': todos_empleados,
-    'query': query  # Para mantener el texto en el campo de búsqueda
-  }
+    # Construir una lista de empleados con su información vigente
+    empleados_con_datos = []
+    for emp in empleados:
+        empleados_con_datos.append({
+            'empleado': emp,
+            'oficina_actual': emp.oficina_actual(),
+            'condicion_actual': emp.condicion_actual(),
+            'grupo_actual': emp.grupo_actual(),
+            'cargo_actual': emp.cargo_actual(),
+            'nivel_actual': emp.nivel_actual(),
+            'plaza_actual': emp.plaza_actual(),
+        })
 
-  return render(request, 'empleados.html', context)
-
-def legajos_lista(request):
-    query = request.GET.get('buscar', '')  # Obtén el texto ingresado en el buscador
-    filters = Q(regimen_laboral__icontains=query) | Q(empleado__apellido_paterno__icontains=query) | Q(empleado__apellido_materno__icontains=query) | Q(empleado__nombres__icontains=query)
-    
-    legajos = Legajo.objects.filter(filters)  # Obtén todos los legajos
+    # Preparar contexto
     context = {
-        'legajos': legajos,
+        'empleados': empleados_con_datos,
         'query': query  # Para mantener el texto en el campo de búsqueda
     }
-    return render(request, 'legajos_lista.html', context)
 
+    return render(request, 'empleados.html', context)
+
+def legajos_lista(request):
+  query = request.GET.get('buscar', '')  # Obtén el texto ingresado en el buscador
+  filters = Q(regimen_laboral__icontains=query) | Q(empleado__apellido_paterno__icontains=query) | Q(empleado__apellido_materno__icontains=query) | Q(empleado__nombres__icontains=query)
+  
+  legajos = Legajo.objects.filter(filters)  # Obtén todos los legajos
+  context = {
+      'legajos': legajos,
+      'query': query  # Para mantener el texto en el campo de búsqueda
+  }
+  return render(request, 'legajos_lista.html', context)
+  
+# Vista para seccion documentos
+def documentos(request):
+  query = request.GET.get('buscador', '')  # Obtén el texto ingresado en el buscador
+  filters = Q(documento__icontains=query) | Q(numero__icontains=query) | Q(tipo__icontains=query)
+  
+  todos_documentos = Resolucion.objects.filter(filters)  # Obtén todos los legajos
+  
+  context = {
+      'todos_documentos': todos_documentos,
+      'query': query  # Para mantener el texto en el campo de búsqueda
+  }
+  return render(request, 'documentos.html', context)
+
+# Vista para crear empleado
 def empleado_crear(request):
   if request.method == 'POST':
     form = EmpleadoForm(request.POST)
     if form.is_valid():
       form.save()
-      return redirect('legajos:datos_personales')  # Cambia por el nombre de tu vista de lista
+      return redirect('legajos:datos_personales')  
   else:
     form = EmpleadoForm()
   return render(request, 'empleado_crear.html', {'form': form})
 
+# Vista para editar empleado
 def empleado_editar(request, empleado_id):
   empleado = get_object_or_404(Empleado, id=empleado_id)
   
@@ -48,11 +76,36 @@ def empleado_editar(request, empleado_id):
     form = EmpleadoForm(request.POST, instance=empleado)
     if form.is_valid():
       form.save()
-      return redirect('legajos:datos_personales')  # Cambia por el nombre de tu vista de lista
+      return redirect('legajos:datos_personales') 
   else:
     form = EmpleadoForm(instance=empleado)
   
   return render(request, 'empleado_editar.html', {'form': form, 'empleado': empleado})
+
+# Vista para crear documento
+def resolucion_crear(request):
+  if request.method == 'POST':
+    form = ResolucionForm(request.POST, request.FILES)  # Asegurar que los archivos se envíen
+    if form.is_valid():
+      form.save()
+      return redirect('legajos:documentos')  
+  else:
+    form = ResolucionForm()
+  return render(request, 'resolucion_crear.html', {'form': form})
+
+# Vista para editar documento
+def resolucion_editar(request, resolucion_id):
+  resolucion = get_object_or_404(Resolucion, id=resolucion_id)
+  
+  if request.method == 'POST':
+    form = ResolucionForm(request.POST, request.FILES, instance=resolucion)  # Asegurar que los archivos se envíen
+    if form.is_valid():
+      form.save()
+      return redirect('legajos:documentos') 
+  else:
+    form = ResolucionForm(instance=resolucion)
+
+  return render(request, 'resolucion_crear.html', {'form': form})
 
 # Vista para crear legajo  
 def crear_legajo(request):
@@ -65,7 +118,67 @@ def crear_legajo(request):
         form = LegajoForm()
     return render(request, 'crear_legajo.html', {'form': form})
 
+# Vista para actualizar Historial Laboral Personal
+def info_historial(request, empleado_id):
+    empleado = get_object_or_404(Empleado, id=empleado_id)
+    
+    # Obtener registros históricos
+    oficina_historial = OficinaHistorial.objects.filter(empleado=empleado).order_by('-fecha_inicio')
+    condicion_historial = CondicionHistorial.objects.filter(empleado=empleado).order_by('-fecha_inicio')
+    grupo_historial = GrupoHistorial.objects.filter(empleado=empleado).order_by('-fecha_inicio')
+    cargo_historial = CargoHistorial.objects.filter(empleado=empleado).order_by('-fecha_inicio')
+    nivel_historial = NivelHistorial.objects.filter(empleado=empleado).order_by('-fecha_inicio')
+    plaza_historial = PlazaHistorial.objects.filter(empleado=empleado).order_by('-fecha_inicio')
 
+    if request.method == "POST":
+        form = EmpleadoForm(request.POST, instance=empleado)
+        if form.is_valid():
+            form.save()
+            return redirect('info_historial', empleado_id=empleado.id)
+    else:
+        form = EmpleadoForm(instance=empleado)
+
+    return render(request, 'info_historial.html', {
+        'empleado': empleado,
+        'form': form,
+        'oficina_historial': oficina_historial,
+        'condicion_historial': condicion_historial,
+        'grupo_historial': grupo_historial,
+        'cargo_historial': cargo_historial,
+        'nivel_historial': nivel_historial,
+        'plaza_historial': plaza_historial
+    })
+
+# =========================
+# CREAR REGISTROS HISTÓRICOS
+# =========================
+
+# Crear OficinaHistorial (seleccionando el empleado en el formulario)
+def oficina_crear(request):
+    if request.method == "POST":
+        form = OficinaHistorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros (ajusta el nombre de la URL según tu caso)
+    else:
+        form = OficinaHistorialForm()
+
+    return render(request, 'oficina_crear.html', {'form': form})
+
+# Editar OficinaHistorial
+def oficina_editar(request, oficina_id):
+    oficina = get_object_or_404(OficinaHistorial, id=oficina_id)
+    if request.method == "POST":
+        form = OficinaHistorialForm(request.POST, instance=oficina)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  # Ajusta el nombre de la URL según corresponda
+    else:
+        form = OficinaHistorialForm(instance=oficina)
+
+    return render(request, 'oficina_edit.html', {'form': form, 'oficina': oficina})
+
+# Vista Para gestionar información en los Legajos
 def info_general(request, legajo_id):
     legajo = get_object_or_404(Legajo.objects.prefetch_related(
         'infopersonal_set',
@@ -90,11 +203,22 @@ def info_general(request, legajo_id):
         'otro_set'
     ), id=legajo_id)
 
+    # Filtrar los vínculos según el tipo
+    vinculos = legajo.vinculo_set.all()
+    incorporacion = vinculos.filter(tipo='Incorporación')
+    progresion = vinculos.filter(tipo='Progresión')
+    desplazamiento = vinculos.filter(tipo='Desplazamiento')
+    desvinculacion = vinculos.filter(tipo='Desvinculación')
+
     context = {
         'legajo': legajo,
         'informacion_personal': legajo.infopersonal_set.all(),
         'selecciones': legajo.seleccion_set.all(),
-        'vinculos': legajo.vinculo_set.all(),
+        'vinculos': vinculos,  # Todos los vínculos
+        'incorporacion': incorporacion,
+        'progresion': progresion,
+        'desplazamiento': desplazamiento,
+        'desvinculacion': desvinculacion,
         'inducciones': legajo.induccion_set.all(),
         'pruebas': legajo.prueba_set.all(),
         'habilitaciones': legajo.habilitacion_set.all(),
@@ -140,7 +264,7 @@ class InfoPersonalCrearView(CreateView):
     return reverse('legajos:info_general', kwargs={'legajo_id': legajo_id})
 
   def form_valid(self, form):
-    # Asociar la ausencia al legajo automáticamente
+    # Asociar la información al legajo automáticamente
     legajo_id = self.kwargs.get('legajo_id')
     if legajo_id:
       form.instance.legajo = Legajo.objects.get(id=legajo_id)
@@ -288,7 +412,7 @@ def vinculo_editar(request, vinculo_id, legajo_id=None):
   vinculo = get_object_or_404(Vinculo, id=vinculo_id)
 
   if not legajo_id:
-    legajo = vinculo.legajo.first()
+    legajo = vinculo.legajo
     legajo_id = legajo.id if legajo else None
 
   if request.method == 'POST':
@@ -307,6 +431,70 @@ def vinculo_editar(request, vinculo_id, legajo_id=None):
     'legajo_preseleccionado': legajo_id,
   }
   return render(request, 'vinculo_edit.html', context)
+"""
+# Vista para crear Oficina
+class OficinaCrearView(CreateView):
+    model = Oficina
+    form_class = OficinaForm
+    template_name = 'oficina_crear.html'
+    
+    def get_initial(self):
+        legajo_id = self.kwargs.get('legajo_id')
+        initial = super().get_initial()
+        if legajo_id:
+            initial['legajo'] = Legajo.objects.get(id=legajo_id)  # Obtener la instancia completa
+        return initial
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        legajo_id = self.kwargs.get('legajo_id')
+        if legajo_id:
+            context['legajo_preseleccionado'] = Legajo.objects.get(id=legajo_id)
+        return context
+
+    def get_success_url(self):
+        legajo_id = self.kwargs.get('legajo_id')
+        return reverse('legajos:info_general', kwargs={'legajo_id': legajo_id})
+
+    def form_valid(self, form):
+        # Asociar la oficina al legajo automáticamente
+        legajo_id = self.kwargs.get('legajo_id')
+        if legajo_id:
+            form.instance.legajo = Legajo.objects.get(id=legajo_id)
+
+        # Manejo de la acción del botón
+        action = self.request.POST.get('action')
+        self.object = form.save()
+        if action == 'save_and_add_more':
+            return redirect('legajos:oficina_crear', legajo_id=legajo_id)
+        elif action == 'save_and_exit':
+            return super().form_valid(form)
+
+        return super().form_valid(form)
+
+# Vista para editar Oficina
+def oficina_editar(request, oficina_id, legajo_id=None):
+    oficina = get_object_or_404(Oficina, id=oficina_id)
+
+    if not legajo_id:
+        legajo = oficina.legajo
+        legajo_id = legajo.id if legajo else None
+
+    if request.method == 'POST':
+        form = OficinaForm(request.POST, request.FILES, instance=oficina)
+        if form.is_valid():
+            oficina = form.save(commit=False)
+            oficina.save()
+            return redirect('legajos:info_general', legajo_id=legajo_id)
+    else:
+        form = OficinaForm(instance=oficina)
+
+    context = {
+        'form': form,
+        'oficina': oficina,
+        'legajo_preseleccionado': legajo_id,
+    }
+    return render(request, 'oficina_edit.html', context) """
 
 # Vista para crear Inducción del Personal
 class InduccionCrearView(CreateView):
@@ -1611,10 +1799,6 @@ def otro_editar(request, otro_id, legajo_id=None):
     'legajo_preseleccionado': legajo_id,
   }
   return render(request, 'otro_edit.html', context)
-
-# Vista para seccion documentos
-def documentos(request):
-    return render(request, 'documentos.html')
 
 # Vista para dashboard
 def dashboard(request):

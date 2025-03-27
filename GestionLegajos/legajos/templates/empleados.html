@@ -2,7 +2,6 @@
 {% block content %}
 <div class="app-content pt-3 p-md-3 p-lg-4">
 	<div class="container-xl">
-		
 		<div class="row g-3 mb-4 align-items-center justify-content-between">
 			<div class="col-auto">
 						<h1 class="app-page-title mb-0">Personal</h1>
@@ -19,8 +18,7 @@
                 <div class="col-auto">
                     <button type="submit" class="btn app-btn-secondary">Buscar</button>
                 </div>
-              </form>
-										
+              </form>			
 						</div><!--//col-->
 
 						<div class="col-auto">						    
@@ -30,158 +28,84 @@
 									<path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
 									<path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5"/>
 								</svg>
-						</a>
+							</a>
 						</div>
 					</div><!--//row-->
 				</div><!--//table-utilities-->
 			</div><!--//col-auto-->
 		</div><!--//row-->
-	 
-		
-<!--//		<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
-			<a class="flex-sm-fill text-sm-center nav-link active" id="todos-tab" data-bs-toggle="tab" href="#todos" role="tab" aria-controls="todos" aria-selected="true">Todos</a>
-			<a class="flex-sm-fill text-sm-center nav-link"  id="nombrados-tab" data-bs-toggle="tab" href="#nombrados" role="tab" aria-controls="nombrados" aria-selected="false">Nombrados</a>
-			<a class="flex-sm-fill text-sm-center nav-link" id="cas-tab" data-bs-toggle="tab" href="#cas" role="tab" aria-controls="cas" aria-selected="false">CAS</a>
-			<a class="flex-sm-fill text-sm-center nav-link" id="pensionistas-tab" data-bs-toggle="tab" href="#pensionistas" role="tab" aria-controls="pensionistas" aria-selected="false">Cesantes</a>
-	</nav> -->
 	
-	
-	<div class="tab-content" id="orders-table-tab-content">
-				<div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
+		<div class="tab-content" id="orders-table-tab-content">
+      <!-- Sección para agregar información al Legajo -->
+      <div class="d-flex justify-content-center mb-3">
+        <div class="col-auto">
+          <button class="btn app-btn-secondary" type="button">
+            <a href="#">Condición Laboral +</a>
+          </button>
+          <button class="btn app-btn-secondary" type="button">
+            <a href="{% url 'legajos:oficina_crear' %}">Departamento u Oficina +</a>
+          </button>
+          <button class="btn app-btn-secondary" type="button">
+            <a href="#">Grupo Ocupacional +</a>
+          </button>
+          <button class="btn app-btn-secondary" type="button">
+            <a href="#">Cargo +</a>
+          </button>
+          <button class="btn app-btn-secondary" type="button">
+            <a href="#">Nivel +</a>
+          </button>
+          <button class="btn app-btn-secondary" type="button">
+            <a href="#">Plaza (Airhsp) +</a>
+          </button>
+        </div>
+      </div>
+
+			<div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
 				<div class="app-card app-card-orders-table shadow-sm mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
-								<table class="table app-table-hover mb-0 text-left">
-							<thead>
-								<tr>
-									<th class="cell">DNI</th>
-									<th class="cell">Apellidos y Nombres</th>
-									<th class="cell">Email</th>
-									<th class="cell">Teléfono</th>
-									<th class="cell">Actualizar</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for empleado in todos_empleados %}
-								<tr>
-									<td class="cell">{{empleado.numero_documento}}</td>
-									<td class="cell">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</td>
-									<td class="cell">{{empleado.email|default_if_none:"-"}}</td>
-									<td class="cell"><span>{{empleado.telefono|default_if_none:"-"}}</span></td>
-									<td class="cell"><span><a href="{% url 'legajos:empleado_editar' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                  </svg></a></span></td>
-								</tr>
-								{% endfor %}	
-							</tbody>
-						</table>
-							</div><!--//table-responsive-->
-						 
+							<table class="table app-table-hover mb-0 text-left">
+								<thead>
+									<tr>
+										<th class="cell">DNI</th>
+										<th class="cell">Apellidos y Nombres</th>
+                    <th class="cell">Condición</th>
+										<th class="cell">Departamento u Oficina</th>
+										<th class="cell">Grupo Ocupacional</th>
+										<th class="cell">Cargo</th>
+										<th class="cell">Nivel</th>
+										<th class="cell">Plaza (Airsh)</th>
+										<th class="cell">Editar</th>
+                    <th class="cell">Historial</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for emp in empleados %}
+									<tr>
+										<td class="cell">{{emp.empleado.numero_documento}}</td>
+										<td class="cell">{{emp.empleado.apellido_paterno}} {{emp.empleado.apellido_materno}} {{emp.empleado.nombres}}</td>
+                    <td class="cell">{{emp.condicion_actual.get_denominacion_display |default:"-"}}</td>
+                    <td class="cell">{{emp.oficina_actual.denominacion|default:"-"}}</td>
+										<td class="cell">{{emp.grupo_actual.denominacion|default:"-"}}</td>
+										<td class="cell">{{emp.cargo_actual.denominacion|default:"-"}}</td>
+										<td class="cell">{{emp.nivel_actual.denominacion|default:"-"}}</td>
+										<td class="cell">{{emp.plaza_actual.denominacion|default:"-"}}</td>
+										<td class="cell"><span><a href="{% url 'legajos:empleado_editar' emp.empleado.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+											<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+										</svg></a></span></td>
+                    <td class="cell"><span><a href="{% url 'legajos:info_historial' emp.empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg></a></span></td>
+                  </tr>
+									</tr>
+									{% endfor %}	
+								</tbody>
+							</table>
+						</div><!--//table-responsive-->	 
 					</div><!--//app-card-body-->		
-			</div><!--//app-card-->
-		
-				</div><!--//tab-pane-->
-				
-				<div class="tab-pane fade" id="nombrados" role="tabpanel" aria-labelledby="nombrados-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">
-							
-								<table class="table mb-0 text-left">
-							<thead>
-								<tr>
-									<th class="cell">DNI</th>
-									<th class="cell">Apellidos y Nombres</th>
-									<th class="cell">Email</th>
-									<th class="cell">Modalidad</th>
-									<th class="cell">Ver</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for empleado in empleados_nombrados %}
-								<tr>
-									<td class="cell">{{empleado.numero_documento}}</td>
-									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
-									<td class="cell">{{empleado.email}}</td>
-									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><span><a href="{% url 'legajos:info_general' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-									</svg></a></span></td>
-								</tr>
-								{% endfor %}	
-							</tbody>
-						</table>
-							</div><!--//table-responsive-->
-					</div><!--//app-card-body-->		
-			</div><!--//app-card-->
-				</div><!--//tab-pane-->
-				
-				<div class="tab-pane fade" id="cas" role="tabpanel" aria-labelledby="cas-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">
-								<table class="table mb-0 text-left">
-							<thead>
-								<tr>
-									<th class="cell">DNI</th>
-									<th class="cell">Apellidos y Nombres</th>
-									<th class="cell">Email</th>
-									<th class="cell">Modalidad</th>
-									<th class="cell">Ver</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for empleado in empleados_cas %}
-								<tr>
-									<td class="cell">{{empleado.numero_documento}}</td>
-									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
-									<td class="cell">{{empleado.email}}</td>
-									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><span><a href="{% url 'legajos:info_general' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-									</svg></a></span></td>
-								</tr>
-								{% endfor %}	
-							</tbody>
-						</table>
-							</div><!--//table-responsive-->
-					</div><!--//app-card-body-->		
-			</div><!--//app-card-->
-				</div><!--//tab-pane-->
-				<div class="tab-pane fade" id="pensionistas" role="tabpanel" aria-labelledby="pensionistas-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">
-								<table class="table mb-0 text-left">
-							<thead>
-								<tr>
-									<th class="cell">DNI</th>
-									<th class="cell">Apellidos y Nombres</th>
-									<th class="cell">Email</th>
-									<th class="cell">Modalidad</th>
-									<th class="cell">Ver</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for empleado in empleados_cesantes %}
-								<tr>
-									<td class="cell">{{empleado.numero_documento}}</td>
-									<td class="cell"><span class="truncate">{{empleado.apellido_paterno}} {{empleado.apellido_materno}} {{empleado.nombres}}</span></td>
-									<td class="cell">{{empleado.email}}</td>
-									<td class="cell"><span>{{empleado.modalidad}}</span></td>
-									<td class="cell"><span><a href="{% url 'legajos:info_general' empleado.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-										<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-									</svg></a></span></td>
-								</tr>
-								{% endfor %}	
-							</tbody>
-						</table>
-							</div><!--//table-responsive-->
-					</div><!--//app-card-body-->		
-			</div><!--//app-card-->
-				</div><!--//tab-pane-->
-	</div><!--//tab-content-->
-		
+				</div><!--//app-card-->
+			</div><!--//tab-pane-->			
+		</div><!--//tab-content-->
 	</div><!--//container-fluid-->
 </div><!--//app-content-->
 {% endblock content %}

@@ -1,32 +1,39 @@
 {% extends 'layouts/base.html' %}
 {% block content %}
 <div class="app-content pt-3 p-md-3 p-lg-4">
-	<div class="container-xl">
-		
+	<div class="container-xl">		
 		<div class="row g-3 mb-4 align-items-center justify-content-between">
 			<div class="col-auto">
-				<h1 class="app-page-title mb-0">{{ empleado }}</h1>
+						<h1 class="app-page-title mb-0">Documentos</h1>
 			</div>
 			<div class="col-auto">
-				<div class="page-utilities">
+				 <div class="page-utilities">
 					<div class="row g-2 justify-content-start justify-content-md-end align-items-center">
+						<div class="col-auto">
+							<form class="table-search-form row gx-1 align-items-center" method="get">
+                <div class="col-auto">
+                    <input type="text" id="buscar-documentos" name="buscador" class="form-control search-orders" 
+                           placeholder="Buscar..." value="{{ query|default:'' }}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn app-btn-secondary">Buscar</button>
+                </div>
+              </form>
+										
+						</div><!--//col-->
 
+						<div class="col-auto">						    
+							<a class="btn app-btn-primary" href="{% url 'legajos:resolucion_crear' %}">
+								Nuevo Documento +
+							</a>
+						</div>
 					</div><!--//row-->
 				</div><!--//table-utilities-->
 			</div><!--//col-auto-->
 		</div><!--//row-->
-		
-		<nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
-			<a class="flex-sm-fill text-sm-center nav-link active" id="orders-services-tab" data-bs-toggle="tab" href="#orders-services" role="tab" aria-controls="orders-service" aria-selected="true">Servicios Prestados</a>
-      <a class="flex-sm-fill text-sm-center nav-link" id="orders-estudios-tab" data-bs-toggle="tab" href="#orders-estudios" role="tab" aria-controls="orders-estudios" aria-selected="false">Estudios Realizados</a>
-      <a class="flex-sm-fill text-sm-center nav-link"  id="orders-amd-tab" data-bs-toggle="tab" href="#orders-amd" role="tab" aria-controls="orders-amd" aria-selected="false">AMD</a>
-			<a class="flex-sm-fill text-sm-center nav-link" id="orders-bonificacion-tab" data-bs-toggle="tab" href="#orders-bonificacion" role="tab" aria-controls="orders-bonificacion" aria-selected="false">Bonificación Personal</a>
-      <a class="flex-sm-fill text-sm-center nav-link" id="orders-tiemposervicios-tab" data-bs-toggle="tab" href="#orders-tiemposervicios" role="tab" aria-controls="orders-tiemposervicios" aria-selected="false">Tiempo de Servicios</a>
-      <a class="flex-sm-fill text-sm-center nav-link" id="orders-pension-tab" data-bs-toggle="tab" href="#orders-pension" role="tab" aria-controls="orders-pension" aria-selected="false">Pensionista Sobreviviente</a>
-		</nav>
-
+	
 		<div class="tab-content" id="orders-table-tab-content">
-			<div class="tab-pane fade show active" id="orders-services" role="tabpanel" aria-labelledby="orders-services-tab">
+			<div class="tab-pane fade show active" id="todos" role="tabpanel" aria-labelledby="todos-tab">
 				<div class="app-card app-card-orders-table shadow-sm mb-5">
 					<div class="app-card-body">
 						<div class="table-responsive">
@@ -34,77 +41,28 @@
 								<thead>
 									<tr>
 										<th class="cell">Resolución</th>
+										<th class="cell">Tipo de Documento</th>
 										<th class="cell">Fecha</th>
-										<th class="cell">Asunto</th>
-										<th class="cell">Cargo</th>
-										<th class="cell">Nivel</th>
 										<th class="cell">Documento</th>
+										<th class="cell">Editar</th>
 									</tr>
 								</thead>
 								<tbody>
-									{% for servicio in servicios %}
+									{% for resolucion in todos_documentos %}
 									<tr>
-										<td class="cell">{{ servicio.documento }} {{ servicio.numero }}</td>
-										<td class="cell"><span class="truncate">{{ servicio.fecha }}</span></td>
-										<td class="cell">{{ servicio.asunto }}</td>
+										<td class="cell">{{resolucion.documento}} Nº {{resolucion.numero}}</td>
+										<td class="cell">{{resolucion.tipo}}</td>
+										<td class="cell"><span>{{ resolucion.fecha|date:"d/m/Y"|default_if_none:"" }}</span></td>
 										<td class="cell"><span>
-											{% if servicio.cargo.all %}
-												{% for cargo in servicio.cargo.all %}
-													{{ cargo }}{% if not forloop.last %}, {% endif %}
-												{% endfor %}
-											{% else %}
-												Sin cargo registrado
-											{% endif %}
-										</span></td>
-										<td class="cell"><span>
-											{% if servicio.nivel.all %}
-												{% for nivel in servicio.nivel.all %}
-													{{ nivel }}{% if not forloop.last %}, {% endif %}
-												{% endfor %}
-											{% else %}
-												Sin nivel registrado
-											{% endif %}
-										</span></td>
-										<td class="cell"><span>{{ servicio.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:servicio_editar' servicio.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg></a></span></td>
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
-						</div><!--//table-responsive-->				 
-					</div><!--//app-card-body-->		
-				</div><!--//app-card-->
-			</div><!--//tab-pane-->
-			
-			<div class="tab-pane fade" id="orders-amd" role="tabpanel" aria-labelledby="orders-amd-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">	
-							<table class="table mb-0 text-left">
-								<thead>
-									<tr>
-										<th class="cell">Resolución</th>
-										<th class="cell">Motivo</th>
-										<th class="cell">Asunto</th>
-										<th class="cell">Desde</th>
-										<th class="cell">Hasta</th>
-										<th class="cell">Documento</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for ausencia in ausencias %}
-									<tr>
-										<td class="cell"><span>{{ ausencia.resolucion }}</span></td>
-										<td class="cell"><span>{{ ausencia.motivo }}</span></td>
-										<td class="cell"><span>{{ ausencia.asunto }}</span></td>
-										<td class="cell"><span>{{ ausencia.desde }}</span></td>
-										<td class="cell"><span>{{ ausencia.hasta }}</span></td>
-										<td class="cell"><span>{{ ausencia.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:ausencias_editar' ausencia.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg></a></span></td>
+											<a href="{{ resolucion.pdf.url }}" target="_blank" class="text-primary">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-file-earmark-pdf" viewBox="0 0 16 16">
+													<path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+													<path d="M4.603 14.087a.8.8 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.7 7.7 0 0 1 1.482-.645 20 20 0 0 0 1.062-2.227 7.3 7.3 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a11 11 0 0 0 .98 1.686 5.8 5.8 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.86.86 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.7 5.7 0 0 1-.911-.95 11.7 11.7 0 0 0-1.997.406 11.3 11.3 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.8.8 0 0 1-.58.029m1.379-1.901q-.25.115-.459.238c-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361q.016.032.026.044l.035-.012c.137-.056.355-.235.635-.572a8 8 0 0 0 .45-.606m1.64-1.33a13 13 0 0 1 1.01-.193 12 12 0 0 1-.51-.858 21 21 0 0 1-.5 1.05zm2.446.45q.226.245.435.41c.24.19.407.253.498.256a.1.1 0 0 0 .07-.015.3.3 0 0 0 .094-.125.44.44 0 0 0 .059-.2.1.1 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a4 4 0 0 0-.612-.053zM8.078 7.8a7 7 0 0 0 .2-.828q.046-.282.038-.465a.6.6 0 0 0-.032-.198.5.5 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822q.036.167.09.346z"/>
+												</svg>
+											</a></span></td>
+										<td class="cell"><span><a href="{% url 'legajos:resolucion_editar' resolucion.id %}" class="btn app-btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+											<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+										</svg></a></span></td>
 									</tr>
 									{% endfor %}	
 								</tbody>
@@ -113,160 +71,7 @@
 					</div><!--//app-card-body-->		
 				</div><!--//app-card-->
 			</div><!--//tab-pane-->
-				
-			<div class="tab-pane fade" id="orders-pension" role="tabpanel" aria-labelledby="orders-pension-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">
-							<table class="table mb-0 text-left">
-								<thead>
-									<tr>
-										<th class="cell">Resolución</th>
-										<th class="cell">Fecha</th>
-										<th class="cell">Apellidos y Nombres</th>
-										<th class="cell">DNI</th>
-										<th class="cell">Documento</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for pensionista in pensionistas %}
-									<tr>
-										<td class="cell"><span>{{ pensionista.resolucion }}</span></td>
-										<td class="cell"><span>{{ pensionista.fecha }}</span></td>
-										<td class="cell"><span>{{ pensionista.apellido_paterno}} {{ pensionista.apellido_materno}} {{ pensionista.nombres}}</span></td>
-										<td class="cell"><span>{{ pensionista.dni}}</span></td>
-										<td class="cell"><span>{{ pensionista.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:pensionista_editar' pensionista.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg></a></span></td>
-									</tr>
-									{% endfor %}	
-								</tbody>
-							</table>
-						</div><!--//table-responsive-->
-					</div><!--//app-card-body-->		
-				</div><!--//app-card-->
-			</div><!--//tab-pane-->
-
-			<div class="tab-pane fade" id="orders-bonificacion" role="tabpanel" aria-labelledby="orders-bonificacion-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">
-							<table class="table mb-0 text-left">
-								<thead>
-									<tr>
-										<th class="cell">Resolución</th>
-										<th class="cell">Fecha</th>
-										<th class="cell">Motivo</th>
-										<th class="cell">Porcentaje</th>
-										<th class="cell">Años</th>
-										<th class="cell">Meses</th>
-										<th class="cell">Días</th>
-										<th class="cell">Documento</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for bonificacion in bonificaciones %}
-									<tr>
-										<td class="cell"><span>{{ bonificacion.resolucion }}</span></td>
-										<td class="cell"><span>{{ bonificacion.fecha }}</span></td>
-										<td class="cell"><span>{{ bonificacion.motivo }}</span></td>
-										<td class="cell"><span>{{ bonificacion.porcentaje }}%</span></td>
-										<td class="cell"><span>{{ bonificacion.anios }}</span></td>
-										<td class="cell"><span>{{ bonificacion.meses }}</span></td>
-										<td class="cell"><span>{{ bonificacion.dias }}</span></td>
-										<td class="cell"><span>{{ bonificacion.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:bonificacion_editar' bonificacion.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg></a></span></td>
-									</tr>
-									{% endfor %}	
-								</tbody>
-							</table>
-						</div><!--//table-responsive-->
-					</div><!--//app-card-body-->		
-				</div><!--//app-card-->
-			</div><!--//tab-pane-->
-
-			<div class="tab-pane fade" id="orders-tiemposervicios" role="tabpanel" aria-labelledby="orders-tiemposervicios-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">
-							<table class="table mb-0 text-left">
-								<thead>
-									<tr>
-										<th class="cell">Resolución</th>
-										<th class="cell">Desde</th>
-										<th class="cell">Hasta</th>
-										<th class="cell">Años</th>
-										<th class="cell">Meses</th>
-										<th class="cell">Días</th>
-										<th class="cell">Documento</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for tiempo in tiempos_servicio %}
-									<tr>
-										<td class="cell"><span>{{ tiempo.resolucion }}</span></td>
-										<td class="cell"><span>{{ tiempo.desde }}</span></td>
-										<td class="cell"><span>{{ tiempo.hasta }}</span></td>
-										<td class="cell"><span>{{ tiempo.anios }}</span></td>
-										<td class="cell"><span>{{ tiempo.meses }}</span></td>
-										<td class="cell"><span>{{ tiempo.dias }}</span></td>
-										<td class="cell"><span>{{ tiempo.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:tiempo_editar' tiempo.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg></a></span></td>
-									</tr>
-									{% endfor %}	
-								</tbody>
-							</table>
-						</div><!--//table-responsive-->
-					</div><!--//app-card-body-->		
-				</div><!--//app-card-->
-			</div><!--//tab-pane-->
-
-			<div class="tab-pane fade" id="orders-estudios" role="tabpanel" aria-labelledby="orders-estudios-tab">
-				<div class="app-card app-card-orders-table mb-5">
-					<div class="app-card-body">
-						<div class="table-responsive">
-							<table class="table mb-0 text-left">
-								<thead>
-									<tr>
-										<th class="cell">Inicio</th>
-										<th class="cell">Fin</th>
-										<th class="cell">Grado de Instrucción</th>
-										<th class="cell">Especialidad</th>
-										<th class="cell">Sub-Especialidad</th>
-										<th class="cell">Código de Especialidad</th>
-										<th class="cell">Fecha de Expedición</th>
-										<th class="cell">Documento</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for estudio in estudios %}
-									<tr>
-										<td class="cell"><span>{{ estudio.inicio }}</span></td>
-										<td class="cell"><span>{{ estudio.fin }}</span></td>
-										<td class="cell"><span>{{ estudio.grado_instruccion }}</span></td>
-										<td class="cell"><span>{{ estudio.especialidad }}</span></td>
-										<td class="cell"><span>{{ estudio.sub_especialidad }}</span></td>
-										<td class="cell"><span>{{ estudio.cod_especialidad }}</span></td>
-										<td class="cell"><span>{{ estudio.fecha_expedicion }}</span></td>
-										<td class="cell"><span>{{ estudio.ver_pdf|safe }}</span></td>
-                    <td class="cell"><span><a href="{% url 'legajos:estudios_editar' estudio.id %}" class="btn app-btn-primary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-                      <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                    </svg></a></span></td>
-									</tr>
-									{% endfor %}	
-								</tbody>
-							</table>
-						</div><!--//table-responsive-->
-					</div><!--//app-card-body-->		
-				</div><!--//app-card-->
-			</div><!--//tab-pane-->
-
-		</div><!--//tab-content-->		
+		</div><!--//tab-content-->
 	</div><!--//container-fluid-->
 </div><!--//app-content-->
 {% endblock content %}

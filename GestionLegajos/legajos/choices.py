@@ -29,6 +29,13 @@ grupo_ocupacional = (
   ('Tecnicos', 'Tecnicos'),
 )
 
+tipo_historial = (
+  ('Incorporación', 'Incorporación'),
+  ('Progresión', 'Progresión'),
+  ('Desplazamiento', 'Desplazamiento'),
+  ('Desvinculación', 'Desvinculación'),
+)
+
 cargos = (
   ('ASISTENTE EJECUTIVO II', 'ASISTENTE EJECUTIVO II'),
   ('ASISTENTE EN SERVICIOS DE SALUD I', 'ASISTENTE EN SERVICIOS DE SALUD I'),
@@ -141,6 +148,7 @@ tipo_vinculo = (
   ('Permuta', 'Permuta'),
   ('Ascenso', 'Ascenso'),
   ('Cambio de grupo Ocupacional', 'Cambio de grupo Ocupacional'),
+  ('Otro', 'Otro'),
 )
 
 departamento = (
