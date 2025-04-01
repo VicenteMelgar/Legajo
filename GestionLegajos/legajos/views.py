@@ -4,7 +4,7 @@ from datetime import date
 from django.db.models import Q
 from django.views.generic.edit import CreateView
 from .models import Empleado, OficinaHistorial, CondicionHistorial, GrupoHistorial, CargoHistorial, NivelHistorial, PlazaHistorial, Vinculo, Resolucion, Seleccion, Induccion, Prueba, Habilitacion, Serum, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, EstudiosRealizados, Subespecialidad, InfoPersonal, Reconocimiento, Laboral, Seguridad, Desvinculacion, Legajo, Otro
-from .forms import EmpleadoForm, OficinaHistorialForm, LegajoForm, InfoPersonalForm, VinculoForm, ResolucionForm, SeleccionForm, InduccionForm, PruebaForm, HabilitacionForm, SerumForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, OtroForm
+from .forms import EmpleadoForm, OficinaHistorialForm, CondicionHistorialForm, GrupoHistorialForm, CargoHistorialForm, NivelHistorialForm, PlazaHistorialForm, LegajoForm, InfoPersonalForm, VinculoForm, ResolucionForm, SeleccionForm, InduccionForm, PruebaForm, HabilitacionForm, SerumForm, EstudiosRealizadosForm, SubespecialidadForm, CursoForm, ExperienciaForm, MovimientosForm, RetencionForm, CompensacionesForm, EvaluacionForm, ReconocimientoForm, LaboralForm, SeguridadForm, DesvinculacionForm, OtroForm
 
 def datospersonales_lista(request):
     query = request.GET.get('searchorders', '')  # Texto ingresado en el buscador
@@ -82,7 +82,7 @@ def empleado_editar(request, empleado_id):
   
   return render(request, 'empleado_editar.html', {'form': form, 'empleado': empleado})
 
-# Vista para crear documento
+# Vista para crear documento (Resolución)
 def resolucion_crear(request):
   if request.method == 'POST':
     form = ResolucionForm(request.POST, request.FILES)  # Asegurar que los archivos se envíen
@@ -159,7 +159,7 @@ def oficina_crear(request):
         form = OficinaHistorialForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros (ajusta el nombre de la URL según tu caso)
+            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros 
     else:
         form = OficinaHistorialForm()
 
@@ -172,11 +172,136 @@ def oficina_editar(request, oficina_id):
         form = OficinaHistorialForm(request.POST, instance=oficina)
         if form.is_valid():
             form.save()
-            return redirect('legajos:datos_personales')  # Ajusta el nombre de la URL según corresponda
+            return redirect('legajos:datos_personales')  
     else:
         form = OficinaHistorialForm(instance=oficina)
 
     return render(request, 'oficina_edit.html', {'form': form, 'oficina': oficina})
+  
+# Crear CondicionHistorial (seleccionando el empleado en el formulario)
+def condicion_crear(request):
+    if request.method == "POST":
+        form = CondicionHistorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros 
+    else:
+        form = CondicionHistorialForm()
+
+    return render(request, 'condicion_crear.html', {'form': form})
+
+# Editar CondicionHistorial
+def condicion_editar(request, condicion_id):
+    condicion = get_object_or_404(CondicionHistorial, id=condicion_id)
+    if request.method == "POST":
+        form = CondicionHistorialForm(request.POST, instance=condicion)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  
+    else:
+        form = CondicionHistorialForm(instance=condicion)
+
+    return render(request, 'condicion_edit.html', {'form': form, 'condicion': condicion})
+
+# Crear GrupoHistorial (seleccionando el empleado en el formulario)
+def grupo_crear(request):
+    if request.method == "POST":
+        form = GrupoHistorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros 
+    else:
+        form = GrupoHistorialForm()
+
+    return render(request, 'grupo_crear.html', {'form': form})
+
+# Editar GrupoHistorial
+def grupo_editar(request, grupo_id):
+    grupo = get_object_or_404(GrupoHistorial, id=grupo_id)
+    if request.method == "POST":
+        form = GrupoHistorialForm(request.POST, instance=grupo)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  
+    else:
+        form = GrupoHistorialForm(instance=grupo)
+
+    return render(request, 'grupo_edit.html', {'form': form, 'grupo': grupo})
+
+# Crear CargoHistorial (seleccionando el empleado en el formulario)
+def cargo_crear(request):
+    if request.method == "POST":
+        form = CargoHistorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros 
+    else:
+        form = CargoHistorialForm()
+
+    return render(request, 'cargo_crear.html', {'form': form})
+
+# Editar CargoHistorial
+def cargo_editar(request, cargo_id):
+    cargo = get_object_or_404(CargoHistorial, id=cargo_id)
+    if request.method == "POST":
+        form = CargoHistorialForm(request.POST, instance=cargo)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  
+    else:
+        form = CargoHistorialForm(instance=cargo)
+
+    return render(request, 'cargo_edit.html', {'form': form, 'cargo': cargo})
+
+# Crear NivelHistorial (seleccionando el empleado en el formulario)
+def nivel_crear(request):
+    if request.method == "POST":
+        form = NivelHistorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros 
+    else:
+        form = NivelHistorialForm()
+
+    return render(request, 'nivel_crear.html', {'form': form})
+
+# Editar NivelHistorial
+def nivel_editar(request, nivel_id):
+    nivel = get_object_or_404(NivelHistorial, id=nivel_id)
+    if request.method == "POST":
+        form = NivelHistorialForm(request.POST, instance=nivel)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  
+    else:
+        form = NivelHistorialForm(instance=nivel)
+
+    return render(request, 'nivel_edit.html', {'form': form, 'nivel': nivel})
+
+# Crear PlazaHistorial (seleccionando el empleado en el formulario)
+def plaza_crear(request):
+    if request.method == "POST":
+        form = PlazaHistorialForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  # Redirigir a la lista de registros 
+    else:
+        form = PlazaHistorialForm()
+
+    return render(request, 'plaza_crear.html', {'form': form})
+
+# Editar PlazaHistorial
+def plaza_editar(request, plaza_id):
+    plaza = get_object_or_404(PlazaHistorial, id=plaza_id)
+    if request.method == "POST":
+        form = PlazaHistorialForm(request.POST, instance=plaza)
+        if form.is_valid():
+            form.save()
+            return redirect('legajos:datos_personales')  
+    else:
+        form = PlazaHistorialForm(instance=plaza)
+
+    return render(request, 'plaza_edit.html', {'form': form, 'plaza': plaza})
 
 # Vista Para gestionar información en los Legajos
 def info_general(request, legajo_id):

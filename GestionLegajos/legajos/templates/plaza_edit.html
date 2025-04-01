@@ -1,0 +1,15 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Editar Plaza</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <button type="submit" class="btn app-btn-primary">Guardar</button>
+    <a href="{% url 'legajos:datos_personales' %}" class="btn app-btn-secondary">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

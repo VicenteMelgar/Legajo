@@ -40,22 +40,22 @@
       <div class="d-flex justify-content-center mb-3">
         <div class="col-auto">
           <button class="btn app-btn-secondary" type="button">
-            <a href="#">Condición Laboral +</a>
+            <a href="{% url 'legajos:condicion_crear' %}">Condición Laboral +</a>
           </button>
           <button class="btn app-btn-secondary" type="button">
             <a href="{% url 'legajos:oficina_crear' %}">Departamento u Oficina +</a>
           </button>
           <button class="btn app-btn-secondary" type="button">
-            <a href="#">Grupo Ocupacional +</a>
+            <a href="{% url 'legajos:grupo_crear' %}">Grupo Ocupacional +</a>
           </button>
           <button class="btn app-btn-secondary" type="button">
-            <a href="#">Cargo +</a>
+            <a href="{% url 'legajos:cargo_crear' %}">Cargo +</a>
           </button>
           <button class="btn app-btn-secondary" type="button">
-            <a href="#">Nivel +</a>
+            <a href="{% url 'legajos:nivel_crear' %}">Nivel +</a>
           </button>
           <button class="btn app-btn-secondary" type="button">
-            <a href="#">Plaza (Airhsp) +</a>
+            <a href="{% url 'legajos:plaza_crear' %}">Plaza (Airhsp) +</a>
           </button>
         </div>
       </div>
@@ -74,7 +74,7 @@
 										<th class="cell">Grupo Ocupacional</th>
 										<th class="cell">Cargo</th>
 										<th class="cell">Nivel</th>
-										<th class="cell">Plaza (Airsh)</th>
+										<th class="cell">Plaza (Airhsp)</th>
 										<th class="cell">Editar</th>
                     <th class="cell">Historial</th>
 									</tr>

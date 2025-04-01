@@ -34,7 +34,7 @@
                         >
                         <label class="form-check-label" for="vinculo-{{ vinculo.id }}">
                             {{ vinculo.cargo }}
-                            ({{ vinculo.fecha_inicio|date:"d/m/Y" }} - {{ vinculo.fecha_fin|date:"d/m/Y"|default:"actualidad" }})
+                            ({{ vinculo.fecha_inicio|date:"d/m/Y" }} - {{ vinculo.fecha_fin|date:"d/m/Y"|default:"Fecha de finalización no registrada" }})
                         </label>
                     </div>
                 {% empty %}
@@ -59,7 +59,7 @@
                 >
                 <label class="form-check-label" for="desplazamiento-{{ desplazamiento.id }}">
                     {{ desplazamiento.cargo }}
-                    ({{ desplazamiento.fecha_inicio|date:"d/m/Y" }} - {{ desplazamiento.fecha_fin|date:"d/m/Y"|default:"actualidad" }})
+                    ({{ desplazamiento.fecha_inicio|date:"d/m/Y" }} - {{ desplazamiento.fecha_fin|date:"d/m/Y"|default:"Fecha de finalización no registrada" }})
                 </label>
             </div>
             {% empty %}

@@ -22,7 +22,7 @@ class Resolucion(models.Model):
   ver_pdf.short_description = "Visualizar PDF"
 
   def __str__(self):
-      return self.numero
+      return f'{self.documento} Nº {self.numero}'
   
   class Meta:
     ordering = ['-fecha']

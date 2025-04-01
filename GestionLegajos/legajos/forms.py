@@ -1,5 +1,5 @@
 from django import forms
-from .models import Empleado, OficinaHistorial, Legajo, Resolucion, InfoPersonal, Seleccion, Vinculo, Induccion, Prueba, Habilitacion, Serum, EstudiosRealizados, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, Reconocimiento, Laboral, Seguridad, Desvinculacion, Subespecialidad, Otro
+from .models import Empleado, OficinaHistorial, CondicionHistorial, GrupoHistorial, CargoHistorial, NivelHistorial, PlazaHistorial, Legajo, Resolucion, InfoPersonal, Seleccion, Vinculo, Induccion, Prueba, Habilitacion, Serum, EstudiosRealizados, Curso, Experiencia, Movimientos, Retencion, Compensaciones, Evaluacion, Reconocimiento, Laboral, Seguridad, Desvinculacion, Subespecialidad, Otro
 
 class EmpleadoForm(forms.ModelForm):
   class Meta:
@@ -69,6 +69,66 @@ class OficinaHistorialForm(forms.ModelForm):
       'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
     }
 
+class CondicionHistorialForm(forms.ModelForm):
+  class Meta:
+    model = CondicionHistorial
+    fields = '__all__'
+    widgets = {
+      'empleado': forms.Select(attrs={'class': 'form-select'}),
+      'resolucion': forms.Select(attrs={'class': 'form-select'}),
+      'denominacion': forms.Select(attrs={'class': 'form-control'}),
+      'fecha_inicio': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+      'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+    }
+
+class GrupoHistorialForm(forms.ModelForm):
+  class Meta:
+    model = GrupoHistorial
+    fields = '__all__'
+    widgets = {
+      'empleado': forms.Select(attrs={'class': 'form-select'}),
+      'resolucion': forms.Select(attrs={'class': 'form-select'}),
+      'denominacion': forms.Select(attrs={'class': 'form-control'}),
+      'fecha_inicio': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+      'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+    }
+
+class CargoHistorialForm(forms.ModelForm):
+  class Meta:
+    model = CargoHistorial
+    fields = '__all__'
+    widgets = {
+      'empleado': forms.Select(attrs={'class': 'form-select'}),
+      'resolucion': forms.Select(attrs={'class': 'form-select'}),
+      'denominacion': forms.Select(attrs={'class': 'form-control'}),
+      'fecha_inicio': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+      'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+    }
+
+class NivelHistorialForm(forms.ModelForm):
+  class Meta:
+    model = NivelHistorial
+    fields = '__all__'
+    widgets = {
+      'empleado': forms.Select(attrs={'class': 'form-select'}),
+      'resolucion': forms.Select(attrs={'class': 'form-select'}),
+      'denominacion': forms.Select(attrs={'class': 'form-control'}),
+      'fecha_inicio': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+      'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+    }
+     
+class PlazaHistorialForm(forms.ModelForm):
+  class Meta:
+    model = PlazaHistorial
+    fields = '__all__'
+    widgets = {
+      'empleado': forms.Select(attrs={'class': 'form-select'}),
+      'resolucion': forms.Select(attrs={'class': 'form-select'}),
+      'denominacion': forms.TextInput(attrs={'class': 'form-control'}),
+      'fecha_inicio': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+      'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa'}),
+    }
+      
 class SeleccionForm(forms.ModelForm):
     class Meta:
         model = Seleccion
